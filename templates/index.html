@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>base page of school app</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/index.js"></script>
+
+<div align="center">
+
+    <button id="school_admin"><h3>Log in as School Admin</h3></button><br>
+    <button id="school_employee"><h3>Log in as School Employee</h3></button><br>
+    <button id="show-btn">Show Content</button>
+    <div id="hidden-content">
+        <h2>Hidden Content</h2>
+        <p>This content was hidden when the page loaded. Now it’s visible!</p>
+    </div>
+    <div id ="hidden-school_admin">
+
+    <div class="form-container" align="center">
+        <h2>Login school admin</h2>
+        <form action="/submit_form" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    </div>  
+    <div id ="hidden-office">
+
+    <div class="form-container" align="center">
+        <h2>Login office Employee</h2>
+        <form action="/submit_form" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    </div>
+
+</div>
+</body>
+</html>

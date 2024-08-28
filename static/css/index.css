@@ -7,20 +7,7 @@
     height: 100vh;
     margin: 0;
 }
-#hidden-content {
-    display: none; /* Hide content by default */
-}
-#show-btn {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-#show-btn:hover {
-    background-color: #030803;
-}
+
 
 #hidden-school_admin {
     display: none; 

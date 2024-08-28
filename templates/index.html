@@ -12,19 +12,14 @@
     <script src="../static/js/index.js"></script>
 
 <div align="center">
-
     <button id="school_admin"><h3>Log in as School Admin</h3></button><br>
     <button id="school_employee"><h3>Log in as School Employee</h3></button><br>
-    <button id="show-btn">Show Content</button>
-    <div id="hidden-content">
-        <h2>Hidden Content</h2>
-        <p>This content was hidden when the page loaded. Now it’s visible!</p>
-    </div>
+
     <div id ="hidden-school_admin">
 
     <div class="form-container" align="center">
         <h2>Login school admin</h2>
-        <form action="/submit_form" method="POST">
+        <form id="school_admin_form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" required>
             <br><br>
@@ -38,7 +33,7 @@
 
     <div class="form-container" align="center">
         <h2>Login office Employee</h2>
-        <form action="/submit_form" method="POST">
+        <form id="school_employee_form" >
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" required>
             <br><br>
@@ -49,6 +44,7 @@
     </div>
     </div>
 
+<a href="http://127.0.0.1:8000/setup_auth/render_demo">demo page</a>
 </div>
 </body>
 </html>

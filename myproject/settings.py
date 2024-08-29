@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'attendence',
     'setup_authentication',
     'student_progress',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -80,15 +81,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'schooldb',
-        'USER': 'praveen',
-        'PASSWORD': 'praveen',
-        'HOST': 'localhost',  # Or the IP address of your MySQL server
-        'PORT': '3306',       # Default MySQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 
 # Password validation
@@ -127,10 +123,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATIC_ROOT = '/static/'
 
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

@@ -3,48 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>base page of school app</title>
-    <link rel="stylesheet" href="../static/index.css">
-</head>
-
-<body>
+    <title>Base Page of School App</title>
+    <link rel="stylesheet" href="../static/css/index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../static/js/index.js"></script>
-
-<div align="center">
-    <button id="school_admin"><h3>Log in as School Admin</h3></button><br>
-    <button id="school_employee"><h3>Log in as School Employee</h3></button><br>
-
-    <div id ="hidden-school_admin">
-
-    <div class="form-container" align="center">
-        <h2>Login school admin</h2>
-        <form id="school_admin_form">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
-            <input type="submit" value="Login">
-        </form>
+    
+</head>
+<body>
+    <div align="center">
+        <button id="register_school"><h3>Register School</h3></button><br>
+        <button id="login"><h3>Log in</h3></button><br>
     </div>
-    </div>  
-    <div id ="hidden-office">
-
-    <div class="form-container" align="center">
-        <h2>Login office Employee</h2>
-        <form id="school_employee_form" >
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
-            <input type="submit" value="Login">
-        </form>
-    </div>
-    </div>
-
-<a href="http://127.0.0.1:8000/setup_auth/render_demo">demo page</a>
-</div>
 </body>
 </html>

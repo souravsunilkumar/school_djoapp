@@ -17,7 +17,7 @@ $(document).ready(function() {
             data: JSON.stringify(formData),
             success: function(response) {
                 if (response.success) {
-                    window.location.href = response.redirect_url; // Redirect to dashboard
+                    window.location.href = response.redirect_url; // Redirect to the appropriate dashboard
                 } else {
                     alert('Login failed: ' + response.message);
                 }

@@ -26,4 +26,5 @@ urlpatterns = [
     path('attendence/', include('attendence.urls')),
     path('setup_auth/', include('setup_authentication.urls')),
     path('progress/', include('student_progress.urls')),
+    path('management/', include('management.urls')),
 ]

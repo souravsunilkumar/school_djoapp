@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Class Teacher</title>
+    <link rel="stylesheet" href="../static/css/admin_assign_class_teacher.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="../static/js/admin_assign_class_teacher.js"></script>
+</head>
+<body>
+    <h1>Assign Class Teacher</h1>
+    <form id="assign-teacher-form">
+        <label for="teacher">Select Teacher:</label>
+        <select id="teacher" name="teacher" style="width: 100%;" required>
+            <!-- Options will be populated via JavaScript -->
+        </select><br><br>
+
+        <label for="class">Class:</label>
+        <input type="text" id="class" name="class" required><br><br>
+
+        <label for="division">Division:</label>
+        <input type="text" id="division" name="division" required><br><br>
+
+        <button type="submit">Assign</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#teacher').select2({
+                placeholder: 'Select a Teacher',
+                ajax: {
+                    url: '/management/api/get_teachers/', // Corrected URL to match your Django path
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: data.teachers.map(function (teacher) {
+                                return {
+                                    id: teacher.id,
+                                    text: teacher.full_name // Adjusted to match your teacher fields
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

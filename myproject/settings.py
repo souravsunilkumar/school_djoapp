@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'attendence',
     'setup_authentication',
     'student_progress',
+    'management',
     'rest_framework',
 ]
 

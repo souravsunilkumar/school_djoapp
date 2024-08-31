@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from .models import *
@@ -77,7 +78,7 @@ def login_page(request):
     return render(request, 'login.html')
 
 @csrf_exempt
-def login_admin(request):
+def user_login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -86,18 +87,24 @@ def login_admin(request):
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
-                main_admin_group = Group.objects.get(id=1)
-                if main_admin_group in user.groups.all():
+                login(request, user)  # Use Django's built-in login function
+                if user.groups.filter(id=1).exists():
                     # Redirect URL for the admin dashboard
                     return JsonResponse({'success': True, 'redirect_url': '/setup_auth/admin_dashboard/'})
+                elif user.groups.filter(id=2).exists():
+                    # Redirect URL for the sub-admin dashboard
+                    return JsonResponse({'success': True, 'redirect_url': '/setup_auth/sub_admin_dashboard/'})
+                elif user.groups.filter(id=3).exists():
+                    # Redirect URL for the teacher dashboard
+                    return JsonResponse({'success': True, 'redirect_url': '/setup_auth/teacher_dashboard/'})
                 else:
-                    return JsonResponse({'success': False, 'message': 'User is not authorized as Main Administrator.'})
+                    return JsonResponse({'success': False, 'message': 'User is not authorized.'})
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid credentials.'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
 
 def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
@@ -170,3 +177,97 @@ def register_sub_admin(request):
             return JsonResponse({'success': False, 'message': str(e)})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+
+@csrf_exempt
+def register_employee(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            # Extract data
+            username = data.get('emp_username')
+            first_name = data.get('emp_first_name')
+            last_name = data.get('emp_last_name')
+            contact_number = data.get('emp_contact')  # Ensure this is extracted
+            designation = data.get('emp_designation')
+            password = data.get('password')
+
+            # Get the logged-in user's school
+            user = request.user
+            school = School.objects.get(school_admin_username=user.username)
+
+            # Create User instance
+            employee_user = User.objects.create_user(username=username, password=password)
+            employee_user.first_name = first_name
+            employee_user.last_name = last_name
+            employee_user.save()
+
+            # Create Employee instance
+            employee = Employee.objects.create(
+                user=employee_user,
+                school=school,
+                first_name=first_name,
+                second_name=last_name,
+                contact_number=contact_number,  # Save contact_number here
+                designation=designation,
+                user_name=username
+            )
+            employee.save()
+
+            # Determine group and create related model
+            group_mapping = {
+                'Teacher': 3,
+                'Peon': 4,
+                'Security': 5,
+                'Warden': 6,
+                'Office Staff': 7
+            }
+            group_id = group_mapping.get(designation)
+            if group_id:
+                group = Group.objects.get(id=group_id)
+                employee_user.groups.add(group)
+
+            # Save in Teacher or Warden model if applicable
+            if designation == 'Teacher':
+                Teacher.objects.create(
+                    employee=employee,
+                    school=school,
+                    user=employee_user,
+                    first_name=first_name,
+                    last_name=last_name,
+                    user_name=username,
+                    contact_number=contact_number  # Ensure this is saved
+                )
+            elif designation == 'Warden':
+                Warden.objects.create(
+                    employee=employee,
+                    school=school,
+                    user=employee_user,
+                    first_name=first_name,
+                    last_name=last_name,
+                    user_name=username,
+                    contact_number=contact_number
+                )
+
+            return JsonResponse({'success': True, 'message': 'Employee registered successfully!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+def teacher_dashboard(request):
+    """Render the teacher dashboard."""
+    return render(request, 'teacher_dashboard.html')
+
+def teacher_dashboard_data(request):
+    if request.user.is_authenticated:
+        teacher = get_object_or_404(Teacher, user=request.user)
+        data = {
+            'is_class_teacher': teacher.is_class_teacher,
+            'class_assigned': teacher.class_teacher_set.first().class_assigned if teacher.is_class_teacher else None,
+            'division_assigned': teacher.class_teacher_set.first().division_assigned if teacher.is_class_teacher else None
+        }
+        return JsonResponse({'success': True, 'data': data})
+    return JsonResponse({'success': False, 'message': 'User not authenticated.'})

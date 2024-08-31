@@ -34,6 +34,48 @@
         </form>
     </div>
 
+       <!-- Button to show the Employee Registration Form -->
+       <button id="show-employee-register-form">Register Employee</button>
+
+       <!-- Employee Registration Form -->
+       <div id="employee-register-form" style="display: none;">
+           <h2>Register Employee</h2>
+           <form id="employee-registration-form">
+               <label for="emp_username">Username:</label>
+               <input type="text" id="emp_username" name="emp_username" required><br>
+   
+               <label for="emp_first_name">First Name:</label>
+               <input type="text" id="emp_first_name" name="emp_first_name" required><br>
+   
+               <label for="emp_last_name">Last Name:</label>
+               <input type="text" id="emp_last_name" name="emp_last_name" required><br>
+   
+               <label for="emp_contact">Contact Number:</label>
+               <input type="text" id="emp_contact" name="emp_contact" required><br>
+   
+               <label for="emp_designation">Designation:</label>
+               <select id="emp_designation" name="emp_designation" required>
+                   <option value="Teacher">Teacher</option>
+                   <option value="Peon">Peon</option>
+                   <option value="Security">Security</option>
+                   <option value="Warden">Warden</option>
+                   <option value="Office Staff">Office Staff</option>
+               </select><br>
+   
+               <label for="emp_password">Password:</label>
+               <input type="password" id="emp_password" name="emp_password" required><br>
+   
+               <label for="emp_confirm_password">Confirm Password:</label>
+               <input type="password" id="emp_confirm_password" name="emp_confirm_password" required><br>
+   
+               <button type="submit">Register</button>
+               <button type="button" id="cancel-employee-register">Cancel</button>
+           </form>
+       </div>
+
+       <a href="/management/admin_assign_class_teacher/">Assign Class Teacher</a>
+   
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../static/js/admin_dashboard.js"></script>
 </body>

@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
+from django.views.decorators.http import require_POST
 from setup_authentication.models import *
 import json 
 from django.views.decorators.csrf import csrf_exempt
@@ -108,7 +109,8 @@ def parent_notifications(request):
             'timestamp': notification.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
             'is_read': notification.is_read,
             'student_name': notification.student_name,  # Assuming you have a method to get student full name
-            'date': notification.absence_date  # Adjust format if needed
+            'student_id': notification.student.id if notification.student else None,  # Include student ID
+            'date': notification.absence_date.strftime('%Y-%m-%d') if notification.absence_date else None
         }
         for notification in notifications
     ]
@@ -129,3 +131,53 @@ def mark_notifications_as_read(request):
             return JsonResponse({'success': False, 'message': str(e)})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def submit_leave_reason(request):
+    try:
+        data = json.loads(request.body)
+        notification_id = data.get('notification_id')
+        reason = data.get('reason')
+
+        if not notification_id or not reason:
+            return JsonResponse({'error': 'Notification ID and reason are required.'}, status=400)
+
+        # Fetch the notification
+        notification = Notification.objects.get(id=notification_id)
+
+        # Debugging statements
+        print(f"Notification: {notification}")
+        print(f"Student: {notification.student}")
+        print(f"Parent: {notification.parent}")
+        print(f"Teacher: {notification.teacher}")
+
+        # Create the LeaveReason
+        leave_reason = LeaveReason(
+            student=notification.student,
+            parent=notification.parent,
+            teacher=notification.teacher,
+            parent_notification=notification,
+            reason=reason,
+            date=notification.absence_date if notification.absence_date else None
+        )
+        leave_reason.save()
+
+        # Create the TeacherNotification
+        teacher_notification = TeacherNotification(
+            teacher=notification.teacher,
+            parent=notification.parent,
+            student=notification.student,
+            message=reason,  # Set the message to the reason
+            reason=leave_reason,
+            is_read=False
+        )
+        teacher_notification.save()
+
+        # Optionally, mark the notification as read
+        notification.is_read = True
+        notification.save()
+
+        return JsonResponse({'message': 'Leave reason submitted and notification sent successfully.'})
+    except Notification.DoesNotExist:
+        return JsonResponse({'error': 'Notification not found.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

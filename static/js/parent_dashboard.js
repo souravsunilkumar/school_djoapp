@@ -29,7 +29,7 @@ $(document).ready(function () {
         });
     }
 
-    // Update guardian message on student change
+    // Update guardian message when student selection changes
     $('#student_select').on('change', function () {
         const selectedStudent = $(this).find('option:selected').text();
         $('#guardian_message').text(`You are parent/guardian of ${selectedStudent}`);
@@ -45,6 +45,11 @@ $(document).ready(function () {
         const studentId = $('#student_select').val();
         const fromDate = $('#from_date').val();
         const toDate = $('#to_date').val();
+
+        if (!studentId || !fromDate || !toDate) {
+            alert('Please fill in all fields.');
+            return;
+        }
 
         $.ajax({
             url: '/parent/attendance_report/',
@@ -88,11 +93,10 @@ $(document).ready(function () {
         });
     });
 
-    // Show notification section
+    // Show notification section and load notifications
     $('#notification_icon').on('click', function () {
         $('#notification_section').toggle(); // Toggle visibility of the notification section
 
-        // Load notifications
         $.ajax({
             url: '/parent/notifications/',
             method: 'GET',
@@ -101,9 +105,9 @@ $(document).ready(function () {
                 if (data.notifications.length > 0) {
                     data.notifications.forEach(function (notification) {
                         $('#notification_message').append(`
-                            <div class="notification-item">
+                            <div class="notification-item" data-notification-id="${notification.id}">
                                 <p>${notification.message}</p>
-                                <button class="give_reason_btn" data-notification-id="${notification.id}" data-student-name="${notification.student_name}" data-date="${notification.date}">Give Reason</button>
+                                <button class="give_reason_btn" data-notification-id="${notification.id}" data-student-name="${notification.student_name}" data-date="${notification.date}" ${notification.reason_given ? 'disabled' : ''}>${notification.reason_given ? 'Reason Given' : 'Give Reason'}</button>
                             </div>
                         `);
                     });
@@ -122,15 +126,15 @@ $(document).ready(function () {
         $('#notification_section').hide(); // Hide the notification section
     });
 
-    // Close notification section when clicking outside of it
+    // Hide notification section when clicking outside of it
     $(window).on('click', function (event) {
         if (!$(event.target).closest('#notification_section, #notification_icon').length) {
-            $('#notification_section').hide(); // Hide if click is outside of notification section
+            $('#notification_section').hide(); // Hide if click is outside the notification section
         }
     });
 
     // Mark notifications as read
-    function markNotificationsAsRead() {
+    function markNotificationsAsRead(notificationIds) {
         $.ajax({
             url: '/parent/mark_notifications_as_read/',
             method: 'POST',
@@ -138,7 +142,7 @@ $(document).ready(function () {
                 'X-CSRFToken': getCSRFToken()
             },
             data: JSON.stringify({
-                notification_ids: [] // Include the IDs of notifications if needed
+                notification_ids: notificationIds // Send the IDs of notifications to be marked as read
             }),
             contentType: 'application/json',
             success: function (data) {
@@ -154,20 +158,80 @@ $(document).ready(function () {
     $(document).on('click', '.give_reason_btn', function () {
         const studentName = $(this).data('student-name');
         const date = $(this).data('date');
+        const notificationId = $(this).data('notification-id');
+
+        if (!notificationId) {
+            alert('Notification ID is missing.');
+            return;
+        }
+
+        $('#reason_modal').data('notification-id', notificationId);
+
+        // Update the modal heading with the student's name and date
         $('#reason_modal_heading').text(`Why was ${studentName} absent on ${date}?`);
-        $('#reason_modal').show();
+
+        // Center the modal
+        $('#reason_modal').css({
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%) scale(1)', // Full size
+            opacity: 1
+        }).show();
+
+        // Show the modal overlay
+        $('#reason_modal_overlay').show();
     });
 
     // Close reason modal
     $('#close_reason_modal_btn').on('click', function () {
         $('#reason_modal').hide();
+        $('#reason_modal_overlay').hide();
     });
 
-    // Close modal
-    $('#close_modal_btn').on('click', function () {
-        $('#attendance_modal').hide();
+    // Submit leave reason
+    $('#submit_reason_btn').on('click', function () {
+        const notificationId = $('#reason_modal').data('notification-id');
+        const reason = $('#reason_textarea').val().trim();
+
+        if (!notificationId || !reason) {
+            alert('Please provide a reason.');
+            return;
+        }
+
+        $.ajax({
+            url: '/parent/submit_leave_reason/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            },
+            data: JSON.stringify({
+                notification_id: notificationId,
+                reason: reason
+            }),
+            contentType: 'application/json',
+            success: function (data) {
+                alert('Reason submitted successfully!');
+                $('#reason_modal').hide();
+                $('#reason_modal_overlay').hide();
+
+                // Mark notification as read and update button text
+                markNotificationsAsRead([notificationId]);
+                $(`button.give_reason_btn[data-notification-id="${notificationId}"]`).text('Reason Given');
+            },
+            error: function (error) {
+                console.error('Error submitting leave reason:', error);
+            }
+        });
     });
 
-    // Initial fetch of parent data
+    // Close modal if clicked outside
+    $(window).on('click', function (event) {
+        if ($(event.target).is('#reason_modal_overlay')) {
+            $('#reason_modal').hide();
+            $('#reason_modal_overlay').hide();
+        }
+    });
+
+    // Fetch initial data
     fetchParentData();
 });

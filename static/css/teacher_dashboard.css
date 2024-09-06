@@ -1,14 +1,137 @@
+
+/* Dashboard Container */
+.dashboard-container {
+    background-color: #e8f4f8; /* Light blue background for the dashboard */
+    color: #1a1a1a; /* Dark text color */
+}
+
+/* Header and Navigation */
+h1 {
+    color: #4a148c; /* Dark violet for headings */
+}
+
+#actions a {
+    color: #4a148c; /* Dark violet for links */
+    text-decoration: none;
+}
+
+#actions a:hover {
+    text-decoration: underline;
+}
+
+/* Students Table */
 #students-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-#students-table th, #students-table td {
+#students-table th,
+#students-table td {
     padding: 8px;
     text-align: left;
 }
 
 #students-table th {
-    background-color: #f2f2f2;
+    background-color: #d1c4e9; /* Light violet background for table headers */
+}
+
+#students-table td {
+    background-color: #fff;
+}
+
+/* Notification Section */
+#notifications-container {
+    margin-top: 20px;
+}
+
+.notification-item {
+    border: 1px solid #b39ddb; /* Light violet border for notifications */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #ffffff; /* White background for notifications */
+}
+
+.notification-item.unread {
+    border-color: #4a148c; /* Dark violet for unread notifications */
+}
+
+.notification-item a {
+    color: #4a148c; /* Dark violet for links */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.notification-item a:hover {
+    color: #3f51b5; /* Darker violet-blue on hover */
+}
+
+/* Modal Styles */
+#notification_modal_content {
+    background: #ffffff; /* White background for modal content */
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+}
+
+#close_modal_btn {
+    cursor: pointer;
+    float: right;
+    font-size: 18px;
+    color: #4a148c; 
+}
+
+/* Notification Icon */
+#notification_icon {
+    position: relative; /* Ensure it's the positioning context for the modal */
+}
+
+/* Notification Modal */
+#notification_modal {
+    display: none;
+    position: absolute; /* Position relative to the notification icon */
+    top: 40px; /* Adjust this value to place the modal below the icon */
+    right: 0; /* Align it to the right of the notification icon */
+    width: 300px; /* Adjust width as needed */
+    background-color: #ffffff; /* White background for the modal */
+    border: 1px solid #b39ddb; /* Light violet border for the modal */
+    padding: 10px;
+    z-index: 1000; /* Ensure it is on top of other elements */
+}
+
+/* CSS for the modal */
+#reason-modal {
+    display: none; /* Hide modal by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer {
+    margin-top: 20px;
+}
+
+.modal-close {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    background-color: #45a049;
+}
+
+.notification-modal {
+    display: none; /* Hide modal by default */
 }

@@ -217,3 +217,30 @@ def delete_student(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+def get_teacher_notifications(request):
+    # Get the logged-in user
+    logged_in_user = request.user
+    
+    # Identify the teacher linked to the logged-in user
+    try:
+        logged_in_teacher = Teacher.objects.get(user=logged_in_user)
+    except Teacher.DoesNotExist:
+        return JsonResponse({'success': False, 'notifications': []})  # If no teacher is found
+    
+    # Fetch notifications for the logged-in teacher
+    notifications = TeacherNotification.objects.filter(teacher=logged_in_teacher, is_read=False)
+
+    # Prepare the data to send as JSON response
+    notification_list = []
+    for notification in notifications:
+        notification_list.append({
+            'id': notification.id,
+            'message': f"Leave reason for {notification.student.first_name} {notification.student.last_name} on {notification.reason.date}",
+            'student': f"{notification.student.first_name} {notification.student.last_name}",
+            'date': notification.reason.date.strftime("%Y-%m-%d"),
+            'is_read': notification.is_read,
+            'reason': notification.reason.reason,
+        })
+
+    return JsonResponse({'success': True, 'notifications': notification_list})

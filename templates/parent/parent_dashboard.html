@@ -35,13 +35,18 @@
         <div id="notification_message">No new notifications.</div>
         <button id="close_notification_btn">Close</button>
     </div>
-    <!-- Reason Modal (Hidden by default) -->
-    <div id="reason_modal"
-        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000;">
-        <h2 id="reason_modal_heading">Give Reason</h2>
-        <textarea id="reason_input" rows="4" cols="30" placeholder="Enter reason here..."></textarea>
-        <button id="submit_reason_btn">Submit Reason</button>
-        <button id="close_reason_modal_btn">Close</button>
+    
+    <!-- Modal Overlay -->
+    <div id="reason_modal_overlay" class="modal-overlay"></div>
+
+    <!-- Reason Modal HTML -->
+    <div id="reason_modal" class="modal">
+        <div class="modal-content">
+            <h2 id="reason_modal_heading"></h2>
+            <textarea id="reason_textarea" placeholder="Enter your reason here"></textarea>
+            <button id="submit_reason_btn">Submit Reason</button>
+            <button id="close_reason_modal_btn">Close</button>
+        </div>
     </div>
 
     <!-- Attendance Modal (Hidden by default) -->

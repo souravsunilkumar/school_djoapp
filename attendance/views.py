@@ -63,12 +63,15 @@ def mark_student_attendance(request):
         try:
             data = json.loads(request.body)
             selected_date = date.fromisoformat(data.get('attendance_date', date.today().strftime('%Y-%m-%d')))
+
+            # Find the logged-in teacher
+            teacher = Teacher.objects.get(user=request.user)
             
             for student in data['students']:
                 student_id = student['student_id']
                 status = student['status']
                 student_obj = Student.objects.get(id=student_id)
-                
+
                 if status == 'absent':
                     Attendance.objects.update_or_create(
                         student=student_obj,
@@ -81,7 +84,8 @@ def mark_student_attendance(request):
                     for parent_obj in parents:
                         Notification.objects.create(
                             parent=parent_obj,
-                            student=student_obj,  # Link the student object here
+                            student=student_obj,
+                            teacher=teacher,  # Link the logged-in teacher here
                             message=f'Your student {student_obj.first_name} {student_obj.last_name} was absent on {selected_date}.',
                             absence_date=selected_date,
                             student_name=f'{student_obj.first_name} {student_obj.last_name}',

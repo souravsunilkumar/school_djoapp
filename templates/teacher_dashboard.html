@@ -1,47 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="../static/css/teacher_dashboard.css">
+    <link rel="stylesheet" href="/static/css/teacher_dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../static/js/teacher_dashboard.js"></script>
-    <style>
-        /* Existing CSS styles */
+    <script src="/static/js/teacher_dashboard.js"></script>
 
-        /* Notification Section */
-        #notifications-container {
-            margin-top: 20px;
-        }
-
-        .notification-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-
-        .notification-item.unread {
-            border-color: #4caf50;
-        }
-
-        .notification-item a {
-            color: #4caf50;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .notification-item a:hover {
-            color: #1b5e20;
-        }
-    </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <h1>Teacher Dashboard</h1>
-        
+
         <div id="welcome-message">
             <!-- Dynamically populated welcome message -->
         </div>
@@ -50,10 +23,31 @@
             <!-- Class teacher status will be displayed here -->
         </div>
 
-        <!-- Notification Section -->
-        <div id="notifications-container" style="position: absolute; top: 20px; right: 20px;">
-            <img src="/static/images/notification.png" alt="Notifications" style="height: 20px; width: 20px;">
-            <!-- Notifications will be dynamically populated here -->
+        <!-- Notification Icon -->
+        <div id="notification_icon" class="notification-icon" style="position: absolute; top: 20px; right: 20px;">
+            <img src="/static/images/notification.png" alt="Notifications" style="height: 30px; width: 30px;">
+        </div>
+
+        <!-- Notification Modal -->
+        <div id="notification_modal" class="notification-modal"
+            style="position: absolute; top: 60px; right: 20px; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px;">
+            <div id="notifications-container">
+                <!-- Notifications will be populated here -->
+            </div>
+            <button id="close_modal_btn" class="modal-close">Close</button>
+        </div>
+
+        <!-- Modal to display leave reason -->
+        <div id="reason-modal">
+            <div class="modal-content">
+                <h4>Leave Reason</h4>
+                <p><strong>Student:</strong> <span id="modal-student"></span></p>
+                <p><strong>Date:</strong> <span id="modal-date"></span></p>
+                <p><strong>Reason:</strong> <span id="modal-reason"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close_reason_modal" class="modal-close">Close</button>
+            </div>
         </div>
 
         <div id="students-container">
@@ -75,10 +69,11 @@
 
         <br>
         <div id="actions">
-            <a href="/management/add_students">Add Student</a>
-            <a href="/attendance/mark_student_attendance">Mark Student Attendance</a>
-            <a href="/attendance/view_attendance_report">View Student Attendance</a>
+            <a href="/management/add_students">Add Student</a><br>
+            <a href="/attendance/mark_student_attendance">Mark Student Attendance</a><br>
+            <a href="/attendance/view_attendance_report">View Student Attendance</a><br>
         </div>
     </div>
 </body>
+
 </html>

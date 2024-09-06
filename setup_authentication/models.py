@@ -166,12 +166,30 @@ class Notification(models.Model):
         return f"Notification for {self.parent.username if self.parent else 'No Parent'} - {self.message[:20]}"
     
 
-class Leave_Reason(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
-    leave_date = models.DateField()
+
+
+class LeaveReason(models.Model):
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    parent = models.ForeignKey('Parent', on_delete=models.CASCADE)
+    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE, null=True, blank=True)
+    parent_notification=models.ForeignKey('Notification',on_delete=models.CASCADE,null=True,blank=True)
     reason = models.TextField()
+    date = models.DateField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Leave Reason for {self.student.first_name} {self.student.last_name} on {self.leave_date}"
+        return f"Leave Reason for {self.student} on {self.date}"
+    
+
+class TeacherNotification(models.Model):
+    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE)
+    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, blank=True)
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    message = models.TextField()
+    reason= models.ForeignKey('LeaveReason',on_delete=models.CASCADE, null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification for {self.student} - {self.message[:20]}"
+    

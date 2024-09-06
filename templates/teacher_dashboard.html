@@ -7,19 +7,78 @@
     <link rel="stylesheet" href="../static/css/teacher_dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../static/js/teacher_dashboard.js"></script>
+    <style>
+        /* Existing CSS styles */
+
+        /* Notification Section */
+        #notifications-container {
+            margin-top: 20px;
+        }
+
+        .notification-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .notification-item.unread {
+            border-color: #4caf50;
+        }
+
+        .notification-item a {
+            color: #4caf50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .notification-item a:hover {
+            color: #1b5e20;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <h1>Teacher Dashboard</h1>
+        
         <div id="welcome-message">
-            <!-- This can be dynamically populated -->
+            <!-- Dynamically populated welcome message -->
         </div>
+
         <div id="class-teacher-status">
             <!-- Class teacher status will be displayed here -->
         </div>
-        
+
+        <!-- Notification Section -->
+        <div id="notifications-container" style="position: absolute; top: 20px; right: 20px;">
+            <img src="/static/images/notification.png" alt="Notifications" style="height: 20px; width: 20px;">
+            <!-- Notifications will be dynamically populated here -->
+        </div>
+
+        <div id="students-container">
+            <h3>Students List:</h3>
+            <table id="students-table" border="1">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Students data will be populated here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+        <div id="actions">
+            <a href="/management/add_students">Add Student</a>
+            <a href="/attendance/mark_student_attendance">Mark Student Attendance</a>
+            <a href="/attendance/view_attendance_report">View Student Attendance</a>
+        </div>
     </div>
-    <br>
-    <a href="/management/add_students">Add Student</a>
 </body>
 </html>

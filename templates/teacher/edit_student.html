@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="../static/css/edit_student.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/edit_student.js"></script>
+</head>
+<body>
+    <div class="edit-student-container">
+        <h1>Edit Student</h1>
+        <form id="edit-student-form">
+            <input type="hidden" id="student_id" value="{{ student_id }}">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" required>
+            <br>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" required>
+            <br>
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+            <br>
+            <label for="admission_number">Admission Number:</label>
+            <input type="text" id="admission_number" required>
+            <br>
+            <label for="roll_number">Roll Number:</label>
+            <input type="text" id="roll_number" required>
+            <br>
+            <label for="parents_number">Parents Number:</label>
+            <input type="text" id="parents_number" required>
+            <br>
+            <label for="parents_email">Parents Email:</label>
+            <input type="email" id="parents_email" required>
+            <br>
+            <label for="warden">Warden:</label>
+            <select id="warden">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+            <br>
+            <button type="submit">Update Student</button>
+        </form>
+    </div>
+</body>
+</html>
+
+

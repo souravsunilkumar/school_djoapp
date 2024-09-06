@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.date-range {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.date-range label {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+#report-section {
+    margin-top: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto; /* Allow horizontal scrolling */
+    margin: 0 auto;
+    border: 1px solid #ddd; /* Optional border for the table wrapper */
+}
+
+#attendance-report {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px; /* Minimum width to avoid column congestion */
+}
+
+#attendance-report th, #attendance-report td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+#attendance-report th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#attendance-report .sticky-column {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    left: 0;
+    background-color: #fff;
+    z-index: 2; /* Make sure the sticky column is above other content */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+#attendance-report .status-present {
+    color: green;
+}
+
+#attendance-report .status-absent {
+    color: red;
+}
+
+#attendance-report .status-holiday {
+    color: blue;
+}
+
+#download_pdf {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#download_pdf:hover {
+    background-color: #45a049;
+}

@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9; /* Light green background */
+    color: #1b5e20; /* Dark green text */
+    position: relative; /* Allows for absolute positioning of the notification icon */
+}
+
+h1 {
+    color: #388e3c; /* Slightly darker green for headings */
+}
+
+label {
+    font-weight: bold;
+}
+
+select {
+    padding: 8px;
+    border: 1px solid #4caf50; /* Green border */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #fff; /* White background */
+}
+
+.notification-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.notification {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.notification-item {
+    margin-bottom: 10px;
+}
+
+.give_reason_btn {
+    background-color: #4caf50; /* Green button */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.give_reason_btn:hover {
+    background-color: #388e3c;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Ensure modal is above other content */
+}
+
+textarea {
+    width: 100%;
+    border: 1px solid #4caf50; /* Green border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px;
+}
+
+button {
+    background-color: #4caf50; /* Green button */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #388e3c;
+}

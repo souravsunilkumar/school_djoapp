@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard</title>
+    <link rel="stylesheet" href="/static/css/parent_dashboard.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/parent_dashboard.js"></script>
+</head>
+
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <div align="center">
+        <h1>Welcome, <span id="parent_name"></span></h1>
+        <p id="guardian_message"></p>
+
+        <label for="student_select">Select Student:</label>
+        <select id="student_select">
+            <!-- Options will be populated via AJAX -->
+        </select>
+
+        <button id="view_attendance_btn">View Attendance Report</button>
+    </div>
+
+    <!-- Notification Icon -->
+    <div id="notification_icon" class="notification-icon" style="position: absolute; top: 20px; right: 20px;">
+        <img src="/static/images/notification.png" alt="Notifications" style="height: 30px; width: 30px;">
+    </div>
+
+    <!-- Notification Section (Hidden by default) -->
+    <div id="notification_section" class="notification"
+        style="display: none; position: absolute; top: 60px; right: 20px; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px;">
+        <div id="notification_message">No new notifications.</div>
+        <button id="close_notification_btn">Close</button>
+    </div>
+    <!-- Reason Modal (Hidden by default) -->
+    <div id="reason_modal"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 1000;">
+        <h2 id="reason_modal_heading">Give Reason</h2>
+        <textarea id="reason_input" rows="4" cols="30" placeholder="Enter reason here..."></textarea>
+        <button id="submit_reason_btn">Submit Reason</button>
+        <button id="close_reason_modal_btn">Close</button>
+    </div>
+
+    <!-- Attendance Modal (Hidden by default) -->
+    <div id="attendance_modal" style="display: none;">
+        <h2 id="report_heading">Attendance Report</h2>
+        <label for="from_date">From Date:</label>
+        <input type="date" id="from_date">
+        <label for="to_date">To Date:</label>
+        <input type="date" id="to_date">
+        <button id="generate_report_btn">Generate Report</button>
+        <table id="attendance_report" border="1">
+            <thead>
+                <tr id="report_header">
+                    <th>Student Name</th>
+                    <!-- Dates will be added here dynamically -->
+                </tr>
+            </thead>
+            <tbody id="report_body">
+                <!-- Report data will be added here dynamically -->
+            </tbody>
+        </table>
+        <button id="close_modal_btn">Close</button>
+    </div>
+</body>
+
+</html>

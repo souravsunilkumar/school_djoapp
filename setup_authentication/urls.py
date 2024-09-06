@@ -16,6 +16,11 @@ urlpatterns = [
     path('api/admin_dashboard/', admin_dashboard_data, name='admin_dashboard_data'),
     path('api/register_sub_admin/', register_sub_admin, name='register_sub_admin'),
     path('api/register_employee/', register_employee, name='register_employee'),
-    path('teacher_dashboard/', teacher_dashboard, name='teacher_dashboard'),
-    path('api/teacher/dashboard/', teacher_dashboard_data, name='teacher_dashboard_data'),
+
+    path('parent_register/', parent_register, name='parent_register'),
+    path('get_schools/', get_schools, name='get_schools'),
+    path('get_classes_and_divisions/<int:school_id>/', get_classes_and_divisions, name='get_classes_and_divisions'),
+    path('get_students/<int:school_id>/<str:class_division>/', get_students, name='get_students'),
+    path('register_parent/', register_parent, name='register_parent'),
+    
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

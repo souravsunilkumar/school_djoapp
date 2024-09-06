@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Student Attendance</title>
+    <link rel="stylesheet" href="/static/css/mark_student_attendance.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/mark_student_attendance.js"></script>
+</head>
+<body>
+    <h1>Mark Student Attendance</h1>
+    <form id="attendance-form">
+        <label for="attendance_date">Select Date:</label>
+        <input type="date" id="attendance_date" name="attendance_date" value="{{ attendance_date }}">
+        <table id="students-table" border="1">
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Present</th>
+                    <th>Absent</th>
+                </tr>
+            </thead>
+            <tbody id="students-tbody">
+                <!-- Student rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+        <button type="submit">Submit Attendance</button>
+    </form>
+</body>
+</html>

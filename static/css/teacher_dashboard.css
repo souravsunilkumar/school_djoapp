@@ -1,0 +1,14 @@
+#students-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#students-table th, #students-table td {
+    padding: 8px;
+    text-align: left;
+}
+
+#students-table th {
+    background-color: #f2f2f2;
+}

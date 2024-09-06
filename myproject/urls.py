@@ -23,8 +23,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('attendence/', include('attendence.urls')),
+    path('attendance/', include('attendance.urls')),
     path('setup_auth/', include('setup_authentication.urls')),
     path('progress/', include('student_progress.urls')),
     path('management/', include('management.urls')),
+    path('parent/', include('parent.urls')),
 ]

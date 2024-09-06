@@ -30,6 +30,38 @@ def get_teachers(request):
 
     return JsonResponse({'error': 'Invalid request method.'})
 
+def teacher_dashboard(request):
+    """Render the teacher dashboard."""
+    return render(request, 'teacher_dashboard.html')
+
+def teacher_dashboard_data(request):
+    if request.user.is_authenticated:
+        try:
+            teacher = get_object_or_404(Teacher, user=request.user)
+            if teacher.is_class_teacher:
+                class_teacher = teacher.class_teacher_set.first()
+                students = Student.objects.filter(
+                    class_assigned=class_teacher.class_assigned,
+                    division_assigned=class_teacher.division_assigned,
+                    school=class_teacher.school
+                ).values('id', 'first_name', 'last_name', 'roll_number')  # Include 'id' field
+
+                data = {
+                    'is_class_teacher': True,
+                    'class_assigned': class_teacher.class_assigned,
+                    'division_assigned': class_teacher.division_assigned,
+                    'students': list(students),
+                }
+            else:
+                data = {
+                    'is_class_teacher': False,
+                    'students': []
+                }
+            return JsonResponse({'success': True, 'data': data})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    return JsonResponse({'success': False, 'message': 'User not authenticated.'})
+
 @csrf_exempt
 def assign_class_teacher(request):
     if request.method == 'POST':
@@ -117,6 +149,71 @@ def add_student(request):
             return JsonResponse({'success': True, 'message': 'Student added successfully.'})
         except Class_Teacher.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Class teacher record not found.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def get_student(request, student_id):
+    if request.method == 'GET':
+        try:
+            student = get_object_or_404(Student, id=student_id)
+            data = {
+                'first_name': student.first_name,
+                'last_name': student.last_name,
+                'gender': student.gender,
+                'admission_number': student.admission_number,
+                'roll_number': student.roll_number,
+                'parents_number': student.parents_number,
+                'parents_email': student.parents_email,
+                'warden': student.warden.id if student.warden else 'not_a_hostler'
+            }
+            return JsonResponse({'success': True, 'data': data})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+def edit_student_page(request, student_id):
+    return render(request, 'teacher/edit_student.html', {'student_id': student_id})
+
+@csrf_exempt
+def edit_student(request, student_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            student = get_object_or_404(Student, id=student_id)
+            
+            student.first_name = data.get('first_name', student.first_name)
+            student.last_name = data.get('last_name', student.last_name)
+            student.gender = data.get('gender', student.gender)
+            student.admission_number = data.get('admission_number', student.admission_number)
+            student.roll_number = data.get('roll_number', student.roll_number)
+            student.parents_number = data.get('parents_number', student.parents_number)
+            student.parents_email = data.get('parents_email', student.parents_email)
+
+            # Handle 'warden' field
+            warden_id = data.get('warden', None)
+            if warden_id:
+                student.warden_id = warden_id
+            else:
+                student.warden = None
+
+            student.save()
+
+            return JsonResponse({'success': True, 'message': 'Student updated successfully.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@csrf_exempt
+def delete_student(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            student_id = data.get('student_id')
+            student = get_object_or_404(Student, id=student_id)
+            student.delete()
+            return JsonResponse({'success': True, 'message': 'Student deleted successfully.'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})

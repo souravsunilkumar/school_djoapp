@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.date-range {
+    margin-bottom: 20px;
+}
+
+.date-range label {
+    margin-right: 10px;
+}
+
+.date-range input[type="date"] {
+    margin-right: 10px;
+    padding: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#report-section {
+    margin-top: 20px;
+}
+
+#report-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#report-section table th, #report-section table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#report-section table th {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+#report-section table td {
+    text-align: center;
+}

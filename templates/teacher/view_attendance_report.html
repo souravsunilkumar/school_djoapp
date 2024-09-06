@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Attendance Report</title>
+    <link rel="stylesheet" href="/static/css/view_attendance_report.css">
+    <!-- Ensure jQuery is included first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance Report</h1>
+        <div class="date-range">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date">
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date">
+            <button id="generate_report">Generate Report</button>
+        </div>
+
+        <div id="report-section">
+            <h2>Attendance from <span id="report-start-date"></span> to <span id="report-end-date"></span></h2>
+            <div class="table-wrapper">
+                <table id="attendance-report">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Admission Number</th>
+                            <th>Roll Number</th>
+                            <th>Class</th>
+                            <th>Division</th>
+                            <!-- Dates will be dynamically added here -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Attendance data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button id="download_pdf">Download PDF</button>
+    </div>
+    
+    <!-- Your custom script must be included after jQuery -->
+    <script src="/static/js/view_attendance_report.js"></script>
+</body>
+</html>

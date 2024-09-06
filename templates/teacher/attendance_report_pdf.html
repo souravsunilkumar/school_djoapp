@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report PDF</title>
+    <link rel="stylesheet" href="/static/css/attendance_report_pdf.css">
+    
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Include jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Include jsPDF-AutoTable Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Attendance Report PDF</h1>
+        <div class="date-range">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date">
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date">
+            <button id="generate_pdf">Generate PDF</button>
+        </div>
+        <div id="report-section">
+            <!-- PDF preview can be shown here if necessary -->
+        </div>
+    </div>
+
+    <!-- Your custom JavaScript file -->
+    <script src="/static/js/attendance_report_pdf.js"></script>
+</body>
+</html>

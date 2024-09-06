@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     function fetchTeacherDetails() {
         $.ajax({
-            url: '/setup_auth/api/teacher/dashboard/', // Ensure this endpoint is correct
+            url: '/management/api/teacher/dashboard/', // Ensure this endpoint is correct
             type: 'GET',
             success: function(response) {
                 if (response.success) {

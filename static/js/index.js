@@ -11,4 +11,8 @@ $(document).ready(function() {
         console.log('Login button clicked'); // Debugging statement
         window.location.href = 'http://127.0.0.1:8000/setup_auth/login/';
     });
+    $('#register_parent').click(function(){
+        console.log('Register Parent button clicked'); // Debugging statement
+        window.location.href = 'http://127.0.0.1:8000/setup_auth/parent_register/';
+    });
 });

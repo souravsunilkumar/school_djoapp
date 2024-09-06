@@ -5,15 +5,22 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
 from .models import *
 import json 
 from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
+import logging
 # Create your views here.
+
+
+logger = logging.getLogger(__name__)
+
 
 def home(request):
     return render(request,'index.html')
@@ -96,7 +103,10 @@ def user_login(request):
                     return JsonResponse({'success': True, 'redirect_url': '/setup_auth/sub_admin_dashboard/'})
                 elif user.groups.filter(id=3).exists():
                     # Redirect URL for the teacher dashboard
-                    return JsonResponse({'success': True, 'redirect_url': '/setup_auth/teacher_dashboard/'})
+                    return JsonResponse({'success': True, 'redirect_url': '/management/teacher_dashboard/'})
+                elif user.groups.filter(id=8).exists():
+                    # Redirect URL for the teacher dashboard
+                    return JsonResponse({'success': True, 'redirect_url': '/parent/parent_dashboard/'})
                 else:
                     return JsonResponse({'success': False, 'message': 'User is not authorized.'})
             else:
@@ -257,17 +267,106 @@ def register_employee(request):
 
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
-def teacher_dashboard(request):
-    """Render the teacher dashboard."""
-    return render(request, 'teacher_dashboard.html')
 
-def teacher_dashboard_data(request):
-    if request.user.is_authenticated:
-        teacher = get_object_or_404(Teacher, user=request.user)
-        data = {
-            'is_class_teacher': teacher.is_class_teacher,
-            'class_assigned': teacher.class_teacher_set.first().class_assigned if teacher.is_class_teacher else None,
-            'division_assigned': teacher.class_teacher_set.first().division_assigned if teacher.is_class_teacher else None
-        }
-        return JsonResponse({'success': True, 'data': data})
-    return JsonResponse({'success': False, 'message': 'User not authenticated.'})
+
+
+@csrf_exempt
+def parent_register(request):
+    return render(request, 'parent_register.html')
+
+def get_schools(request):
+    schools = School.objects.all()
+    school_data = [{"school_id": school.school_id, "school_name": school.school_name} for school in schools]
+    return JsonResponse({"schools": school_data})
+
+def get_classes_and_divisions(request, school_id):
+    students = Student.objects.filter(school_id=school_id)
+    class_division_data = list(set(student.class_and_division for student in students))
+    return JsonResponse({"classes": class_division_data})
+
+def get_students(request, school_id, class_division):
+    # Split the `class_division` string to get class and division separately
+    class_assigned, division_assigned = class_division.split(' - ')
+    
+    # Filter students based on the separated class and division
+    students = Student.objects.filter(
+        school_id=school_id,
+        class_assigned=class_assigned,
+        division_assigned=division_assigned
+    )
+    
+    student_data = [{"id": student.id, "first_name": student.first_name, "last_name": student.last_name} for student in students]
+    
+    return JsonResponse({"students": student_data})
+
+
+@csrf_exempt
+def register_parent(request):
+    if request.method == 'POST':
+        try:
+            # Extract POST data
+            first_name = request.POST.get('first_name')
+            second_name = request.POST.get('second_name')
+            email = request.POST.get('email')
+            contact_number = request.POST.get('contact_number')
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            school_id = request.POST.get('school_id')
+            class_division = request.POST.get('class_division')
+            students = request.POST.getlist('students[]')  # Adjusted to handle list format
+
+            logger.debug(f"Received data: first_name={first_name}, second_name={second_name}, email={email}, contact_number={contact_number}, username={username}, school_id={school_id}, class_division={class_division}, students={students}")
+
+            # Check if all required fields are provided
+            if not all([first_name, email, contact_number, username, password, confirm_password, school_id, class_division]):
+                return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+            # Check if passwords match
+            if password != confirm_password:
+                return JsonResponse({'error': 'Passwords do not match'}, status=400)
+
+            # Create user
+            user = User.objects.create_user(
+                username=username,
+                email=email,  # Set email
+                password=password,  # Password is already hashed by create_user
+                first_name=first_name,
+                last_name=second_name
+            )
+
+            # Assign user to parent group
+            try:
+                parent_group = Group.objects.get(id=8)
+                user.groups.add(parent_group)
+            except Group.DoesNotExist:
+                logger.error("Parent group with ID 8 does not exist")
+                return JsonResponse({'error': 'Parent group does not exist'}, status=400)
+
+            # Create parent
+            parent = Parent.objects.create(
+                first_name=first_name,
+                second_name=second_name,
+                username=username,
+                user=user,
+                school_id=school_id,
+                contact_number=contact_number,
+                email=email
+            )
+
+            # Add students to the parent
+            for student_id in students:
+                try:
+                    student = Student.objects.get(id=student_id)
+                    parent.students.add(student)
+                except ObjectDoesNotExist:
+                    logger.error(f"Student with ID {student_id} does not exist")
+                    return JsonResponse({'error': f'Student with ID {student_id} does not exist'}, status=400)
+
+            parent.save()  # Ensure the parent instance is saved with the updated students
+
+            return JsonResponse({'success': True})
+        
+        except Exception as e:
+            logger.error(f"Error in register_parent: {str(e)}")
+            return JsonResponse({'error': 'An unexpected error occurred'}, status=500)

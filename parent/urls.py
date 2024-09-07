@@ -13,6 +13,7 @@ urlpatterns = [
     path('notifications/', parent_notifications, name='parent_notifications'),
     path('mark_notifications_as_read/', mark_notifications_as_read, name='mark_notifications_as_read'),
     path('submit_leave_reason/', submit_leave_reason, name='submit_leave_reason'),
+    path('check_reason_given/', check_reason_given, name='check_reason_given'),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

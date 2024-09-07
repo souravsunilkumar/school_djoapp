@@ -66,25 +66,22 @@ $(document).ready(function () {
             success: function (data) {
                 const dates = data.dates;
                 const reportBody = data.attendance_records;
+                const reasons = data.reasons || {}; // Assuming `reasons` is returned with the response
                 const studentName = data.student_name;
 
-                // Set the table header with dates
-                let headerHtml = '<th>Student Name</th>';
-                dates.forEach(date => {
-                    headerHtml += `<th>${date}</th>`;
-                });
-                $('#report_header').html(headerHtml);
+                // Transpose the table
+                let headerHtml = '<th>Date</th><th>Status</th><th>Reason</th>';
+                let bodyHtml = '';
 
-                // Set the table body with attendance data
-                let bodyHtml = `<tr><td>${studentName}</td>`;
                 dates.forEach(date => {
                     const record = reportBody.find(r => r.date === date);
-                    bodyHtml += `<td>${record ? record.status : 'N/A'}</td>`;
+                    const status = record ? record.status : 'N/A';
+                    const reason = status === 'Absent' ? (reasons[date] ? reasons[date] : 'No reason given') : 'N/A';
+                    bodyHtml += `<tr><td>${date}</td><td>${status}</td><td>${reason}</td></tr>`;
                 });
-                bodyHtml += '</tr>';
-                $('#report_body').html(bodyHtml);
 
-                // Set the report heading
+                $('#report_header').html(headerHtml);
+                $('#report_body').html(bodyHtml);
                 $('#report_heading').text(`Attendance Report of ${studentName}`);
             },
             error: function (error) {
@@ -92,7 +89,6 @@ $(document).ready(function () {
             }
         });
     });
-
     // Show notification section and load notifications
     $('#notification_icon').on('click', function () {
         $('#notification_section').toggle(); // Toggle visibility of the notification section
@@ -104,12 +100,18 @@ $(document).ready(function () {
                 $('#notification_message').empty();
                 if (data.notifications.length > 0) {
                     data.notifications.forEach(function (notification) {
+                        const buttonText = notification.reason_given ? 'Reason Given' : 'Give Reason';
+                        const buttonClass = notification.reason_given ? 'reason_given_btn' : 'give_reason_btn';
+
                         $('#notification_message').append(`
-                            <div class="notification-item" data-notification-id="${notification.id}">
-                                <p>${notification.message}</p>
-                                <button class="give_reason_btn" data-notification-id="${notification.id}" data-student-name="${notification.student_name}" data-date="${notification.date}" ${notification.reason_given ? 'disabled' : ''}>${notification.reason_given ? 'Reason Given' : 'Give Reason'}</button>
-                            </div>
-                        `);
+                        <div class="notification-item" data-notification-id="${notification.id}">
+                            <p>${notification.message}</p>
+                            <button class="${buttonClass}" data-notification-id="${notification.id}" data-student-name="${notification.student_name}" data-date="${notification.date}">${buttonText}</button>
+                        </div>
+                    `);
+
+                        // Check if the reason has already been given for this notification
+                        checkReasonGiven(notification.id, $(`button[data-notification-id="${notification.id}"]`));
                     });
                 } else {
                     $('#notification_message').text('No new notifications.');
@@ -120,6 +122,28 @@ $(document).ready(function () {
             }
         });
     });
+
+    function checkReasonGiven(notificationId, button) {
+        $.ajax({
+            url: '/parent/check_reason_given/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            },
+            data: JSON.stringify({
+                notification_id: notificationId
+            }),
+            contentType: 'application/json',
+            success: function (data) {
+                if (data.reason_given) {
+                    button.text('Reason Given').removeClass('give_reason_btn').addClass('reason_given_btn');
+                }
+            },
+            error: function (error) {
+                console.error('Error checking reason status:', error);
+            }
+        });
+    }
 
     // Close notification section
     $('#close_notification_btn').on('click', function () {
@@ -170,7 +194,7 @@ $(document).ready(function () {
         // Update the modal heading with the student's name and date
         $('#reason_modal_heading').text(`Why was ${studentName} absent on ${date}?`);
 
-        // Center the modal
+        // Center and show the modal
         $('#reason_modal').css({
             top: '50%',
             left: '50%',
@@ -216,12 +240,44 @@ $(document).ready(function () {
 
                 // Mark notification as read and update button text
                 markNotificationsAsRead([notificationId]);
-                $(`button.give_reason_btn[data-notification-id="${notificationId}"]`).text('Reason Given');
+                $(`button.give_reason_btn[data-notification-id="${notificationId}"]`).text('Reason Given')
+                    .removeClass('give_reason_btn')
+                    .addClass('reason_given_btn'); // Change class to update button style
             },
             error: function (error) {
                 console.error('Error submitting leave reason:', error);
             }
         });
+    });
+
+    
+
+    // Style for "Reason Given" button
+    $(document).on('click', '.give_reason_btn', function () {
+        const studentName = $(this).data('student-name');
+        const date = $(this).data('date');
+        const notificationId = $(this).data('notification-id');
+
+        if (!notificationId) {
+            alert('Notification ID is missing.');
+            return;
+        }
+
+        $('#reason_modal').data('notification-id', notificationId);
+
+        // Update the modal heading with the student's name and date
+        $('#reason_modal_heading').text(`Why was ${studentName} absent on ${date}?`);
+
+        // Center the modal
+        $('#reason_modal').css({
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%) scale(1)', // Full size
+            opacity: 1
+        }).show();
+
+        // Show the modal overlay
+        $('#reason_modal_overlay').show();
     });
 
     // Close modal if clicked outside

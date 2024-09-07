@@ -76,6 +76,13 @@ def attendance_report(request):
             date__range=[from_date, to_date]
         )
         
+        # Get reasons for absences
+        reasons = LeaveReason.objects.filter(
+            student=student,
+            date__range=[from_date, to_date]
+        ).values('date', 'reason')
+        reason_dict = {str(r['date']): r['reason'] for r in reasons}
+
         # Create list of dates and report data
         dates = []
         report_data = []
@@ -93,7 +100,8 @@ def attendance_report(request):
         return JsonResponse({
             'student_name': f"{student.first_name} {student.last_name}",
             'dates': dates,
-            'attendance_records': report_data
+            'attendance_records': report_data,
+            'reasons': reason_dict
         })
 
 
@@ -135,6 +143,8 @@ def mark_notifications_as_read(request):
 def submit_leave_reason(request):
     try:
         data = json.loads(request.body)
+        print(f"Received data: {data}")  # Debugging line
+        
         notification_id = data.get('notification_id')
         reason = data.get('reason')
 
@@ -144,11 +154,11 @@ def submit_leave_reason(request):
         # Fetch the notification
         notification = Notification.objects.get(id=notification_id)
 
-        # Debugging statements
-        print(f"Notification: {notification}")
-        print(f"Student: {notification.student}")
-        print(f"Parent: {notification.parent}")
-        print(f"Teacher: {notification.teacher}")
+        # Check if a LeaveReason already exists for this notification
+        existing_leave_reason = LeaveReason.objects.filter(parent_notification=notification).first()
+
+        if existing_leave_reason:
+            return JsonResponse({'error': 'Leave reason has already been submitted.'}, status=400)
 
         # Create the LeaveReason
         leave_reason = LeaveReason(
@@ -179,5 +189,26 @@ def submit_leave_reason(request):
         return JsonResponse({'message': 'Leave reason submitted and notification sent successfully.'})
     except Notification.DoesNotExist:
         return JsonResponse({'error': 'Notification not found.'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+def check_reason_given(request):
+    try:
+        data = json.loads(request.body)
+        notification_id = data.get('notification_id')
+
+        if not notification_id:
+            return JsonResponse({'error': 'Notification ID is required.'}, status=400)
+
+        notification = Notification.objects.get(id=notification_id)
+        reason_given = LeaveReason.objects.filter(parent_notification=notification).exists()
+
+        return JsonResponse({'reason_given': reason_given})
+    except Notification.DoesNotExist:
+        return JsonResponse({'error': 'Notification not found.'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

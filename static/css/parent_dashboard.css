@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #e8f5e9; /* Light green background */
@@ -55,65 +56,41 @@ select {
     margin: 5px 0;
     border-radius: 5px;
     cursor: pointer;
+    position: relative; /* Needed for absolute positioning of the modal */
 }
 
 .give_reason_btn:hover {
     background-color: #388e3c;
 }
 
+/* Modal Styles */
 .modal {
     display: none; /* Hidden by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute; /* Position relative to the button */
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 20px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000; /* Ensure modal is above other content */
-}
-
-textarea {
-    width: 100%;
-    border: 1px solid #4caf50; /* Green border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 8px;
-}
-
-button {
-    background-color: #4caf50; /* Green button */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 5px 0;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #388e3c;
-}
-
-/* Modal transition for smooth pop-out effect */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
     transition: all 0.3s ease-out; /* Smooth transition for transform and opacity */
     transform-origin: center; /* Ensure it scales from the center */
     opacity: 0; /* Start hidden */
     width: 400px; /* Fixed width */
+    height: auto;
+    transform: scale(0); /* Start scaled down */
 }
 
+.modal.show {
+    opacity: 1; /* Show the modal */
+    transform: scale(1); /* Scale to full size */
+}
+
+.modal.hide {
+    opacity: 0; /* Hide the modal */
+    transform: scale(0); /* Scale down */
+}
+
+/* Modal Overlay */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -140,4 +117,29 @@ textarea {
     border-radius: 4px; /* Rounded corners */
     padding: 8px;
     margin-top: 10px;
+}
+
+.reason_given_btn {
+    background-color: #2196F3; /* Blue color */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: not-allowed; /* Indicate that the button is not clickable */
+}
+
+.reason_given_btn:hover {
+    background-color: #1976D2; /* Darker blue */
+}
+
+/* Animation */
+.modal.show {
+    opacity: 1; /* Show the modal */
+    transform: scale(1); /* Scale to full size */
+    transition: all 0.5s ease; /* Smooth transition for scaling */
 }

@@ -4,6 +4,7 @@ from django.shortcuts import render
 import io
 from io import BytesIO
 import xhtml2pdf.pisa as pisa
+from datetime import timedelta, datetime
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -162,3 +163,86 @@ def view_attendance_report(request):
 @login_required
 def attendance_report_pdf_page(request):
     return render(request, 'teacher/attendance_report_pdf.html')
+
+@login_required
+def individual_student_attendance_page(request):
+    return render(request, 'teacher/individual_student_attendance.html')
+
+
+@login_required
+def get_class_students(request):
+    user = request.user
+    try:
+        class_teacher = Class_Teacher.objects.get(user=user)
+        students = Student.objects.filter(class_teacher=class_teacher)
+    except Class_Teacher.DoesNotExist:
+        students = []
+
+    student_data = [
+        {'id': student.id, 'first_name': student.first_name, 'last_name': student.last_name}
+        for student in students
+    ]
+
+    return JsonResponse({'students': student_data})
+
+@login_required
+def get_student_attendance(request):
+    student_id = request.GET.get('student_id')
+    from_date = request.GET.get('from_date')
+    to_date = request.GET.get('to_date')
+
+    if not student_id or not from_date or not to_date:
+        return JsonResponse({'error': 'Student ID, From Date, and To Date are required.'}, status=400)
+
+    try:
+        student = Student.objects.get(id=student_id)
+    except Student.DoesNotExist:
+        return JsonResponse({'error': 'Student not found.'}, status=404)
+
+    # Convert from_date and to_date to date objects
+    from_date = datetime.strptime(from_date, "%Y-%m-%d").date()
+    to_date = datetime.strptime(to_date, "%Y-%m-%d").date()
+
+    # Create a list of all dates in the range
+    all_dates = [from_date + timedelta(days=i) for i in range((to_date - from_date).days + 1)]
+
+    # Query Attendance model for absent records in the date range
+    absences = Attendance.objects.filter(student=student, date__range=[from_date, to_date])
+
+    # Query LeaveReason model for reasons related to this student and within the date range
+    leave_reasons = LeaveReason.objects.filter(student=student, date__range=[from_date, to_date])
+
+    # Create a dictionary of absences keyed by date for fast lookup
+    absent_dates = {absence.date: absence for absence in absences}
+
+    # Create a dictionary for leave reasons keyed by date for fast lookup
+    leave_reasons_dict = {reason.date: reason.reason for reason in leave_reasons}
+
+    # Prepare the result data
+    result_data = []
+    for date in all_dates:
+        if date.weekday() == 6:  # Sunday (0 is Monday, 6 is Sunday)
+            result_data.append({
+                'date': date,
+                'is_present': None,  # None to indicate a Sunday
+                
+            })
+        elif date in absent_dates:
+            # Student was absent on this date, check if there is a leave reason
+            reason = leave_reasons_dict.get(date, 'N/A')  # Get reason or 'N/A' if not available
+            result_data.append({
+                'date': date,
+                'is_present': False,
+                'reason': reason
+            })
+        else:
+            # Student was present on this date (no absence record)
+            result_data.append({
+                'date': date,
+                'is_present': True,
+                'reason': None
+            })
+
+    return JsonResponse({
+        'attendance': result_data
+    })

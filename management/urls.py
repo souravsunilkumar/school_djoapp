@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/get_student/<int:student_id>/', get_student, name='get_student'),
     path('edit_student/<int:student_id>/', edit_student_page, name='edit_student_page'),
     path('api/edit_student/<int:student_id>/', edit_student, name='edit_student'),
+    path('api/delete_student/', delete_student, name='delete_student'),
     path('notifications/', get_teacher_notifications, name='get_teacher_notifications'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

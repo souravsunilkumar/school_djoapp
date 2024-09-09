@@ -370,3 +370,23 @@ def register_parent(request):
         except Exception as e:
             logger.error(f"Error in register_parent: {str(e)}")
             return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
+        
+
+def student_attendance(request, student_id):
+    try:
+        student = Student.objects.get(id=student_id)
+        attendance_records = Attendance.objects.filter(student=student)
+        
+        attendance_details = [
+            {
+                'name': student.first_name + ' ' + student.last_name,
+                'date': record.date.strftime('%Y-%m-%d'),
+                'attendance_status': 'Present' if record.is_present else 'Absent',
+                'reason': record.reason or 'N/A'
+            }
+            for record in attendance_records
+        ]
+        
+        return JsonResponse({'success': True, 'attendance_details': attendance_details})
+    except Student.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Student not found.'}, status=404)

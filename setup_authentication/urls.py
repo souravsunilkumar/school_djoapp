@@ -22,5 +22,8 @@ urlpatterns = [
     path('get_classes_and_divisions/<int:school_id>/', get_classes_and_divisions, name='get_classes_and_divisions'),
     path('get_students/<int:school_id>/<str:class_division>/', get_students, name='get_students'),
     path('register_parent/', register_parent, name='register_parent'),
+
+    
+    
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

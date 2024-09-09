@@ -89,6 +89,7 @@ $(document).ready(function () {
             }
         });
     });
+
     // Show notification section and load notifications
     $('#notification_icon').on('click', function () {
         $('#notification_section').toggle(); // Toggle visibility of the notification section
@@ -178,7 +179,7 @@ $(document).ready(function () {
         });
     }
 
-    // Show reason modal
+    // Show reason modal with scaling effect
     $(document).on('click', '.give_reason_btn', function () {
         const studentName = $(this).data('student-name');
         const date = $(this).data('date');
@@ -194,13 +195,27 @@ $(document).ready(function () {
         // Update the modal heading with the student's name and date
         $('#reason_modal_heading').text(`Why was ${studentName} absent on ${date}?`);
 
-        // Center and show the modal
+        // Position the modal at the button's location
+        const buttonOffset = $(this).offset();
+        const buttonHeight = $(this).outerHeight();
+        const buttonWidth = $(this).outerWidth();
+
         $('#reason_modal').css({
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%) scale(1)', // Full size
-            opacity: 1
-        }).show();
+            top: buttonOffset.top + buttonHeight / 2 - $('#reason_modal').outerHeight() / 2,
+            left: buttonOffset.left + buttonWidth / 2 - $('#reason_modal').outerWidth() / 2,
+            transform: 'scale(0)', // Start scaled down
+            opacity: 0,
+            display: 'block',
+            position: 'absolute'
+        });
+
+        // Use setTimeout to allow display to take effect before animating
+        setTimeout(() => {
+            $('#reason_modal').css({
+                transform: 'scale(1)', // Scale to full size
+                opacity: 1
+            });
+        }, 10); // Short delay to allow browser to apply initial styles
 
         // Show the modal overlay
         $('#reason_modal_overlay').show();
@@ -208,8 +223,16 @@ $(document).ready(function () {
 
     // Close reason modal
     $('#close_reason_modal_btn').on('click', function () {
-        $('#reason_modal').hide();
-        $('#reason_modal_overlay').hide();
+        $('#reason_modal').css({
+            transform: 'scale(0)', // Scale down
+            opacity: 0
+        });
+
+        // Hide the modal and overlay after animation
+        setTimeout(() => {
+            $('#reason_modal').hide();
+            $('#reason_modal_overlay').hide();
+        }, 300); // Match the duration of the scaling animation
     });
 
     // Submit leave reason
@@ -250,8 +273,6 @@ $(document).ready(function () {
         });
     });
 
-    
-
     // Style for "Reason Given" button
     $(document).on('click', '.give_reason_btn', function () {
         const studentName = $(this).data('student-name');
@@ -280,14 +301,6 @@ $(document).ready(function () {
         $('#reason_modal_overlay').show();
     });
 
-    // Close modal if clicked outside
-    $(window).on('click', function (event) {
-        if ($(event.target).is('#reason_modal_overlay')) {
-            $('#reason_modal').hide();
-            $('#reason_modal_overlay').hide();
-        }
-    });
-
-    // Fetch initial data
+    // Initialize the dashboard data
     fetchParentData();
 });

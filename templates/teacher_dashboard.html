@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/static/css/teacher_dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/static/js/teacher_dashboard.js"></script>
-
 </head>
 
 <body>
@@ -50,7 +49,7 @@
             </div>
         </div>
 
-        <div id="students-container">
+        <div id="students-container" style="display: none;">
             <h3>Students List:</h3>
             <table id="students-table" border="1">
                 <thead>
@@ -67,11 +66,11 @@
             </table>
         </div>
 
-        <br>
-        <div id="actions">
+        <div id="actions" style="display: none;">
             <a href="/management/add_students">Add Student</a><br>
             <a href="/attendance/mark_student_attendance">Mark Student Attendance</a><br>
             <a href="/attendance/view_attendance_report">View Student Attendance</a><br>
+            <a href="/attendance/individual_student_attendance">View Attendance of Individual student</a>
         </div>
     </div>
 </body>

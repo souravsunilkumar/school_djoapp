@@ -48,6 +48,7 @@ $(document).ready(function () {
         });
     }
 
+
     // Show notification modal
     $('#notification_icon').on('click', function () {
         $('#notification_modal').css('display', 'block'); // Show the notification modal
@@ -59,8 +60,8 @@ $(document).ready(function () {
         $('#notification_modal').css('display', 'none'); // Hide the notification modal
     });
 
-    // Hide notification modal when clicking outside of it
-    $(window).on('click', function (event) {
+     // Hide notification modal when clicking outside of it
+     $(window).on('click', function (event) {
         if (!$(event.target).closest('#notification_modal, #notification_icon').length) {
             $('#notification_modal').css('display', 'none'); // Hide the modal if the click is outside
         }
@@ -134,11 +135,13 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     const data = response.data;
-                    $('#welcome-message').text(`Welcome, ${data.is_class_teacher ? 'Class Teacher' : 'Teacher'}`);
+                    $('#welcome-message').text(`Welcome, ${data.teacher_name}`);
                     if (data.is_class_teacher) {
                         $('#class-teacher-status').html(`
                             <p>You are the class teacher for ${data.class_assigned} - ${data.division_assigned}</p>
                         `);
+                        $('#students-container').show(); // Show students list container
+                        $('#actions').show(); // Show actions section
                         const studentsTableBody = $('#students-table tbody');
                         studentsTableBody.empty(); // Clear existing data
                         data.students.forEach(student => {
@@ -148,8 +151,8 @@ $(document).ready(function () {
                                     <td>${student.first_name}</td>
                                     <td>${student.last_name}</td>
                                     <td>
-                                        <a href="/management/edit_student/${student.student_id}">Edit</a> |
-                                        <a href="#" class="delete-student" data-id="${student.student_id}">Delete</a>
+                                        <a href="/management/edit_student/${student.id}">Edit</a> |
+                                        <a href="#" class="delete-student" data-id="${student.id}">Delete</a>
                                     </td>
                                 </tr>
                             `);
@@ -165,32 +168,30 @@ $(document).ready(function () {
                                 data: JSON.stringify({ student_id: studentId }),
                                 success: function (response) {
                                     if (response.success) {
-                                        alert('Student deleted successfully.');
-                                        loadTeacherDashboard(); // Refresh the dashboard
+                                        location.reload(); // Reload the page after deletion
                                     } else {
-                                        alert('Failed to delete student: ' + response.message);
+                                        alert('Error deleting student.');
                                     }
                                 },
                                 error: function (error) {
-                                    alert('There was an error deleting the student.');
-                                    console.error(error);
+                                    console.error('Error deleting student:', error);
                                 }
                             });
                         });
                     } else {
-                        $('#class-teacher-status').html('<p>You are not assigned as a class teacher.</p>');
+                        $('#class-teacher-status').html('<p>You are not a class teacher.</p>');
+                        $('#students-container').hide(); // Hide students list container
+                        $('#actions').hide(); // Hide actions section
                     }
                 } else {
-                    $('#welcome-message').text('Error loading dashboard data.');
+                    console.error('Failed to load teacher dashboard data:', response.message);
                 }
             },
             error: function (error) {
-                console.error('Error loading teacher dashboard:', error);
-                $('#welcome-message').text('Error loading dashboard data.');
+                console.error('Error loading teacher dashboard data:', error);
             }
         });
     }
 
-    // Load the teacher dashboard on page load
     loadTeacherDashboard();
 });

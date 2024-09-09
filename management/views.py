@@ -38,16 +38,21 @@ def teacher_dashboard_data(request):
     if request.user.is_authenticated:
         try:
             teacher = get_object_or_404(Teacher, user=request.user)
+            
             if teacher.is_class_teacher:
-                class_teacher = teacher.class_teacher_set.first()
+                # Fetch class teacher data
+                class_teacher = get_object_or_404(Class_Teacher, teacher=teacher)
+                
+                # Fetch students for the class and division assigned to the teacher
                 students = Student.objects.filter(
                     class_assigned=class_teacher.class_assigned,
                     division_assigned=class_teacher.division_assigned,
                     school=class_teacher.school
                 ).values('id', 'first_name', 'last_name', 'roll_number')  # Include 'id' field
-
+                
                 data = {
                     'is_class_teacher': True,
+                    'teacher_name': f"{teacher.first_name} {teacher.last_name}",
                     'class_assigned': class_teacher.class_assigned,
                     'division_assigned': class_teacher.division_assigned,
                     'students': list(students),
@@ -55,11 +60,15 @@ def teacher_dashboard_data(request):
             else:
                 data = {
                     'is_class_teacher': False,
+                    'teacher_name': f"{teacher.first_name} {teacher.last_name}",
                     'students': []
                 }
+            
             return JsonResponse({'success': True, 'data': data})
+        
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
+    
     return JsonResponse({'success': False, 'message': 'User not authenticated.'})
 
 @csrf_exempt

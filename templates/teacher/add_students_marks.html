@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add or Select Exam, Class, Division, and Subject</title>
+    <link rel="stylesheet" href="/static/css/add_exam.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_students_marks.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Exam or Subject</h1>
+        <!-- Button to open modal -->
+        <button id="openModalButton">Add Subject or Exam</button>
+        
+        <!-- Modal structure -->
+        <div id="addExamModal" style="display:none;">
+            <div class="modal-content">
+                <span id="closeModalButton">&times;</span>
+                
+                <!-- Exam Section -->
+                <h2>Add or Select Exam</h2>
+                <label for="existing_exam">Select Existing Exam:</label>
+                <select id="existing_exam">
+                    <option value="">Select an exam</option>
+                    <!-- Options will be dynamically populated via JavaScript -->
+                </select>
+                <br><br>
+
+                <form id="add_exam_form">
+                    <label for="exam_name">Or Add New Exam:</label>
+                    <input type="text" id="exam_name" name="exam_name" placeholder="New Exam Name"><br><br>
+                    
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                    <button type="submit">Add Exam</button>
+                </form>
+
+                <div id="message" style="display:none;"></div>
+                
+                <!-- Subject Section -->
+                <h2>Select Class, Division, and Add Subject</h2>
+                <label for="class_assigned">Select Class:</label>
+                <select id="class_assigned">
+                    <option value="">Select Class</option>
+                </select>
+                <br><br>
+
+                <label for="division_assigned">Select Division:</label>
+                <select id="division_assigned">
+                    <option value="">Select Division</option>
+                </select>
+                <br><br>
+
+                <form id="add_subject_form">
+                    <label for="subject_name">Subject Name:</label>
+                    <input type="text" id="subject_name" name="subject_name" placeholder="Subject Name"><br><br>
+                    
+                    <!-- Hidden field for exam_id -->
+                    <input type="hidden" id="exam_id" name="exam_id">
+                    
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <button type="submit">Add Subject</button>
+                </form>
+
+                <div id="message_subject" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+    <a href="/management/add_marks_page">Add marks</a>
+</body>
+</html>

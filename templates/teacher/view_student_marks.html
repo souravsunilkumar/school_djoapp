@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Student Marks</title>
+    <link rel="stylesheet" href="/static/css/teacher_marks.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/view_student_marks.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Marks</h1>
+        
+        <label for="exam_select">Select Exam:</label>
+        <select id="exam_select">
+            <option value="">Select Exam</option>
+            <!-- Options will be populated via JavaScript -->
+        </select>
+        <button id="fetch_marks">Fetch Marks</button>
+        
+        <table id="marks_table" border="1">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <!-- Subject headers will be added dynamically -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Student rows will be added dynamically -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -26,4 +26,13 @@ urlpatterns = [
     path('exam/add_subject/', add_subject, name='add_subject'),
     path('add_marks_page/', add_marks_page, name='add_marks_page'),
 
+    path('exam/get_subjects/', get_subjects, name='get_subjects'),
+    path('exam/get_students/', get_students, name='get_students'),
+    path('exam/add_marks/', add_marks, name='add_marks'),
+
+
+    path('view_student_marks_page/', view_student_marks_page, name='view_student_marks_page'),
+    path('view_student_marks/', get_student_marks, name='view_student_marks'),
+    
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

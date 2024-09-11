@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Marks for Students</title>
+    <link rel="stylesheet" href="/static/css/add_marks.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_marks.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Marks for Students</h1>
+        
+        <!-- Exam Selection -->
+        <label for="exam_select">Select Exam:</label>
+        <select id="exam_select">
+            <option value="">Select Exam</option>
+            <!-- Options will be dynamically populated via JavaScript -->
+        </select>
+        <br><br>
+
+        <!-- Class and Division Selection -->
+        <label for="class_select">Select Class:</label>
+        <select id="class_select">
+            <option value="">Select Class</option>
+        </select>
+        <br><br>
+
+        <label for="division_select">Select Division:</label>
+        <select id="division_select">
+            <option value="">Select Division</option>
+        </select>
+        <br><br>
+
+        <!-- Subject Selection -->
+        <label for="subject_select">Select Subject:</label>
+        <select id="subject_select">
+            <option value="">Select Subject</option>
+        </select>
+        <br><br>
+
+        <!-- Marks Table and Form -->
+        <div id="marks_section" style="display:none;">
+            <h2>Marks Entry</h2>
+            <label for="total_marks">Total Marks:</label>
+            <input type="number" id="total_marks" placeholder="Enter Total Marks">
+            <br><br>
+
+            <table id="marks_table">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Marks Obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically populated via JavaScript -->
+                </tbody>
+            </table>
+            <br>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <button id="submit_marks">Submit Marks</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -391,3 +391,102 @@ def add_subject(request):
 
 def add_marks_page(request):
     return render(request,'teacher/add_marks.html')
+
+def get_subjects(request):
+    if request.method == 'GET':
+        exam_id = request.GET.get('exam_id')
+        class_assigned = request.GET.get('class_assigned')
+        division_assigned = request.GET.get('division_assigned')
+        
+        teacher = request.user.teacher
+        subjects = Subject.objects.filter(
+            exam_id=exam_id,
+            class_assigned=class_assigned,
+            division_assigned=division_assigned,
+            school=teacher.school
+        )
+        
+        subjects_data = [{"id": subj.id, "subject_name": subj.subject_name} for subj in subjects]
+        return JsonResponse({"subjects": subjects_data})
+    return JsonResponse({"error": "Invalid request method."}, status=405)
+
+
+def get_students(request):
+    if request.method == 'GET':
+        exam_id = request.GET.get('exam_id')
+        class_assigned = request.GET.get('class_assigned')
+        division_assigned = request.GET.get('division_assigned')
+        subject_id = request.GET.get('subject_id')
+        
+        students = Student.objects.filter(
+            class_assigned=class_assigned,
+            division_assigned=division_assigned,
+            school=request.user.teacher.school
+        )
+        
+        students_data = [{"id": student.id, "roll_number": student.roll_number, "first_name": student.first_name, "last_name": student.last_name} for student in students]
+        return JsonResponse({"students": students_data})
+    return JsonResponse({"error": "Invalid request method."}, status=405)
+
+def add_marks(request):
+    if request.method == 'POST':
+        exam_id = request.POST.get('exam_id')
+        class_assigned = request.POST.get('class_assigned')
+        division_assigned = request.POST.get('division_assigned')
+        subject_id = request.POST.get('subject_id')
+        marks_data = request.POST.get('marks')
+        
+        marks_list = json.loads(marks_data)
+        teacher = request.user.teacher
+        for mark in marks_list:
+            Marks.objects.create(
+                school=teacher.school,
+                teacher=teacher,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned,
+                exam_id=exam_id,
+                student_id=mark['student_id'],
+                subject_id=subject_id,
+                marks_obtained=mark['marks_obtained'],
+                out_of=mark['out_of']
+            )
+        return JsonResponse({"success": True})
+    return JsonResponse({"error": "Invalid request method."}, status=405)
+
+def view_student_marks_page(request): 
+    return render(request,'teacher/view_student_marks.html')
+
+def get_student_marks(request):
+    exam_id = request.GET.get('exam_id')
+    if not exam_id:
+        return JsonResponse({'error': 'Exam ID not provided'}, status=400)
+    
+    # Get the class teacher for the logged-in user
+    try:
+        class_teacher = Class_Teacher.objects.get(user=request.user)
+    except Class_Teacher.DoesNotExist:
+        return JsonResponse({'error': 'Class teacher not found'}, status=404)
+
+    class_assigned = class_teacher.class_assigned
+    division_assigned = class_teacher.division_assigned
+
+    # Filter marks based on class_teacher details
+    marks_data = Marks.objects.filter(
+        exam_id=exam_id,
+        student__class_assigned=class_assigned,
+        student__division_assigned=division_assigned
+    ).select_related('student', 'subject').values(
+        'student__first_name', 'student__last_name', 'subject__subject_name', 'marks_obtained','out_of'
+    )
+    
+    result = {}
+    for mark in marks_data:
+        student_name = f"{mark['student__first_name']} {mark['student__last_name']}"
+        subject_name = mark['subject__subject_name']
+        marks_obtained = mark['marks_obtained']
+        
+        if student_name not in result:
+            result[student_name] = {}
+        result[student_name][subject_name] = marks_obtained
+    
+    return JsonResponse(result)

@@ -50,11 +50,11 @@ $(document).ready(function () {
         // Collect subject names and student rows
         for (var student in data) {
             if (!rows[student]) {
-                rows[student] = [];
+                rows[student] = {};
             }
             for (var subject in data[student]) {
                 subjects.add(subject);
-                rows[student].push(data[student][subject]);
+                rows[student][subject] = data[student][subject];  // Store marks as marks_obtained/out_of
             }
         }
 
@@ -68,7 +68,7 @@ $(document).ready(function () {
         for (var student in rows) {
             var studentRow = '<tr><td>' + student + '</td>';
             subjects.forEach(function (subject) {
-                var mark = rows[student][subjects.indexOf(subject)] || ''; // Get mark or empty string
+                var mark = rows[student][subject] || 'N/A';  // Get marks_obtained/out_of or show N/A
                 studentRow += '<td>' + mark + '</td>';
             });
             studentRow += '</tr>';

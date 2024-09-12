@@ -1,205 +1,186 @@
-$(document).ready(function () {
-    // Utility function to get CSRF token from the form
-    function getCSRFToken() {
-        return $('input[name="csrfmiddlewaretoken"]').val();
-    }
-
-    // Fetch exams
-    function fetchExams() {
+$(document).ready(function() {
+    var academicYearSelect = $('#academicYearSelect');
+    var examSelect = $('#examSelect');
+    var classSelect = $('#classSelect');
+    var divisionSelect = $('#divisionSelect');
+    var subjectSelect = $('#subjectSelect');
+    var studentsTable = $('#studentsTable');
+    var csrfToken = $('#csrfToken').val();
+    var totalMarksInput = $('#totalMarks');
+    
+    // Load academic years
+    $.ajax({
+        url: '/management/get_academic_years/',
+        type: 'GET',
+        success: function(response) {
+            academicYearSelect.empty().append('<option value="" disabled selected>Select Academic Year</option>');
+            $.each(response.academic_years, function(index, year) {
+                academicYearSelect.append('<option value="' + year + '">' + year + '</option>');
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching academic years:", error);
+        }
+    });
+    
+    // Load exams based on selected academic year
+    academicYearSelect.on('change', function() {
+        var academicYear = $(this).val();
         $.ajax({
+            url: '/management/get_exams/',
+            data: { academic_year: academicYear },
             type: 'GET',
-            url: '/management/exam/get_exams/', // Your endpoint to get the exams
-            success: function (response) {
-                var exams = response.exams;
-                var examDropdown = $('#exam_select');
-                examDropdown.empty().append('<option value="">Select Exam</option>');
-
-                exams.forEach(function (exam) {
-                    examDropdown.append('<option value="' + exam.id + '">' + exam.name + '</option>');
+            success: function(response) {
+                examSelect.empty().append('<option value="" disabled selected>Select Exam</option>');
+                $.each(response.exams, function(index, exam) {
+                    examSelect.append('<option value="' + exam.exam_id + '">' + exam.exam_name + '</option>');
                 });
             },
-            error: function (xhr, status, error) {
-                alert('Error fetching exams.');
+            error: function(xhr, status, error) {
+                console.error("Error fetching exams:", error);
             }
         });
-    }
-
-    // Fetch classes and divisions
-    function fetchClassesAndDivisions() {
+    });
+    
+    // Load classes based on selected exam
+    examSelect.on('change', function() {
+        var examId = $(this).val();
         $.ajax({
+            url: '/management/get_classes_and_divisions/',
             type: 'GET',
-            url: '/management/exam/get_classes_and_divisions/',
-            success: function (response) {
-                var classes = response.classes;
-                var classDropdown = $('#class_select');
-                classDropdown.empty().append('<option value="">Select Class</option>');
-
-                classes.forEach(function (cls) {
-                    classDropdown.append('<option value="' + cls.class_assigned + '">' + cls.class_assigned + '</option>');
+            success: function(response) {
+                classSelect.empty().append('<option value="" disabled selected>Select Class</option>');
+                $.each(response.classes, function(index, cls) {
+                    classSelect.append('<option value="' + cls.class_assigned + '">' + cls.class_assigned + '</option>');
                 });
             },
-            error: function (xhr, status, error) {
-                alert('Error fetching classes.');
+            error: function(xhr, status, error) {
+                console.error("Error fetching classes:", error);
             }
         });
-    }
-
-    // Fetch divisions based on selected class
-    function fetchDivisions(classAssigned) {
+    });
+    
+    // Load divisions based on selected class
+    classSelect.on('change', function() {
+        var classAssigned = $(this).val();
         $.ajax({
-            type: 'GET',
-            url: '/management/exam/get_classes_and_divisions/',
+            url: '/management/get_classes_and_divisions/',
             data: { class_id: classAssigned },
-            success: function (response) {
-                var divisions = response.divisions;
-                var divisionDropdown = $('#division_select');
-
-                divisionDropdown.empty().append('<option value="">Select Division</option>');
-
-                divisions.forEach(function (div) {
-                    divisionDropdown.append('<option value="' + div.division_assigned + '">' + div.division_assigned + '</option>');
+            type: 'GET',
+            success: function(response) {
+                divisionSelect.empty().append('<option value="" disabled selected>Select Division</option>');
+                $.each(response.divisions, function(index, div) {
+                    divisionSelect.append('<option value="' + div.division_assigned + '">' + div.division_assigned + '</option>');
                 });
             },
-            error: function (xhr, status, error) {
-                alert('Error fetching divisions.');
+            error: function(xhr, status, error) {
+                console.error("Error fetching divisions:", error);
             }
         });
-    }
-
-    // Fetch subjects based on exam, class, and division
-    function fetchSubjects(examId, classAssigned, divisionAssigned) {
+    });
+    
+    // Load subjects based on selected exam
+    examSelect.on('change', function() {
+        var examId = $(this).val();
         $.ajax({
+            url: '/management/get_subject/',
+            data: { exam_id: examId },
             type: 'GET',
-            url: '/management/exam/get_subjects/', // Add this URL in your urls.py
+            success: function(response) {
+                subjectSelect.empty().append('<option value="" disabled selected>Select Subject</option>');
+                $.each(response.subjects, function(index, subject) {
+                    subjectSelect.append('<option value="' + subject.subject_id + '">' + subject.subject_name + '</option>');
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching subjects:", error);
+            }
+        });
+    });
+    
+    // Load students based on selected subject
+    subjectSelect.on('change', function() {
+        var examId = examSelect.val();
+        var classAssigned = classSelect.val();
+        var divisionAssigned = divisionSelect.val();
+        $.ajax({
+            url: '/management/get_students/',
             data: {
                 exam_id: examId,
                 class_assigned: classAssigned,
                 division_assigned: divisionAssigned
             },
-            success: function (response) {
-                var subjects = response.subjects;
-                var subjectDropdown = $('#subject_select');
-                subjectDropdown.empty().append('<option value="">Select Subject</option>');
-
-                subjects.forEach(function (subj) {
-                    subjectDropdown.append('<option value="' + subj.id + '">' + subj.subject_name + '</option>');
-                });
-                $('#marks_section').hide();
-            },
-            error: function (xhr, status, error) {
-                alert('Error fetching subjects.');
-            }
-        });
-    }
-
-    // Fetch students based on selected subject
-    function fetchStudents(examId, classAssigned, divisionAssigned, subjectId) {
-        $.ajax({
             type: 'GET',
-            url: '/management/exam/get_students/', // Add this URL in your urls.py
-            data: {
-                
-                exam_id: examId,
-                class_assigned: classAssigned,
-                division_assigned: divisionAssigned,
-                subject_id: subjectId
+            success: function(response) {
+                studentsTable.empty();
+                if (Array.isArray(response.students) && response.students.length > 0) {
+                    var tableHtml = '<table><thead><tr><th>Student</th><th>Marks Obtained</th><th>Total Marks</th></tr></thead><tbody>';
+                    $.each(response.students, function(index, student) {
+                        tableHtml += '<tr><td>' + student.first_name + ' ' + student.last_name + '</td><td><input type="number" name="marks_obtained_' + student.id + '" /></td><td><input type="number" name="out_of_' + student.id + '" /></td></tr>';
+                    });
+                    tableHtml += '</tbody></table>';
+                    studentsTable.html(tableHtml);
+                } else {
+                    studentsTable.html('<p>No students found.</p>');
+                }
             },
-            success: function (response) {
-                var students = response.students;
-                var tableBody = $('#marks_table tbody');
-                tableBody.empty();
-
-                students.forEach(function (student) {
-                    tableBody.append(
-                        '<tr>' +
-                        '<td>' + student.roll_number + '</td>' +
-                        '<td>' + student.first_name + ' ' + student.last_name + '</td>' +
-                        '<td><input type="number" class="marks_obtained" data-student-id="' + student.id + '"></td>' +
-                        '</tr>'
-                    );
-                });
-                $('#marks_section').show();
-            },
-            error: function (xhr, status, error) {
-                alert('Error fetching students.');
+            error: function(xhr, status, error) {
+                console.error("Error fetching students:", error);
             }
         });
-    }
-
-    // Load exams on page load
-    fetchExams();
-    fetchClassesAndDivisions();
-
-    // Fetch divisions when class is selected
-    $('#class_select').on('change', function () {
-        var selectedClass = $(this).val();
-        if (selectedClass) {
-            fetchDivisions(selectedClass);
-        } else {
-            $('#division_select').empty().append('<option value="">Select Division</option>');
-        }
     });
-
-    // Fetch subjects when exam, class, and division are selected
-    $('#exam_select, #class_select, #division_select').on('change', function () {
-        var examId = $('#exam_select').val();
-        var classAssigned = $('#class_select').val();
-        var divisionAssigned = $('#division_select').val();
-
-        if (examId && classAssigned && divisionAssigned) {
-            fetchSubjects(examId, classAssigned, divisionAssigned);
-        }
+    
+    // Set total marks for all students
+    totalMarksInput.on('input', function() {
+        var totalMarks = $(this).val();
+        studentsTable.find('input[name^="out_of_"]').val(totalMarks);
     });
-
-    // Fetch students when subject is selected
-    $('#subject_select').on('change', function () {
-        var examId = $('#exam_select').val();
-        var classAssigned = $('#class_select').val();
-        var divisionAssigned = $('#division_select').val();
-        var subjectId = $(this).val();
-
-        if (examId && classAssigned && divisionAssigned && subjectId) {
-            fetchStudents(examId, classAssigned, divisionAssigned, subjectId);
-        }
-    });
-
-    // Submit marks
-    $('#submit_marks').on('click', function () {
-        var examId = $('#exam_select').val();
-        var classAssigned = $('#class_select').val();
-        var divisionAssigned = $('#division_select').val();
-        var subjectId = $('#subject_select').val();
-        var totalMarks = $('#total_marks').val();
-        var marksData = [];
-
-        $('#marks_table tbody tr').each(function () {
-            var studentId = $(this).find('.marks_obtained').data('student-id');
-            var marksObtained = $(this).find('.marks_obtained').val();
-            if (studentId && marksObtained) {
-                marksData.push({
-                    student_id: studentId,
-                    marks_obtained: marksObtained,
-                    out_of: totalMarks
-                });
+    
+    // Handle form submission to add marks
+    $('#addMarksForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var academicYear = academicYearSelect.val();
+        var examId = examSelect.val();
+        var classAssigned = classSelect.val();
+        var divisionAssigned = divisionSelect.val();
+        var subjectId = subjectSelect.val();
+        
+        var marksData = {};
+        studentsTable.find('tbody tr').each(function() {
+            var studentId = $(this).find('input[name^="marks_obtained_"]').attr('name').split('_')[2];
+            var marksObtained = $(this).find('input[name="marks_obtained_' + studentId + '"]').val();
+            var outOf = $(this).find('input[name="out_of_' + studentId + '"]').val();
+            
+            if (marksObtained || outOf) {
+                marksData[studentId] = { marks_obtained: marksObtained, out_of: outOf };
             }
         });
-
+        
         $.ajax({
+            url: '/management/add_marks/',
             type: 'POST',
-            url: '/management/exam/add_marks/', // Add this URL in your urls.py
-            data: {
-                exam_id: examId,
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({
+                academic_year: academicYear,
+                exam: examId,
                 class_assigned: classAssigned,
                 division_assigned: divisionAssigned,
-                subject_id: subjectId,
-                marks: JSON.stringify(marksData),
-                'csrfmiddlewaretoken': getCSRFToken()
+                subject: subjectId,
+                marks: marksData
+            }),
+            success: function(response) {
+                if (response.success) {
+                    alert('Marks added successfully!');
+                } else {
+                    alert('Error adding marks: ' + (response.error || 'Unknown error.'));
+                }
             },
-            success: function (response) {
-                alert('Marks added successfully.');
-            },
-            error: function (xhr, status, error) {
-                alert('Error adding marks.');
+            error: function(xhr, status, error) {
+                alert('An error occurred while adding the marks: ' + error);
             }
         });
     });

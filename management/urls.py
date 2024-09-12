@@ -19,20 +19,17 @@ urlpatterns = [
     path('api/delete_student/', delete_student, name='delete_student'),
     path('notifications/', get_teacher_notifications, name='get_teacher_notifications'),
 
-    path('add_students_marks/', add_students_marks, name='add_students_marks'),
-    path('exam/get_exams/', get_exams, name='get_exams'),
-    path('exam/add_exam_or_select/', add_exam_or_select, name='add_exam_or_select'),
-    path('exam/get_classes_and_divisions/', get_classes_and_divisions, name='get_classes_and_divisions'),
-    path('exam/add_subject/', add_subject, name='add_subject'),
+    path('add_students_marks/', add_students_marks ,name='add_students_marks'),
+    path('add_exam/', add_exam, name='add_exam'),
+    path('get_academic_years/', get_academic_years, name='get_academic_years'),
+    path('get_exams/', get_exams, name='get_exams'),
+    path('get_classes_and_divisions/', get_classes_and_divisions, name='get_classes_and_divisions'),
+    path('add_subject/', add_subject, name='add_subject'),
+
+
     path('add_marks_page/', add_marks_page, name='add_marks_page'),
-
-    path('exam/get_subjects/', get_subjects, name='get_subjects'),
-    path('exam/get_students/', get_students, name='get_students'),
-    path('exam/add_marks/', add_marks, name='add_marks'),
-
-
-    path('view_student_marks_page/', view_student_marks_page, name='view_student_marks_page'),
-    path('view_student_marks/', get_student_marks, name='view_student_marks'),
-    
+    path('get_subject/', get_subject, name='get_subject'),
+    path('get_students/', get_students, name='get_students'),
+    path('add_marks/', add_marks, name='add_marks'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

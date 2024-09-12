@@ -1,172 +1,248 @@
 $(document).ready(function () {
-    // Utility function to get CSRF token from the form
-    function getCSRFToken() {
-        return $('input[name="csrfmiddlewaretoken"]').val();
-    }
+    var examModal = $('#examModal');
+    var subjectModal = $('#subjectModal');
+    var openExamModalBtn = $('#openExamModalBtn');
+    var openSubjectModalBtn = $('#openSubjectModalBtn');
+    var closeBtn = $('.close');
 
-    // Show the modal when the button is clicked
-    $('#openModalButton').on('click', function() {
-        $('#addExamModal').show();
+    // Open the exam modal
+    openExamModalBtn.on('click', function () {
+        examModal.fadeIn();  // Use fadeIn for a smooth transition
+        loadAcademicYears(); // Load academic years when opening the modal
     });
 
-    // Close the modal when the 'X' is clicked
-    $('#closeModalButton').on('click', function() {
-        $('#addExamModal').hide();
+    // Open the subject modal
+    openSubjectModalBtn.on('click', function () {
+        subjectModal.fadeIn();  // Use fadeIn for a smooth transition
+        loadAcademicYearsForSubject(); // Load academic years when opening the modal
+        loadClassesAndDivisions(); // Load classes and divisions for the subject modal
     });
 
-    // Close the modal when clicking outside the modal content
-    $(window).on('click', function(event) {
-        if ($(event.target).is('#addExamModal')) {
-            $('#addExamModal').hide();
+    // Close the modals
+    closeBtn.on('click', function () {
+        var modalId = $(this).data('modal');
+        $('#' + modalId).fadeOut();  // Use fadeOut for a smooth transition
+    });
+
+    // Close the modal when clicking outside of it
+    $(window).on('click', function (event) {
+        if ($(event.target).is(examModal)) {
+            examModal.fadeOut();  // Use fadeOut for a smooth transition
+        } else if ($(event.target).is(subjectModal)) {
+            subjectModal.fadeOut();  // Use fadeOut for a smooth transition
         }
     });
 
-    // Fetch existing exams linked to the school
-    function fetchExams() {
+    // Load academic years for the exam modal
+    function loadAcademicYears() {
         $.ajax({
+            url: '/management/get_academic_years/', // Endpoint to get academic years
             type: 'GET',
-            url: '/management/exam/get_exams/', // Your endpoint to get the exams
             success: function (response) {
-                var exams = response.exams;
-                var examDropdown = $('#existing_exam');
-                examDropdown.empty().append('<option value="">Select an exam</option>');
+                var academicYearSelect = $('#academicYearSelect');
+                academicYearSelect.empty(); // Clear existing options
+                academicYearSelect.append('<option value="" disabled selected>Select Academic Year</option>'); // Default option
 
-                exams.forEach(function (exam) {
-                    examDropdown.append('<option value="' + exam.id + '">' + exam.name + '</option>');
-                });
+                if (Array.isArray(response.academic_years) && response.academic_years.length > 0) {
+                    $.each(response.academic_years, function (index, year) {
+                        academicYearSelect.append('<option value="' + year + '">' + year + '</option>');
+                    });
+                }
             },
-            error: function (xhr, status, error) {
-                $('#message').text('Error fetching exams.').show();
+            error: function(xhr, status, error) {
+                console.error("Error fetching academic years:", error);
             }
         });
     }
+    // Handle form submission to add exam
+    $('#addExamForm').on('submit', function (e) {
+        e.preventDefault();  // Prevent default form submission behavior
 
-    // Call the function to fetch exams when the page loads
-    fetchExams();
+        var examName = $('#examName').val();
+        var newAcademicYear = $('#newAcademicYear').val();
+        var selectedAcademicYear = $('#academicYearSelect').val();
+        var academicYear = newAcademicYear || selectedAcademicYear; // Use new year if provided
+        var csrfToken = $('#csrfToken').val(); // Retrieve CSRF token from hidden field
 
-    // Update exam_id hidden field when an exam is selected
-    $('#existing_exam').on('change', function () {
-        $('#exam_id').val($(this).val());
-    });
-
-    // Submit form for adding or selecting an exam
-    $('#add_exam_form').on('submit', function (e) {
-        e.preventDefault();
-
-        var examName = $('#exam_name').val();
-        var selectedExam = $('#existing_exam').val();
-
-        if (examName && selectedExam) {
-            $('#message').text('Please either select an existing exam or add a new one, not both.').show();
-            return;
+        // Ensure either a new year is provided or an existing year is selected
+        if (!examName || !academicYear) {
+            alert('Please provide both exam name and academic year.');
+            return; // Stop submission if any field is missing
         }
 
-        var examData = selectedExam ? { 'exam_id': selectedExam } : { 'exam_name': examName };
-
         $.ajax({
+            url: '/management/add_exam/',
             type: 'POST',
-            url: '/management/exam/add_exam_or_select/',
+            headers: {
+                'X-CSRFToken': csrfToken // Ensure CSRF token is sent in the headers
+            },
             data: {
-                ...examData,
-                'csrfmiddlewaretoken': getCSRFToken()
+                'exam_name': examName,
+                'academic_year': academicYear
             },
             success: function (response) {
-                $('#message').text(response.message).show();
-                $('#add_exam_form')[0].reset();
-                $('#existing_exam').val('');
+                if (response.success) {
+                    alert('Exam "' + examName + '" added successfully!');
+                    modal.fadeOut();  // Hide modal on success
+                    $('#addExamForm')[0].reset();  // Reset the form fields
+                    loadAcademicYears(); // Reload academic years in case a new one was added
+                } else {
+                    alert('Error adding exam: ' + (response.error || 'Unknown error.'));
+                }
             },
             error: function (xhr, status, error) {
-                $('#message').text('Error processing exam.').show();
+                alert('An error occurred while adding the exam: ' + error);
             }
         });
     });
 
-    // Fetch classes and populate class dropdown
-    function fetchClasses() {
+    // Load academic years for the subject modal
+    function loadAcademicYearsForSubject() {
+        $.ajax({
+            url: '/management/get_academic_years/', // Endpoint to get academic years
+            type: 'GET',
+            success: function (response) {
+                var academicYearSelectSubject = $('#academicYearSelectSubject');
+                academicYearSelectSubject.empty(); // Clear existing options
+                academicYearSelectSubject.append('<option value="" disabled selected>Select Academic Year</option>'); // Default option
+
+                if (Array.isArray(response.academic_years) && response.academic_years.length > 0) {
+                    $.each(response.academic_years, function (index, year) {
+                        academicYearSelectSubject.append('<option value="' + year + '">' + year + '</option>');
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching academic years:", error);
+            }
+        });
+    }
+
+    // Load exams based on selected academic year
+    function loadExams(academicYear) {
+        $.ajax({
+            url: '/management/get_exams/?academic_year=' + academicYear,
+            type: 'GET',
+            success: function (response) {
+                var examSelect = $('#examSelect');
+                examSelect.empty(); // Clear existing options
+                examSelect.append('<option value="" disabled selected>Select Exam</option>'); // Default option
+
+                if (Array.isArray(response.exams) && response.exams.length > 0) {
+                    $.each(response.exams, function (index, exam) {
+                        examSelect.append('<option value="' + exam.exam_id + '">' + exam.exam_name + '</option>');
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching exams:", error);
+            }
+        });
+    }
+
+    // Load classes and divisions based on selected academic year and exam
+    function loadClassesAndDivisions() {
         $.ajax({
             type: 'GET',
-            url: '/management/exam/get_classes_and_divisions/',
+            url: '/management/get_classes_and_divisions/',
             success: function (response) {
-                var classes = response.classes;
-                var classDropdown = $('#class_assigned');
-
+                var classDropdown = $('#classSelect');
+                var divisionDropdown = $('#divisionSelect');
+                
                 classDropdown.empty().append('<option value="">Select Class</option>');
+                divisionDropdown.empty().append('<option value="">Select Division</option>');
 
-                classes.forEach(function (cls) {
-                    classDropdown.append('<option value="' + cls.class_assigned + '">' + cls.class_assigned + '</option>');
+                if (Array.isArray(response.classes) && response.classes.length > 0) {
+                    $.each(response.classes, function (index, cls) {
+                        classDropdown.append('<option value="' + cls.class_assigned + '">' + cls.class_assigned + '</option>');
+                    });
+                }
+
+                // Load divisions when a class is selected
+                classDropdown.on('change', function () {
+                    var selectedClass = $(this).val();
+                    if (selectedClass) {
+                        loadDivisions(selectedClass);
+                    } else {
+                        divisionDropdown.empty().append('<option value="">Select Division</option>');
+                    }
                 });
             },
             error: function (xhr, status, error) {
-                $('#message_subject').text('Error fetching classes.').show();
+                console.error('Error fetching classes.', error);
             }
         });
     }
 
     // Fetch divisions based on selected class
-    function fetchDivisions(classAssigned) {
+    function loadDivisions(classAssigned) {
         $.ajax({
             type: 'GET',
-            url: '/management/exam/get_classes_and_divisions/',
+            url: '/management/get_classes_and_divisions/',
             data: { class_id: classAssigned },
             success: function (response) {
-                var divisions = response.divisions;
-                var divisionDropdown = $('#division_assigned');
-
+                var divisionDropdown = $('#divisionSelect');
                 divisionDropdown.empty().append('<option value="">Select Division</option>');
 
-                divisions.forEach(function (div) {
-                    divisionDropdown.append('<option value="' + div.division_assigned + '">' + div.division_assigned + '</option>');
-                });
+                if (Array.isArray(response.divisions) && response.divisions.length > 0) {
+                    $.each(response.divisions, function (index, div) {
+                        divisionDropdown.append('<option value="' + div.division_assigned + '">' + div.division_assigned + '</option>');
+                    });
+                }
             },
             error: function (xhr, status, error) {
-                $('#message_subject').text('Error fetching divisions.').show();
+                console.error('Error fetching divisions.', error);
             }
         });
     }
 
-    // Call the function to fetch classes when the page loads
-    fetchClasses();
-
-    // Fetch divisions when a class is selected
-    $('#class_assigned').on('change', function () {
-        var selectedClass = $(this).val();
-        if (selectedClass) {
-            fetchDivisions(selectedClass);
-        } else {
-            $('#division_assigned').empty().append('<option value="">Select Division</option>');
-        }
+    // Load exams when an academic year is selected
+    $('#academicYearSelectSubject').on('change', function () {
+        var selectedAcademicYear = $(this).val();
+        loadExams(selectedAcademicYear); // Load exams based on the selected academic year
     });
 
-    // Submit form for adding a subject
-    $('#add_subject_form').on('submit', function (e) {
-        e.preventDefault();
+    // Handle form submission to add subject
+    $('#addSubjectForm').on('submit', function (e) {
+        e.preventDefault();  // Prevent default form submission behavior
 
-        var subjectName = $('#subject_name').val();
-        var selectedClass = $('#class_assigned').val();
-        var selectedDivision = $('#division_assigned').val();
-        var examId = $('#exam_id').val();
+        var subjectName = $('#subjectName').val();
+        var academicYear = $('#academicYearSelectSubject').val();
+        var examId = $('#examSelect').val();
+        var classAssigned = $('#classSelect').val();
+        var divisionAssigned = $('#divisionSelect').val();
+        var csrfToken = $('#csrfTokenSubject').val(); // Retrieve CSRF token from hidden field
 
-        if (!subjectName || !selectedClass || !selectedDivision || !examId) {
-            $('#message_subject').text('Please fill all fields.').show();
-            return;
+        // Ensure all required fields are filled
+        if (!subjectName || !academicYear || !examId || !classAssigned || !divisionAssigned) {
+            alert('Please provide all required fields.');
+            return; // Stop submission if any field is missing
         }
 
         $.ajax({
+            url: '/management/add_subject/', // Endpoint to add subject
             type: 'POST',
-            url: '/management/exam/add_subject/',
+            headers: {
+                'X-CSRFToken': csrfToken // Ensure CSRF token is sent in the headers
+            },
             data: {
                 'subject_name': subjectName,
-                'class_id': selectedClass,
-                'division_id': selectedDivision,
-                'exam_id': examId,
-                'csrfmiddlewaretoken': getCSRFToken()
+                'academic_year': academicYear,
+                'exam': examId,
+                'class_assigned': classAssigned, // Change to match the field name in view
+                'division_assigned': divisionAssigned
             },
             success: function (response) {
-                $('#message_subject').text(response.message).show();
-                $('#add_subject_form')[0].reset();
+                if (response.success) {
+                    alert('Subject "' + subjectName + '" added successfully!');
+                    subjectModal.fadeOut();  // Hide modal on success
+                    $('#addSubjectForm')[0].reset();  // Reset the form fields
+                } else {
+                    alert('Error adding subject: ' + (response.error || 'Unknown error.'));
+                }
             },
             error: function (xhr, status, error) {
-                $('#message_subject').text('Error adding subject.').show();
+                alert('An error occurred while adding the subject: ' + error);
             }
         });
     });

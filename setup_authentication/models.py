@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
-
 # Create your models here.
 class School(models.Model):
     school_id = models.AutoField(primary_key=True)
@@ -19,6 +18,7 @@ class School(models.Model):
     def __str__(self):
         return self.school_name
 
+
 class School_admin(models.Model):
     school_admin_id = models.AutoField(primary_key=True)
     school_admin_first_name = models.CharField(max_length=50, null=True)
@@ -28,26 +28,31 @@ class School_admin(models.Model):
 
     def __str__(self):
         return f"{self.school_admin_first_name} {self.school_admin_last_name}".strip()
-    
+
+
 class Employee(models.Model):
-    TEACHER = 'Teacher'
-    PEON = 'Peon'
-    SECURITY = 'Security'
-    WARDEN = 'Warden'
-    OFFICE_STAFF = 'Office Staff'
+    TEACHER = "Teacher"
+    PEON = "Peon"
+    SECURITY = "Security"
+    WARDEN = "Warden"
+    OFFICE_STAFF = "Office Staff"
 
     DESIGNATION_CHOICES = [
-        (TEACHER, 'Teacher'),
-        (PEON, 'Peon'),
-        (SECURITY, 'Security'),
-        (WARDEN, 'Warden'),
-        (OFFICE_STAFF, 'Office Staff'),
+        (TEACHER, "Teacher"),
+        (PEON, "Peon"),
+        (SECURITY, "Security"),
+        (WARDEN, "Warden"),
+        (OFFICE_STAFF, "Office Staff"),
     ]
 
     id = models.AutoField(primary_key=True)  # Explicit id field
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Foreign key to School model
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Foreign key to User model
-    user_name=models.CharField(max_length=25, null=True)
+    school = models.ForeignKey(
+        School, on_delete=models.CASCADE
+    )  # Foreign key to School model
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE
+    )  # Foreign key to User model
+    user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     second_name = models.CharField(max_length=25)
     contact_number = models.CharField(max_length=15)
@@ -58,14 +63,18 @@ class Employee(models.Model):
     )
 
     def __str__(self):
-        return f"{self.first_name} {self.second_name} - {self.designation} - {self.school}"
-    
+        return (
+            f"{self.first_name} {self.second_name} - {self.designation} - {self.school}"
+        )
+
 
 class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)  # Link to User model
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True
+    )  # Link to User model
     user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
@@ -74,12 +83,16 @@ class Teacher(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - Teacher - {self.school}"
-    
+
 
 class Class_Teacher(models.Model):
     id = models.AutoField(primary_key=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)  # Ensure lowercase 'teacher'
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)  # Link to User model
+    teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE, null=True
+    )  # Ensure lowercase 'teacher'
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True
+    )  # Link to User model
     user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
@@ -89,12 +102,17 @@ class Class_Teacher(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.class_assigned} {self.division_assigned} - {self.school}"
-    
+
+
 class Warden(models.Model):
     id = models.AutoField(primary_key=True)  # Explicit id field
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Link to School model
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)  # Link to Employee model
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True)  # Link to User model
+    employee = models.ForeignKey(
+        Employee, on_delete=models.CASCADE
+    )  # Link to Employee model
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True
+    )  # Link to User model
     user_name = models.CharField(max_length=20, null=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
@@ -102,13 +120,14 @@ class Warden(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - Warden - {self.school}"
-    
 
 
 class Student(models.Model):
     id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    class_teacher = models.ForeignKey(Class_Teacher, on_delete=models.CASCADE, null=True)
+    class_teacher = models.ForeignKey(
+        Class_Teacher, on_delete=models.CASCADE, null=True
+    )
     warden = models.ForeignKey(Warden, on_delete=models.SET_NULL, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -126,17 +145,17 @@ class Student(models.Model):
     @property
     def class_and_division(self):
         return f"{self.class_assigned} - {self.division_assigned}"
-    
+
 
 class Attendance(models.Model):
     id = models.AutoField(primary_key=True)  # Explicit id field
-    student = models.ForeignKey(Student, on_delete=models.CASCADE,null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     date = models.DateField(default=date.today)
-    is_present = models.BooleanField(default=False)  
+    is_present = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.student} - {'Absent' if not self.is_present else 'Present'} on {self.date}"
-    
+
 
 class Parent(models.Model):
     first_name = models.CharField(max_length=255)
@@ -144,7 +163,7 @@ class Parent(models.Model):
     username = models.CharField(max_length=255, unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     school = models.ForeignKey(School, on_delete=models.CASCADE, blank=True, null=True)
-    students = models.ManyToManyField(Student, blank=True)  
+    students = models.ManyToManyField(Student, blank=True)
     contact_number = models.CharField(max_length=20)
     email = models.EmailField()
 
@@ -154,8 +173,10 @@ class Parent(models.Model):
 
 class Notification(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, null=True, blank=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, blank=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE,null=True)
+    teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE, null=True, blank=True
+    )
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -164,46 +185,55 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.parent.username if self.parent else 'No Parent'} - {self.message[:20]}"
-    
-
 
 
 class LeaveReason(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE)
-    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE, null=True, blank=True)
-    parent_notification=models.ForeignKey('Notification',on_delete=models.CASCADE,null=True,blank=True)
+    student = models.ForeignKey("Student", on_delete=models.CASCADE)
+    parent = models.ForeignKey("Parent", on_delete=models.CASCADE)
+    teacher = models.ForeignKey(
+        "Teacher", on_delete=models.CASCADE, null=True, blank=True
+    )
+    parent_notification = models.ForeignKey(
+        "Notification", on_delete=models.CASCADE, null=True, blank=True
+    )
     reason = models.TextField()
     date = models.DateField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Leave Reason for {self.student} on {self.date}"
-    
+
 
 class TeacherNotification(models.Model):
-    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE)
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, blank=True)
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    teacher = models.ForeignKey("Teacher", on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        "Parent", on_delete=models.CASCADE, null=True, blank=True
+    )
+    student = models.ForeignKey("Student", on_delete=models.CASCADE)
     message = models.TextField()
-    reason= models.ForeignKey('LeaveReason',on_delete=models.CASCADE, null=True, blank=True)
+    reason = models.ForeignKey(
+        "LeaveReason", on_delete=models.CASCADE, null=True, blank=True
+    )
     is_read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Notification for {self.student} - {self.message[:20]}"
-    
+
 
 class Exam(models.Model):
     exam_id = models.AutoField(primary_key=True)
     exam_name = models.CharField(max_length=100)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     school_admin_username = models.CharField(max_length=15, null=True)
+    academic_year = models.CharField(max_length=15, null=True)
 
     def __str__(self):
-        return f"{self.exam_name} ({self.school.school_name})"
-    
+        return f"{self.exam_name} - {self.academic_year} - ({self.school.school_name})"
+
+
 class Subject(models.Model):
+    subject_id = models.AutoField(primary_key=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=25)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
@@ -213,9 +243,13 @@ class Subject(models.Model):
     subject_name = models.CharField(max_length=25)
 
     def __str__(self):
-        return f"{self.subject_name} ({self.teacher.first_name} {self.teacher.last_name})"
+        return (
+            f"{self.subject_name} ({self.teacher.first_name} {self.teacher.last_name})"
+        )
+
 
 class Marks(models.Model):
+    marks_id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     class_assigned = models.CharField(max_length=20)

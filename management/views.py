@@ -304,40 +304,49 @@ def add_students_marks(request):
     return render(request, "teacher/add_students_marks.html")
 
 
-def get_exams(request):
-    if request.user.is_authenticated:
-        teacher = request.user.teacher  # Assuming there's a teacher relation
-        exams = Exam.objects.filter(
-            school=teacher.school
-        )  # Filter exams by the teacher's school
-        exams_data = [{"id": exam.exam_id, "name": exam.exam_name} for exam in exams]
-        return JsonResponse({"exams": exams_data})
-    return JsonResponse({"error": "Unauthorized"}, status=403)
+@login_required
+def add_exam(request):
+    if request.method == 'POST':
+        exam_name = request.POST.get('exam_name')
+        academic_year = request.POST.get('academic_year')
 
+        # Get the logged-in teacher
+        teacher = Teacher.objects.get(user=request.user)
+        school = teacher.school
 
-def add_exam_or_select(request):
-    if request.method == "POST":
-        exam_name = request.POST.get("exam_name")
-        exam_id = request.POST.get("exam_id")
+        if not exam_name or not academic_year:
+            return JsonResponse({'success': False, 'error': 'Invalid input.'})
 
-        if exam_id:
-            try:
-                exam = Exam.objects.get(id=exam_id)
-                return JsonResponse(
-                    {"message": f'Exam "{exam.exam_name}" selected successfully.'}
-                )
-            except Exam.DoesNotExist:
-                return JsonResponse({"error": "Exam not found."}, status=404)
+        # Create the exam and link it to the teacher's school and school admin
+        exam = Exam.objects.create(
+            exam_name=exam_name,
+            academic_year=academic_year,
+            school=school,
+            school_admin_username=school.school_admin_username
+        )
 
-        if exam_name:
-            teacher = request.user.teacher
-            exam = Exam.objects.create(exam_name=exam_name, school=teacher.school)
-            return JsonResponse({"message": f'Exam "{exam_name}" added successfully.'})
+        return JsonResponse({
+            'success': True,
+            'exam_id': exam.exam_id,
+            'exam_name': exam.exam_name
+        })
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
 
-        return JsonResponse({"error": "No exam selected or added."}, status=400)
+@login_required
+def get_academic_years(request):
+    try:
+        teacher = Teacher.objects.get(user=request.user)
+        school = teacher.school
 
-    return JsonResponse({"error": "Invalid request method."}, status=405)
+        # Get distinct academic years for exams linked to this school
+        academic_years = Exam.objects.filter(school=school).values_list('academic_year', flat=True).distinct()
 
+        # Return JSON response with academic years
+        return JsonResponse({'academic_years': list(academic_years)})
+    except Teacher.DoesNotExist:
+        return JsonResponse({'academic_years': []})
+    
 
 def get_classes_and_divisions(request):
     if request.method == "GET":
@@ -359,134 +368,113 @@ def get_classes_and_divisions(request):
 
     return JsonResponse({"error": "Invalid request method."}, status=405)
 
+@login_required
+def get_exams(request):
+    academic_year = request.GET.get('academic_year')
+    teacher = request.user.teacher
 
+    if academic_year:
+        exams = Exam.objects.filter(school=teacher.school, academic_year=academic_year).values('exam_id', 'exam_name')
+        return JsonResponse({'exams': list(exams)})
+    else:
+        return JsonResponse({'exams': []})
+    
+@csrf_exempt
 def add_subject(request):
-    if request.method == "POST":
-        subject_name = request.POST.get("subject_name")
-        class_id = request.POST.get("class_id")
-        division_id = request.POST.get("division_id")
-        exam_id = request.POST.get("exam_id")
-        teacher = request.user.teacher  # Assuming a related teacher object for the logged-in user
-
-        if subject_name and class_id and division_id and exam_id:
-            # Get the school from the logged-in teacher
-            school = teacher.school
-            username = request.user.username  # Get the username of the logged-in teacher
-
-            # Now, create the subject and include the school and username
-            subject = Subject.objects.create(
-                subject_name=subject_name,
-                class_assigned=class_id,
-                division_assigned=division_id,
-                teacher=teacher,
-                exam_id=exam_id,
-                school=school,  # Set the school field
-                user_name=username  # Set the user_name field to the logged-in teacher's username
-            )
-            return JsonResponse({"message": f'Subject "{subject_name}" added successfully.'})
-
-        return JsonResponse({"error": "All fields are required."}, status=400)
-
-    return JsonResponse({"error": "Invalid request method."}, status=405)
-
-def add_marks_page(request):
-    return render(request,'teacher/add_marks.html')
-
-def get_subjects(request):
-    if request.method == 'GET':
-        exam_id = request.GET.get('exam_id')
-        class_assigned = request.GET.get('class_assigned')
-        division_assigned = request.GET.get('division_assigned')
-        
-        teacher = request.user.teacher
-        subjects = Subject.objects.filter(
-            exam_id=exam_id,
-            class_assigned=class_assigned,
-            division_assigned=division_assigned,
-            school=teacher.school
-        )
-        
-        subjects_data = [{"id": subj.id, "subject_name": subj.subject_name} for subj in subjects]
-        return JsonResponse({"subjects": subjects_data})
-    return JsonResponse({"error": "Invalid request method."}, status=405)
-
-
-def get_students(request):
-    if request.method == 'GET':
-        exam_id = request.GET.get('exam_id')
-        class_assigned = request.GET.get('class_assigned')
-        division_assigned = request.GET.get('division_assigned')
-        subject_id = request.GET.get('subject_id')
-        
-        students = Student.objects.filter(
-            class_assigned=class_assigned,
-            division_assigned=division_assigned,
-            school=request.user.teacher.school
-        )
-        
-        students_data = [{"id": student.id, "roll_number": student.roll_number, "first_name": student.first_name, "last_name": student.last_name} for student in students]
-        return JsonResponse({"students": students_data})
-    return JsonResponse({"error": "Invalid request method."}, status=405)
-
-def add_marks(request):
     if request.method == 'POST':
-        exam_id = request.POST.get('exam_id')
-        class_assigned = request.POST.get('class_assigned')
-        division_assigned = request.POST.get('division_assigned')
-        subject_id = request.POST.get('subject_id')
-        marks_data = request.POST.get('marks')
-        
-        marks_list = json.loads(marks_data)
+        data = request.POST
+        subject_name = data.get('subject_name')
+        academic_year = data.get('academic_year')
+        exam_id = data.get('exam')
+        class_assigned = data.get('class_assigned')
+        division_assigned = data.get('division_assigned')
+
+        # Get the logged-in teacher
         teacher = request.user.teacher
-        for mark in marks_list:
-            Marks.objects.create(
-                school=teacher.school,
+        school = teacher.school
+        user_name = teacher.user_name
+
+        try:
+            exam = Exam.objects.get(exam_id=exam_id)
+            subject = Subject(
                 teacher=teacher,
+                user_name=user_name,
+                school=school,
+                exam=exam,
                 class_assigned=class_assigned,
                 division_assigned=division_assigned,
-                exam_id=exam_id,
-                student_id=mark['student_id'],
-                subject_id=subject_id,
-                marks_obtained=mark['marks_obtained'],
-                out_of=mark['out_of']
+                subject_name=subject_name
             )
-        return JsonResponse({"success": True})
-    return JsonResponse({"error": "Invalid request method."}, status=405)
+            subject.save()
+            return JsonResponse({'success': True})
+        except Exam.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Exam does not exist.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
-def view_student_marks_page(request): 
-    return render(request,'teacher/view_student_marks.html')
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
 
-def get_student_marks(request):
+
+def add_marks_page(request): 
+    return render(request,'teacher/add_marks.html')
+
+def get_subject(request):
     exam_id = request.GET.get('exam_id')
-    if not exam_id:
-        return JsonResponse({'error': 'Exam ID not provided'}, status=400)
+    exam = get_object_or_404(Exam, pk=exam_id)
+    subjects = Subject.objects.filter(exam=exam)
+    subjects_data = [{'subject_id': subject.subject_id, 'subject_name': subject.subject_name} for subject in subjects]
+    return JsonResponse({'subjects': subjects_data})
+
+def get_students(request):
+    exam_id = request.GET.get('exam_id')
+    class_assigned = request.GET.get('class_assigned')
+    division_assigned = request.GET.get('division_assigned')
     
-    # Get the class teacher for the logged-in user
     try:
-        class_teacher = Class_Teacher.objects.get(user=request.user)
-    except Class_Teacher.DoesNotExist:
-        return JsonResponse({'error': 'Class teacher not found'}, status=404)
-
-    class_assigned = class_teacher.class_assigned
-    division_assigned = class_teacher.division_assigned
-
-    # Filter marks based on class_teacher details
-    marks_data = Marks.objects.filter(
-        exam_id=exam_id,
-        student__class_assigned=class_assigned,
-        student__division_assigned=division_assigned
-    ).select_related('student', 'subject').values(
-        'student__first_name', 'student__last_name', 'subject__subject_name', 'marks_obtained','out_of'
-    )
-    
-    result = {}
-    for mark in marks_data:
-        student_name = f"{mark['student__first_name']} {mark['student__last_name']}"
-        subject_name = mark['subject__subject_name']
-        marks_obtained = mark['marks_obtained']
+        exam = Exam.objects.get(pk=exam_id)
+        students = Student.objects.filter(
+            school=exam.school,
+            class_assigned=class_assigned,
+            division_assigned=division_assigned
+        )
         
-        if student_name not in result:
-            result[student_name] = {}
-        result[student_name][subject_name] = marks_obtained
+        students_data = [{'id': student.id, 'first_name': student.first_name, 'last_name': student.last_name} for student in students]
+        return JsonResponse({'students': students_data})
     
-    return JsonResponse(result)
+    except Exam.DoesNotExist:
+        return JsonResponse({'students': [], 'error': 'Exam does not exist.'})
+    except Exception as e:
+        return JsonResponse({'students': [], 'error': str(e)})
+
+@csrf_exempt
+def add_marks(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            academic_year = data.get('academic_year')
+            exam_id = data.get('exam')
+            class_assigned = data.get('class_assigned')
+            division_assigned = data.get('division_assigned')
+            subject_id = data.get('subject')
+            marks = data.get('marks', {})
+            
+            for student_id, mark_data in marks.items():
+                student = get_object_or_404(Student, pk=student_id)
+                subject = get_object_or_404(Subject, pk=subject_id)
+                Marks.objects.create(
+                    school=student.school,
+                    teacher=request.user.teacher,
+                    class_assigned=class_assigned,
+                    division_assigned=division_assigned,
+                    exam_id=exam_id,
+                    student=student,
+                    subject=subject,
+                    marks_obtained=mark_data.get('marks_obtained'),
+                    out_of=mark_data.get('out_of')
+                )
+            
+            return JsonResponse({'success': True})
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON data.'})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})

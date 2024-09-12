@@ -3,72 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add or Select Exam, Class, Division, and Subject</title>
-    <link rel="stylesheet" href="/static/css/add_exam.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/static/js/add_students_marks.js"></script>
+    <title>Add Exam</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Add Exam or Subject</h1>
-        <!-- Button to open modal -->
-        <button id="openModalButton">Add Subject or Exam</button>
-        
-        <!-- Modal structure -->
-        <div id="addExamModal" style="display:none;">
-            <div class="modal-content">
-                <span id="closeModalButton">&times;</span>
+    <!-- Add Exam Button -->
+    <button id="openExamModalBtn">Add Exam</button>
+
+    <!-- Add Subject Button -->
+    <button id="openSubjectModalBtn">Add Subject</button>
+
+    <!-- Modal for Adding Exam -->
+    <div id="examModal" style="display: none;">
+        <div>
+            <span class="close" data-modal="examModal" style="cursor: pointer;">&times;</span>
+            <h2>Add Exam</h2>
+            <form id="addExamForm">
+                <label for="examName">Exam Name:</label>
+                <input type="text" id="examName" name="exam_name" required>
                 
-                <!-- Exam Section -->
-                <h2>Add or Select Exam</h2>
-                <label for="existing_exam">Select Existing Exam:</label>
-                <select id="existing_exam">
-                    <option value="">Select an exam</option>
-                    <!-- Options will be dynamically populated via JavaScript -->
-                </select>
-                <br><br>
-
-                <form id="add_exam_form">
-                    <label for="exam_name">Or Add New Exam:</label>
-                    <input type="text" id="exam_name" name="exam_name" placeholder="New Exam Name"><br><br>
+                <div>
+                    <label for="academicYearSelect">Select Existing Academic Year:</label>
+                    <select id="academicYearSelect" name="academic_year">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
                     
-                    <!-- CSRF Token -->
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-
-                    <button type="submit">Add Exam</button>
-                </form>
-
-                <div id="message" style="display:none;"></div>
+                    <label for="newAcademicYear">Or Add New Academic Year:</label>
+                    <input type="text" id="newAcademicYear" name="new_academic_year">
+                </div>
                 
-                <!-- Subject Section -->
-                <h2>Select Class, Division, and Add Subject</h2>
-                <label for="class_assigned">Select Class:</label>
-                <select id="class_assigned">
-                    <option value="">Select Class</option>
+                <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+
+                <button type="submit">Add Exam</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Subject -->
+    <div id="subjectModal" style="display: none;">
+        <div>
+            <span class="close" data-modal="subjectModal" style="cursor: pointer;">&times;</span>
+            <h2>Add Subject</h2>
+            <form id="addSubjectForm">
+                <label for="subjectName">Subject Name:</label>
+                <input type="text" id="subjectName" name="subject_name" required>
+                
+                <label for="academicYearSelectSubject">Select Academic Year:</label>
+                <select id="academicYearSelectSubject" name="academic_year">
+                    <!-- Options will be populated by JavaScript -->
                 </select>
-                <br><br>
 
-                <label for="division_assigned">Select Division:</label>
-                <select id="division_assigned">
-                    <option value="">Select Division</option>
+                <label for="examSelect">Select Exam:</label>
+                <select id="examSelect" name="exam">
+                    <!-- Options will be populated by JavaScript -->
                 </select>
-                <br><br>
+                
+                <label for="classSelect">Select Class:</label>
+                <select id="classSelect" name="class_id">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
 
-                <form id="add_subject_form">
-                    <label for="subject_name">Subject Name:</label>
-                    <input type="text" id="subject_name" name="subject_name" placeholder="Subject Name"><br><br>
-                    
-                    <!-- Hidden field for exam_id -->
-                    <input type="hidden" id="exam_id" name="exam_id">
-                    
-                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                    <button type="submit">Add Subject</button>
-                </form>
+                <label for="divisionSelect">Select Division:</label>
+                <select id="divisionSelect" name="division_id">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
 
-                <div id="message_subject" style="display:none;"></div>
-            </div>
+                <input type="hidden" id="csrfTokenSubject" value="{{ csrf_token }}">
+
+                <button type="submit">Add Subject</button>
+            </form>
         </div>
     </div>
     <a href="/management/add_marks_page">Add marks</a>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_students_marks.js"></script> <!-- Link to your JavaScript file -->
 </body>
 </html>

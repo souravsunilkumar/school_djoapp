@@ -38,5 +38,9 @@ urlpatterns = [
     path('view_individual_student_marks/', view_individual_student_marks, name='view_student_marks'),
     path('get_students_by_class_teacher/', get_students_by_class_teacher, name='get_students_by_class_teacher'),
     path('get_student_marks/', get_student_marks, name='get_student_marks'),
+    path('check_existing_marks/', check_existing_marks, name='check_existing_marks'),
+    path('get_existing_marks/', get_existing_marks, name='get_existing_marks'),
+    path('update_marks_page/', update_marks_page, name='update_marks_page'),
+    path('update_marks/', update_marks, name='add_or_update_marks'),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

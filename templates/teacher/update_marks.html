@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Marks</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/static/js/add_marks.js"></script>
-    <link rel="stylesheet" href="/static/css/add_marks.css">
+    <script src="/static/js/update_marks.js"></script>
 </head>
 <body>
-    <h1>Add Marks</h1>
+    <h1>Update Marks</h1>
     
     <form id="addMarksForm">
         <label for="academicYearSelect">Academic Year:</label>
@@ -33,10 +32,8 @@
         <input type="number" id="totalMarks" name="total_marks" />
         
         <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
-        <button type="submit">Submit Marks</button>
+        <button type="submit">Update Marks</button>
     </form>
 
-    <a href="/management/update_marks_page">update existing marks</a>
-    
 </body>
 </html>

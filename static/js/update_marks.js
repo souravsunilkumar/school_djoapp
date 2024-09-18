@@ -79,13 +79,12 @@ $(document).ready(function () {
         });
     });
 
-    // Trigger subject loading after both class and division are selected
+    // Load subjects and fetch existing marks when both class and division are selected
     divisionSelect.on('change', function () {
         var examId = examSelect.val();
-        var classAssigned = classSelect.val();  // Get selected class
-        var divisionAssigned = divisionSelect.val();  // Get selected division
+        var classAssigned = classSelect.val();
+        var divisionAssigned = divisionSelect.val();
 
-        // Check if both class and division are selected before making the request
         if (examId && classAssigned && divisionAssigned) {
             $.ajax({
                 url: '/management/get_subject/',
@@ -110,36 +109,43 @@ $(document).ready(function () {
         }
     });
 
-    // Load students based on selected subject
+    // Load existing marks when subject is selected
     subjectSelect.on('change', function () {
         var examId = examSelect.val();
         var classAssigned = classSelect.val();
         var divisionAssigned = divisionSelect.val();
-        $.ajax({
-            url: '/management/get_students/',
-            data: {
-                exam_id: examId,
-                class_assigned: classAssigned,
-                division_assigned: divisionAssigned
-            },
-            type: 'GET',
-            success: function (response) {
-                studentsTable.empty();
-                if (Array.isArray(response.students) && response.students.length > 0) {
-                    var tableHtml = '<table><thead><tr><th>Student</th><th>Marks Obtained</th><th>Total Marks</th></tr></thead><tbody>';
-                    $.each(response.students, function (index, student) {
-                        tableHtml += '<tr><td>' + student.first_name + ' ' + student.last_name + '</td><td><input type="number" name="marks_obtained_' + student.id + '" /></td><td><input type="number" name="out_of_' + student.id + '" /></td></tr>';
-                    });
-                    tableHtml += '</tbody></table>';
-                    studentsTable.html(tableHtml);
-                } else {
-                    studentsTable.html('<p>No students found.</p>');
+        var subjectId = $(this).val();
+
+        if (examId && classAssigned && divisionAssigned && subjectId) {
+            $.ajax({
+                url: '/management/get_existing_marks/',
+                data: {
+                    exam_id: examId,
+                    class_assigned: classAssigned,
+                    division_assigned: divisionAssigned,
+                    subject_id: subjectId
+                },
+                type: 'GET',
+                success: function (response) {
+                    studentsTable.empty();
+                    if (response.marks.length > 0) {
+                        var tableHtml = '<table><thead><tr><th>Student</th><th>Marks Obtained</th><th>Total Marks</th></tr></thead><tbody>';
+                        $.each(response.marks, function (index, mark) {
+                            tableHtml += '<tr><td>' + mark.student_name + '</td><td><input type="number" name="marks_obtained_' + mark.student_id + '" value="' + mark.marks_obtained + '" /></td><td><input type="number" name="out_of_' + mark.student_id + '" value="' + mark.out_of + '" /></td></tr>';
+                        });
+                        tableHtml += '</tbody></table>';
+                        studentsTable.html(tableHtml);
+                    } else {
+                        studentsTable.html('<p>No marks found.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching existing marks:", error);
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching students:", error);
-            }
-        });
+            });
+        } else {
+            console.error("Please select all fields before fetching marks.");
+        }
     });
 
     // Set total marks for all students
@@ -148,51 +154,55 @@ $(document).ready(function () {
         studentsTable.find('input[name^="out_of_"]').val(totalMarks);
     });
 
-    // Handle form submission to add marks
+    // Handle form submission to add or update marks
     $('#addMarksForm').on('submit', function (e) {
         e.preventDefault();
-
-        var academicYear = academicYearSelect.val();
-        var examId = examSelect.val();
-        var classAssigned = classSelect.val();
-        var divisionAssigned = divisionSelect.val();
-        var subjectId = subjectSelect.val();
-
-        var marksData = {};
+    
+        var formData = {
+            academic_year: academicYearSelect.val(),
+            exam: examSelect.val(),
+            class_assigned: classSelect.val(),
+            division_assigned: divisionSelect.val(),
+            subject: subjectSelect.val(),
+            marks_data: []
+        };
+    
         studentsTable.find('tbody tr').each(function () {
-            var studentId = $(this).find('input[name^="marks_obtained_"]').attr('name').split('_')[2];
-            var marksObtained = $(this).find('input[name="marks_obtained_' + studentId + '"]').val();
-            var outOf = $(this).find('input[name="out_of_' + studentId + '"]').val();
-
-            if (marksObtained || outOf) {
-                marksData[studentId] = { marks_obtained: marksObtained, out_of: outOf };
+            // Try to find the marks obtained input field
+            var marksInput = $(this).find('input[name^="marks_obtained_"]');
+            if (marksInput.length > 0) {
+                var studentId = marksInput.attr('name').split('_')[2];
+                var marksObtained = marksInput.val();
+                var outOf = $(this).find('input[name="out_of_' + studentId + '"]').val();
+    
+                if (marksObtained || outOf) {
+                    formData.marks_data.push({
+                        student_id: studentId,
+                        marks_obtained: marksObtained,
+                        out_of: outOf
+                    });
+                }
+            } else {
+                console.warn("Marks input field not found for a student row");
             }
         });
-
+    
+        console.log("Form Data:", formData);  // Debug log
+    
         $.ajax({
-            url: '/management/add_marks/',
+            url: '/management/update_marks/',
             type: 'POST',
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
             headers: {
                 'X-CSRFToken': csrfToken
             },
-            contentType: 'application/json',
-            data: JSON.stringify({
-                academic_year: academicYear,
-                exam: examId,
-                class_assigned: classAssigned,
-                division_assigned: divisionAssigned,
-                subject: subjectId,
-                marks: marksData
-            }),
             success: function (response) {
-                if (response.success) {
-                    alert('Marks added successfully!');
-                } else {
-                    alert('Error adding marks: ' + (response.error || 'Unknown error.'));
-                }
+                alert('Marks updated successfully');
             },
             error: function (xhr, status, error) {
-                alert('An error occurred while adding the marks: ' + error);
+                alert('Error updating marks: ' + xhr.responseText);
+                console.error("Error updating marks:", error);
             }
         });
     });

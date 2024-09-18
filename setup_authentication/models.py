@@ -214,7 +214,7 @@ class Subject(models.Model):
 
     def __str__(self):
         return (
-            f"{self.subject_name} ({self.teacher.first_name} {self.teacher.last_name})"
+            f"{self.subject_name} ({self.teacher.first_name} {self.teacher.last_name}) - {self.exam.academic_year}"
         )
 
 

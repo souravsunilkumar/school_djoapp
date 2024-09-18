@@ -1,10 +1,13 @@
 import json
+import logging
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from setup_authentication.models import *
+from django.views.decorators.http import require_GET, require_POST
 
+logger = logging.getLogger(__name__)
 
 def get_teachers(request):
     if request.method == "GET":
@@ -591,3 +594,90 @@ def get_student_marks(request):
             'marks_by_exam': marks_by_exam
         })
     return JsonResponse({'error': 'Unauthorized or Invalid Request'}, status=403)
+
+def update_marks_page(request): 
+    return render(request,'teacher/update_marks.html')
+
+def check_existing_marks(request):
+    if request.method == 'GET':
+        exam_id = request.GET.get('exam_id')
+        class_assigned = request.GET.get('class_assigned')
+        division_assigned = request.GET.get('division_assigned')
+        subject_id = request.GET.get('subject_id')
+        
+        exists = Marks.objects.filter(
+            exam_id=exam_id,
+            class_assigned=class_assigned,
+            division_assigned=division_assigned,
+            subject_id=subject_id
+        ).exists()
+        
+        return JsonResponse({'exists': exists})
+    
+def get_existing_marks(request):
+    if request.method == 'GET':
+        exam_id = request.GET.get('exam_id')
+        class_assigned = request.GET.get('class_assigned')
+        division_assigned = request.GET.get('division_assigned')
+        subject_id = request.GET.get('subject_id')
+        
+        marks = Marks.objects.filter(
+            exam_id=exam_id,
+            class_assigned=class_assigned,
+            division_assigned=division_assigned,
+            subject_id=subject_id
+        ).values('student_id', 'marks_obtained', 'out_of', 'student__first_name', 'student__last_name')
+        
+        marks_list = [
+            {
+                'student_id': mark['student_id'],
+                'marks_obtained': mark['marks_obtained'],
+                'out_of': mark['out_of'],
+                'student_name': f"{mark['student__first_name']} {mark['student__last_name']}"
+            }
+            for mark in marks
+        ]
+        
+        return JsonResponse({'marks': marks_list})
+    
+@csrf_exempt
+@require_POST
+def update_marks(request):
+    try:
+        data = json.loads(request.body)
+        logger.debug("Received data: %s", data)  # Log received data
+
+        academic_year = data.get('academic_year')
+        exam_id = data.get('exam')
+        class_assigned = data.get('class_assigned')
+        division_assigned = data.get('division_assigned')
+        subject_id = data.get('subject')
+        marks_data = data.get('marks_data', [])
+
+        if not all([academic_year, exam_id, class_assigned, division_assigned, subject_id]):
+            return JsonResponse({'error': 'Missing parameters'}, status=400)
+
+        for mark_info in marks_data:
+            student_id = mark_info.get('student_id')
+            marks_obtained = mark_info.get('marks_obtained')
+            out_of = mark_info.get('out_of')
+
+            if student_id and (marks_obtained is not None or out_of is not None):
+                # Update or create a record
+                Marks.objects.update_or_create(
+                    exam_id=exam_id,
+                    class_assigned=class_assigned,
+                    division_assigned=division_assigned,
+                    subject_id=subject_id,
+                    student_id=student_id,
+                    defaults={'marks_obtained': marks_obtained, 'out_of': out_of}
+                )
+
+        return JsonResponse({'success': True})
+
+    except json.JSONDecodeError:
+        logger.error("Invalid JSON data: %s", request.body)
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        logger.exception("Exception occurred while updating marks: %s", str(e))
+        return JsonResponse({'error': str(e)}, status=500)

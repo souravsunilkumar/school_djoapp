@@ -1,0 +1,118 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+a {
+    color: #4CAF50;
+    text-decoration: none;
+    padding: 10px 0;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Modals */
+#examModal, #subjectModal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#examModal > div, #subjectModal > div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.close:hover, .close:focus {
+    color: black;
+    cursor: pointer;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input[type="text"], select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Button to open modals */
+#openExamModalBtn, #openSubjectModalBtn {
+    margin-bottom: 20px;
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
+    #examModal > div, #subjectModal > div {
+        padding: 15px;
+        max-width: 90%;
+    }
+}

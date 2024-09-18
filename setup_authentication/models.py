@@ -46,21 +46,13 @@ class Employee(models.Model):
     ]
 
     id = models.AutoField(primary_key=True)  # Explicit id field
-    school = models.ForeignKey(
-        School, on_delete=models.CASCADE
-    )  # Foreign key to School model
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE
-    )  # Foreign key to User model
+    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Foreign key to School model
+    user = models.OneToOneField( User, on_delete=models.CASCADE)  # Foreign key to User model
     user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     second_name = models.CharField(max_length=25)
     contact_number = models.CharField(max_length=15)
-    designation = models.CharField(
-        max_length=20,
-        choices=DESIGNATION_CHOICES,
-        default=TEACHER,
-    )
+    designation = models.CharField(max_length=20,choices=DESIGNATION_CHOICES,default=TEACHER,)
 
     def __str__(self):
         return (
@@ -72,9 +64,7 @@ class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True
-    )  # Link to User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)  # Link to User model
     user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
@@ -87,12 +77,8 @@ class Teacher(models.Model):
 
 class Class_Teacher(models.Model):
     id = models.AutoField(primary_key=True)
-    teacher = models.ForeignKey(
-        Teacher, on_delete=models.CASCADE, null=True
-    )  # Ensure lowercase 'teacher'
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True
-    )  # Link to User model
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)  # Ensure lowercase 'teacher'
+    user = models.OneToOneField( User, on_delete=models.CASCADE, null=True)  # Link to User model
     user_name = models.CharField(max_length=25, null=True)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
@@ -107,12 +93,8 @@ class Class_Teacher(models.Model):
 class Warden(models.Model):
     id = models.AutoField(primary_key=True)  # Explicit id field
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Link to School model
-    employee = models.ForeignKey(
-        Employee, on_delete=models.CASCADE
-    )  # Link to Employee model
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True
-    )  # Link to User model
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)  # Link to Employee model
+    user = models.OneToOneField( User, on_delete=models.CASCADE, null=True)  # Link to User model
     user_name = models.CharField(max_length=20, null=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
@@ -125,9 +107,7 @@ class Warden(models.Model):
 class Student(models.Model):
     id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    class_teacher = models.ForeignKey(
-        Class_Teacher, on_delete=models.CASCADE, null=True
-    )
+    class_teacher = models.ForeignKey(Class_Teacher, on_delete=models.CASCADE, null=True)
     warden = models.ForeignKey(Warden, on_delete=models.SET_NULL, null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -173,9 +153,7 @@ class Parent(models.Model):
 
 class Notification(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, null=True, blank=True)
-    teacher = models.ForeignKey(
-        Teacher, on_delete=models.CASCADE, null=True, blank=True
-    )
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True, blank=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
@@ -190,12 +168,8 @@ class Notification(models.Model):
 class LeaveReason(models.Model):
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
     parent = models.ForeignKey("Parent", on_delete=models.CASCADE)
-    teacher = models.ForeignKey(
-        "Teacher", on_delete=models.CASCADE, null=True, blank=True
-    )
-    parent_notification = models.ForeignKey(
-        "Notification", on_delete=models.CASCADE, null=True, blank=True
-    )
+    teacher = models.ForeignKey("Teacher", on_delete=models.CASCADE, null=True, blank=True)
+    parent_notification = models.ForeignKey("Notification", on_delete=models.CASCADE, null=True, blank=True)
     reason = models.TextField()
     date = models.DateField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -206,14 +180,10 @@ class LeaveReason(models.Model):
 
 class TeacherNotification(models.Model):
     teacher = models.ForeignKey("Teacher", on_delete=models.CASCADE)
-    parent = models.ForeignKey(
-        "Parent", on_delete=models.CASCADE, null=True, blank=True
-    )
+    parent = models.ForeignKey("Parent", on_delete=models.CASCADE, null=True, blank=True)
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
     message = models.TextField()
-    reason = models.ForeignKey(
-        "LeaveReason", on_delete=models.CASCADE, null=True, blank=True
-    )
+    reason = models.ForeignKey("LeaveReason", on_delete=models.CASCADE, null=True, blank=True)
     is_read = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 

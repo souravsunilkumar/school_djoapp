@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Student Marks</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="/static/js/parent_view_student_marks.js"></script>
+    <link rel="stylesheet" href="/static/css/parent_view_student_marks.css">
+</head>
+<body>
+    <h1>View Student Marks</h1>
+    
+    <div>
+        <label for="academicYearSelect">Select Academic Year:</label>
+        <select id="academicYearSelect">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+    </div>
+    
+    <div>
+        <label for="studentSelect">Select Student:</label>
+        <select id="studentSelect">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+    </div>
+    
+    <button id="loadMarksButton">Load Marks</button>
+    <button id="showProgressButton">Show Progress</button> <!-- New Button -->
+
+    <div id="marksContainer">
+        <!-- Marks data will be loaded here -->
+    </div>
+
+    <div id="progressChartsContainer">
+        <!-- Progress charts will be loaded here -->
+    </div>
+
+    <!-- CSRF token for form submissions -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    
+</body>
+</html>

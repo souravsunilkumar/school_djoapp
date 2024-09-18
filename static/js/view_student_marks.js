@@ -1,78 +1,73 @@
-$(document).ready(function () {
-    // Populate exams dropdown
+$(document).ready(function() {
+    var academicYearSelect = $('#academicYearSelect');
+    var examSelect = $('#examSelect');
+    var marksTableContainer = $('#marksTableContainer');
+
+    // Load academic years
     $.ajax({
+        url: '/management/get_academic_years/',
         type: 'GET',
-        url: '/management/exam/get_exams/', // Endpoint to get list of exams
-        success: function (response) {
-            var $examSelect = $('#exam_select');
-            $examSelect.empty();
-            $examSelect.append('<option value="">Select Exam</option>');
-            $.each(response.exams, function (index, exam) {
-                $examSelect.append('<option value="' + exam.id + '">' + exam.name + '</option>');
+        success: function(response) {
+            academicYearSelect.empty().append('<option value="" disabled selected>Select Academic Year</option>');
+            $.each(response.academic_years, function(index, year) {
+                academicYearSelect.append('<option value="' + year + '">' + year + '</option>');
             });
         },
-        error: function (xhr, status, error) {
-            alert('Error fetching exams.');
+        error: function(xhr, status, error) {
+            console.error("Error fetching academic years:", error);
         }
     });
 
-    // Fetch marks when button is clicked
-    $('#fetch_marks').on('click', function () {
-        var examId = $('#exam_select').val();
-        if (!examId) {
-            alert('Please select an exam.');
-            return;
-        }
-
+    // Load exams based on selected academic year
+    academicYearSelect.on('change', function() {
+        var academicYear = $(this).val();
         $.ajax({
+            url: '/management/get_exams/',
+            data: { academic_year: academicYear },
             type: 'GET',
-            url: '/management/view_student_marks/',
-            data: { 'exam_id': examId },
-            success: function (response) {
-                populateMarksTable(response);
+            success: function(response) {
+                examSelect.empty().append('<option value="" disabled selected>Select Exam</option>');
+                $.each(response.exams, function(index, exam) {
+                    examSelect.append('<option value="' + exam.exam_id + '">' + exam.exam_name + '</option>');
+                });
             },
-            error: function (xhr, status, error) {
-                alert('Error fetching student marks.');
+            error: function(xhr, status, error) {
+                console.error("Error fetching exams:", error);
             }
         });
     });
 
-    function populateMarksTable(data) {
-        var tableHead = $('#marks_table thead tr');
-        var tableBody = $('#marks_table tbody');
-        
-        tableHead.find('th:gt(0)').remove(); // Remove existing subject columns
-        tableBody.empty(); // Clear existing rows
-        
-        var subjects = new Set();
-        var rows = {};
+    // Load marks based on selected exam
+    $('#marksFilterForm').on('submit', function(e) {
+        e.preventDefault();
 
-        // Collect subject names and student rows
-        for (var student in data) {
-            if (!rows[student]) {
-                rows[student] = {};
-            }
-            for (var subject in data[student]) {
-                subjects.add(subject);
-                rows[student][subject] = data[student][subject];  // Store marks as marks_obtained/out_of
-            }
-        }
+        var examId = examSelect.val();
+        $.ajax({
+            url: '/management/view_student_marks/',
+            data: { exam_id: examId },
+            type: 'GET',
+            success: function(response) {
+                var tableHtml = '<table border="1"><thead><tr><th>Student</th>';
+                $.each(response.subjects, function(index, subject) {
+                    tableHtml += '<th>' + subject.name + '</th>';
+                });
+                tableHtml += '</tr></thead><tbody>';
 
-        // Add subjects to the table header
-        subjects = Array.from(subjects);
-        subjects.forEach(function (subject) {
-            tableHead.append('<th>' + subject + '</th>');
+                $.each(response.students, function(index, student) {
+                    tableHtml += '<tr><td>' + student.name + '</td>';
+                    $.each(response.subjects, function(index, subject) {
+                        var mark = response.marks[student.id][subject.id] || 'N/A';
+                        tableHtml += '<td>' + mark + '</td>';
+                    });
+                    tableHtml += '</tr>';
+                });
+
+                tableHtml += '</tbody></table>';
+                marksTableContainer.html(tableHtml);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching student marks:", error);
+            }
         });
-
-        // Add student rows to the table body
-        for (var student in rows) {
-            var studentRow = '<tr><td>' + student + '</td>';
-            subjects.forEach(function (subject) {
-                var mark = rows[student][subject] || 'N/A';  // Get marks_obtained/out_of or show N/A
-                studentRow += '<td>' + mark + '</td>';
-            });
-            studentRow += '</tr>';
-            tableBody.append(studentRow);
-        }
-    }
+    });
 });

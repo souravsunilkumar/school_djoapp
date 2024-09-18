@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Student Marks</title>
+</head>
+<body>
+    <h1>View Marks for Individual Student</h1>
+
+    <!-- Dropdown to select academic year -->
+    <label for="academicYearSelect">Select Academic Year:</label>
+    <select id="academicYearSelect">
+        <option value="" disabled selected>Select Academic Year</option>
+    </select>
+
+    <!-- Dropdown to select student -->
+    <label for="studentSelect">Select Student:</label>
+    <select id="studentSelect">
+        <option value="" disabled selected>Select Student</option>
+    </select>
+
+    <!-- Display student marks -->
+    <div id="studentMarks"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/individual_student_mark.js"></script>
+</body>
+</html>

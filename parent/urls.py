@@ -14,6 +14,12 @@ urlpatterns = [
     path('mark_notifications_as_read/', mark_notifications_as_read, name='mark_notifications_as_read'),
     path('submit_leave_reason/', submit_leave_reason, name='submit_leave_reason'),
     path('check_reason_given/', check_reason_given, name='check_reason_given'),
+
+    path('view_student_marks_page/', view_student_marks_page, name='view_student_marks_page'),
+    path('get_academic_years/', get_academic_years, name='get_academic_years'),
+    path('get_students_for_parent/', get_students_for_parent, name='get_students_for_parent'),
+    path('get_student_marks/', get_student_marks, name='get_student_marks'),
+    path('get_student_progress/', get_student_progress, name='get_student_progress'),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

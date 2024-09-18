@@ -420,11 +420,30 @@ def add_marks_page(request):
 
 def get_subject(request):
     exam_id = request.GET.get('exam_id')
-    exam = get_object_or_404(Exam, pk=exam_id)
-    subjects = Subject.objects.filter(exam=exam)
-    subjects_data = [{'subject_id': subject.subject_id, 'subject_name': subject.subject_name} for subject in subjects]
-    return JsonResponse({'subjects': subjects_data})
+    class_assigned = request.GET.get('class_assigned')
+    division_assigned = request.GET.get('division_assigned')
 
+    if not exam_id or not class_assigned or not division_assigned:
+        return JsonResponse({'error': 'Missing parameters'}, status=400)
+
+    # Filter subjects by exam, class, and division
+    subjects = Subject.objects.filter(
+        exam_id=exam_id,
+        class_assigned=class_assigned,
+        division_assigned=division_assigned
+    )
+
+    # Create a list of subjects with subject_id and subject_name
+    subject_list = [
+        {
+            'subject_id': subject.subject_id,
+            'subject_name': subject.subject_name
+        }
+        for subject in subjects
+    ]
+
+    # Return the list of subjects as JSON
+    return JsonResponse({'subjects': subject_list})
 def get_students(request):
     exam_id = request.GET.get('exam_id')
     class_assigned = request.GET.get('class_assigned')
@@ -478,3 +497,97 @@ def add_marks(request):
             return JsonResponse({'success': False, 'error': 'Invalid JSON data.'})
     
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+
+
+def view_student_marks_page(request): 
+    return render(request,"teacher/view_student_marks.html")
+
+
+@login_required
+def view_student_marks(request):
+    exam_id = request.GET.get('exam_id')
+
+    # Get the class and division of the logged-in class teacher
+    class_teacher = get_object_or_404(Class_Teacher, user=request.user)
+    class_assigned = class_teacher.class_assigned
+    division_assigned = class_teacher.division_assigned
+
+    # Get the students in the assigned class and division
+    students = Student.objects.filter(
+        class_assigned=class_assigned,
+        division_assigned=division_assigned,
+        school=class_teacher.school
+    )
+    
+    # Filter subjects by exam, class, and division
+    subjects = Subject.objects.filter(
+        exam_id=exam_id,
+        class_assigned=class_assigned,
+        division_assigned=division_assigned
+    )
+
+    marks = {}
+
+    # Fetch marks for each student and subject
+    for student in students:
+        student_marks = {}
+        for subject in subjects:
+            mark_record = Marks.objects.filter(
+                student=student,
+                subject=subject,
+                exam_id=exam_id
+            ).first()
+            if mark_record:
+                student_marks[subject.subject_id] = f"{mark_record.marks_obtained}/{mark_record.out_of}"
+            else:
+                student_marks[subject.subject_id] = 'N/A'
+        marks[student.id] = student_marks
+
+    # Return the filtered students, subjects, and marks in the response
+    return JsonResponse({
+        'students': [{'id': student.id, 'name': f"{student.first_name} {student.last_name}"} for student in students],
+        'subjects': [{'id': subject.subject_id, 'name': subject.subject_name} for subject in subjects],
+        'marks': marks
+    })
+
+def view_individual_student_marks(request): 
+    return render(request,'teacher/individual_student_mark.html')
+
+# View to fetch students based on the class and division of the logged-in class teacher
+def get_students_by_class_teacher(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        teacher = request.user.teacher
+        class_teacher = get_object_or_404(Class_Teacher, teacher=teacher)
+        students = Student.objects.filter(
+            class_assigned=class_teacher.class_assigned,
+            division_assigned=class_teacher.division_assigned,
+            school=class_teacher.school
+        )
+        students_data = [{'id': student.id, 'first_name': student.first_name, 'last_name': student.last_name} for student in students]
+        return JsonResponse({'students': students_data})
+    return JsonResponse({'error': 'Unauthorized or Invalid Request'}, status=403)
+
+# View to fetch marks of individual students
+def get_student_marks(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        student_id = request.GET.get('student_id')
+        academic_year = request.GET.get('academic_year')
+
+        student = get_object_or_404(Student, pk=student_id)
+        exams = Exam.objects.filter(school=student.school, academic_year=academic_year)
+        
+        marks_by_exam = {}
+        for exam in exams:
+            marks = Marks.objects.filter(exam=exam, student=student)
+            marks_by_exam[exam.exam_name] = [{
+                'subject': mark.subject.subject_name,
+                'marks_obtained': mark.marks_obtained,
+                'out_of': mark.out_of
+            } for mark in marks]
+
+        return JsonResponse({
+            'student_name': f'{student.first_name} {student.last_name}',
+            'marks_by_exam': marks_by_exam
+        })
+    return JsonResponse({'error': 'Unauthorized or Invalid Request'}, status=403)

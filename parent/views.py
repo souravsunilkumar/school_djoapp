@@ -212,3 +212,115 @@ def check_reason_given(request):
         return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+
+def view_student_marks_page(request): 
+    return render(request, 'parent/parent_view_student_marks.html')
+
+@login_required
+def get_academic_years(request):
+    parent = Parent.objects.get(user=request.user)
+    school_id = parent.school.school_id
+    exams = Exam.objects.filter(school_id=school_id).values_list('academic_year', flat=True).distinct()
+    return JsonResponse({'academic_years': list(exams)})
+
+@login_required
+def get_students_for_parent(request):
+    try:
+        # Get the parent associated with the logged-in user
+        parent = Parent.objects.get(user=request.user)
+        
+        # Retrieve students associated with this parent
+        students = parent.students.all()
+        
+        # Format the student data for the response
+        student_data = [{
+            'id': student.id,
+            'first_name': student.first_name,
+            'last_name': student.last_name,
+            'class_assigned': student.class_assigned,
+            'division_assigned': student.division_assigned
+        } for student in students]
+        
+        # Prepare the response data
+        response_data = {
+            'parent_name': f"{parent.first_name} {parent.second_name}",
+            'students': student_data
+        }
+        
+        return JsonResponse(response_data)
+    
+    except Parent.DoesNotExist:
+        return JsonResponse({'error': 'Parent not found'}, status=404)
+    
+
+@csrf_exempt
+def get_student_marks(request):
+    if request.method == 'GET':
+        academic_year = request.GET.get('academic_year')
+        student_id = request.GET.get('student_id')
+
+        # Get the selected student
+        student = get_object_or_404(Student, id=student_id)
+
+        # Filter exams by academic year
+        exams = Exam.objects.filter(academic_year=academic_year, school=student.school)
+
+        # Filter marks by student and exams
+        marks = Marks.objects.filter(student=student, exam__in=exams)
+
+        # Prepare data for response
+        marks_data = []
+        for mark in marks:
+            marks_data.append({
+                'exam': mark.exam.exam_name,
+                'subject': mark.subject.subject_name,
+                'marks_obtained': mark.marks_obtained,
+                'total_marks': mark.out_of,
+                'student_name': f"{student.first_name} {student.last_name}"  # Add student name
+            })
+
+        response_data = {
+            'marks': marks_data
+        }
+
+        return JsonResponse(response_data)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+@login_required
+def get_student_progress(request):
+    if request.method == 'GET':
+        academic_year = request.GET.get('academic_year')
+        student_id = request.GET.get('student_id')
+
+        # Get the selected student
+        student = get_object_or_404(Student, id=student_id)
+
+        # Filter exams by academic year
+        exams = Exam.objects.filter(academic_year=academic_year, school=student.school)
+        print("Exams:", exams)
+
+        # Filter marks by student and exams
+        marks = Marks.objects.filter(student=student, exam__in=exams)
+        print("Marks:", marks)
+
+        # Group marks by subject
+        progress_data = {}
+        for mark in marks:
+            subject_name = mark.subject.subject_name
+            if subject_name not in progress_data:
+                progress_data[subject_name] = []
+            progress_data[subject_name].append({
+                'exam_name': mark.exam.exam_name,
+                'marks_obtained': mark.marks_obtained
+            })
+
+        response_data = {
+            'progress': progress_data
+        }
+
+        return JsonResponse(response_data)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

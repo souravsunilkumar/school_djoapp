@@ -32,4 +32,11 @@ urlpatterns = [
     path('get_students/', get_students, name='get_students'),
     path('add_marks/', add_marks, name='add_marks'),
 
+
+    path('view_student_marks_page/', view_student_marks_page, name='view_student_marks_page'),
+    path('view_student_marks/', view_student_marks, name='view_student_marks'),
+    path('view_individual_student_marks/', view_individual_student_marks, name='view_student_marks'),
+    path('get_students_by_class_teacher/', get_students_by_class_teacher, name='get_students_by_class_teacher'),
+    path('get_student_marks/', get_student_marks, name='get_student_marks'),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

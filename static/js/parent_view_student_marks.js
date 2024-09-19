@@ -143,7 +143,7 @@ $(document).ready(function () {
                                     label: `Marks for ${subject}`,
                                     data: marksObtained,
                                     borderColor: getRandomColor(), // Random color for each line
-                                    backgroundColor: 'transparent', // No fill
+                                    backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent fill
                                     borderWidth: 2,
                                     tension: 0.1
                                 }]
@@ -152,6 +152,20 @@ $(document).ready(function () {
                                 scales: {
                                     y: {
                                         beginAtZero: true
+                                    }
+                                },
+                                animation: {
+                                    duration: 2000, // Duration of animation in milliseconds
+                                    easing: 'easeInOutQuart', // Easing function for the animation
+                                    onProgress: function (animation) {
+                                        // Optional: log animation progress
+                                        console.log(`Animation progress: ${animation.currentStep / animation.numSteps}`);
+                                    },
+                                    onComplete: function () {
+                                        console.log(`Animation complete for ${subject}`); // Optional: Log when animation completes
+                                    },
+                                    onRender: function () {
+                                        // Optional: custom rendering function
                                     }
                                 }
                             }
@@ -166,7 +180,6 @@ $(document).ready(function () {
             }
         });
     }
-
     // Initialize the page
     fetchAcademicYears();
     fetchStudents();

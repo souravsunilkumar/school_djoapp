@@ -121,18 +121,7 @@ button:focus {
     max-width: 1200px;
 }
 
-/* Chart Tiles */
-.chartTile {
-    background: linear-gradient(135deg, rgba(240, 240, 255, 0.9), rgba(220, 220, 255, 0.8));
-    box-shadow: 0px 10px 30px rgba(180, 180, 240, 0.6);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px;
-    width: 100%;
-    max-width: 500px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-}
+
 
 /* Chart Title */
 .chartTile h3 {
@@ -142,11 +131,6 @@ button:focus {
     margin-bottom: 20px;
 }
 
-/* Hover Effects on Chart Tile */
-.chartTile:hover {
-    transform: translateY(-10px);
-    box-shadow: 0px 15px 35px rgba(180, 180, 240, 0.8);
-}
 
 /* Canvas Styling */
 canvas {
@@ -161,31 +145,26 @@ canvas {
 }
 
 /* Randomized Colors for Graphs */
+/* Chart.js Animation */
 .chartjs-render-monitor {
-    animation: softPulse 1.5s infinite;
+    animation: none; /* Disable any animation that might interfere with Chart.js */
 }
 
-@keyframes softPulse {
-    0% {
-        box-shadow: 0 0 15px rgba(150, 200, 255, 0.5);
-    }
-    50% {
-        box-shadow: 0 0 25px rgba(150, 200, 255, 1);
-    }
-    100% {
-        box-shadow: 0 0 15px rgba(150, 200, 255, 0.5);
-    }
+/* Chart Tile Animations */
+.chartTile {
+    background: linear-gradient(135deg, rgba(240, 240, 255, 0.9), rgba(220, 220, 255, 0.8));
+    box-shadow: 0px 10px 30px rgba(180, 180, 240, 0.6);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    width: 100%;
+    max-width: 500px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
 }
 
-/* Responsive Design for Charts */
-@media (max-width: 768px) {
-    .chartTile {
-        max-width: 100%;
-        margin: 10px 0;
-    }
-
-    canvas {
-        max-width: 100%;
-        height: auto;
-    }
+/* Hover Effects on Chart Tile */
+.chartTile:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 15px 35px rgba(180, 180, 240, 0.8);
 }

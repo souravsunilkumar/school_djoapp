@@ -1,0 +1,141 @@
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Page Header */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Notification List Styles */
+#notification_list {
+    width: 80%;
+    max-width: 600px;
+}
+
+/* Notification Item Styles */
+.notification-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-item p {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.give_reason_btn {
+    background: #007bff;
+    color: #fff;
+}
+
+.give_reason_btn:hover {
+    background: #0056b3;
+}
+
+.reason_given_btn {
+    background: #28a745;
+    color: #fff;
+}
+
+.reason_given_btn:hover {
+    background: #1e7e34;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 1001;
+}
+
+#reason_modal_heading {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+#submit_reason_btn, #close_reason_modal_btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#submit_reason_btn {
+    background: #007bff;
+    color: #fff;
+}
+
+#submit_reason_btn:hover {
+    background: #0056b3;
+}
+
+#close_reason_modal_btn {
+    background: #6c757d;
+    color: #fff;
+}
+
+#close_reason_modal_btn:hover {
+    background: #5a6268;
+}

@@ -324,3 +324,7 @@ def get_student_progress(request):
         return JsonResponse(response_data)
 
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+def absent_page(request): 
+    return render(request,'parent/absent_page.html')

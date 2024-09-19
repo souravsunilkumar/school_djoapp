@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absent Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/absent_page.js"></script>
+    <link rel="stylesheet" href="/static/css/absent_page.css">
+</head>
+
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <div>
+        <h1>Absence Notifications</h1>
+        <div id="notification_list">
+            <!-- Notifications will be populated via AJAX -->
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="reason_modal_overlay" class="modal-overlay"></div>
+
+    <!-- Reason Modal HTML -->
+    <div id="reason_modal" class="modal">
+        <div class="modal-content">
+            <h2 id="reason_modal_heading"></h2>
+            <textarea id="reason_textarea" placeholder="Enter your reason here"></textarea>
+            <button id="submit_reason_btn">Submit Reason</button>
+            <button id="close_reason_modal_btn">Close</button>
+        </div>
+    </div>
+</body>
+
+</html>

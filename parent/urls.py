@@ -20,6 +20,7 @@ urlpatterns = [
     path('get_students_for_parent/', get_students_for_parent, name='get_students_for_parent'),
     path('get_student_marks/', get_student_marks, name='get_student_marks'),
     path('get_student_progress/', get_student_progress, name='get_student_progress'),
+    path('absent_page/', absent_page, name='absent_page'),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

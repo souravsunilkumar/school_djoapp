@@ -681,3 +681,54 @@ def update_marks(request):
     except Exception as e:
         logger.exception("Exception occurred while updating marks: %s", str(e))
         return JsonResponse({'error': str(e)}, status=500)
+    
+
+def leave_reason_page(request):
+    return render(request,'teacher/leave_reason_page.html')
+
+def add_assignment_page(request): 
+    return render(request,'teacher/add_assignment.html')
+
+@login_required
+@csrf_exempt
+def add_assignment(request):
+    if request.method == 'POST':
+        try:
+            teacher = request.user.teacher
+            school = teacher.school
+
+            subject = request.POST.get('subject')
+            class_assigned = request.POST.get('class_assigned')
+            division_assigned = request.POST.get('division_assigned')
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            due_date = request.POST.get('due_date')
+
+            # Create the assignment
+            assignment = Assignment.objects.create(
+                school=school,
+                teacher=teacher,
+                subject=subject,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned,
+                title=title,
+                description=description,
+                due_date=due_date
+            )
+
+            # Create the notification
+            AssignmentNotification.objects.create(
+                school=school,
+                teacher=teacher,
+                subject=subject,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned,
+                assignment=assignment
+            )
+
+            return JsonResponse({'message': 'Assignment added successfully'}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

@@ -86,8 +86,24 @@ h1 {
 
 .notification-item p {
     margin: 0;
+    font-size: 1rem;
+    color: #333;
 }
 
+/* Notification Links */
+.notification-item a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.3s ease;
+}
+
+.notification-item a:hover {
+    color: #0056b3; /* Optional: Add color change on hover if needed */
+}
+
+/* Close Modal Button */
 .modal-close {
     background-color: #007bff;
     color: #fff;
@@ -229,3 +245,27 @@ a[href="/management/add_students_marks/"]:hover {
         padding: 8px;
     }
 }
+
+/* Notification Links Styled as Buttons */
+.notification-link {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px 0;
+    background-color: #007bff; /* Primary color */
+    color: white;
+    text-decoration: none; /* Remove underline */
+    border-radius: 6px; /* Rounded corners */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: bold; /* Make text bold */
+}
+
+.notification-link:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly increase button size on hover */
+}
+
+/* Optional: Add focus styling */
+.notification-link:focus {
+    outline: 2px solid #0056b3; /* Outline on focus for better accessibility */
+}
+

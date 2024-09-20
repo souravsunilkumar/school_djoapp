@@ -43,4 +43,9 @@ urlpatterns = [
     path('update_marks_page/', update_marks_page, name='update_marks_page'),
     path('update_marks/', update_marks, name='add_or_update_marks'),
 
+    path('leave_reason_page/', leave_reason_page, name='leave_reason_page'),
+
+    path('add_assignment_page/', add_assignment_page, name='add_assignment_page'),
+    path('add_assignment/', add_assignment, name='add_assignment'),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

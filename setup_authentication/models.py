@@ -233,3 +233,49 @@ class Marks(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.subject} - {self.exam} - {self.marks_obtained}/{self.out_of}"
+
+
+class Assignment(models.Model):
+    assignment_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=10,null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    class_assigned = models.CharField(max_length=20)
+    division_assigned = models.CharField(max_length=10)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    due_date = models.DateField()
+    date_assigned = models.DateField(auto_now_add=True)
+    
+
+    def __str__(self):
+        return f"{self.title} - {self.teacher} - {self.class_assigned} {self.division_assigned} - Due: {self.due_date}"
+    
+class AssignmentNotification(models.Model):
+    notification_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE,null=True)
+    subject = models.CharField(max_length=10,null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
+    class_assigned = models.CharField(max_length=20)
+    division_assigned = models.CharField(max_length=10)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    date_sent = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification from {self.teacher} - Assignment: {self.assignment.title}"
+    
+
+class StudentAssignmentSubmission(models.Model):
+    submission_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE,null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,null=True)
+    class_assigned = models.CharField(max_length=20)
+    division_assigned = models.CharField(max_length=10)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    submission_date = models.DateField(auto_now_add=True)
+    marks_obtained = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    total_marks = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    
+    def __str__(self):
+        return f"Submission by {self.student} for {self.assignment.title}"

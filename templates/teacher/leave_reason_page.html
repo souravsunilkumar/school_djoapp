@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Reason Page</title>
+    <link rel="stylesheet" href="/static/css/leave_reason_page.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/leave_reason_page.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Leave Reasons</h1>
+
+        <div id="notifications-container">
+            <!-- Notifications will be populated here -->
+        </div>
+
+        <!-- Modal to display leave reason -->
+        <div id="reason-modal">
+            <div class="modal-content">
+                <h4>Leave Reason</h4>
+                <p><strong>Student:</strong> <span id="modal-student"></span></p>
+                <p><strong>Date:</strong> <span id="modal-date"></span></p>
+                <p><strong>Reason:</strong> <span id="modal-reason"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close_reason_modal" class="modal-close">Close</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

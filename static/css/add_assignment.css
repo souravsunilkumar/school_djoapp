@@ -1,0 +1,134 @@
+/* Root variables for easier theming */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #ffffff;
+    --bg-color: #f4f4f9;
+    --form-bg: #ffffff;
+    --border-color: #ddd;
+    --input-hover: #e8f0fe;
+    --font-family: 'Roboto', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Container Styling */
+form {
+    background-color: var(--form-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+    transition: all var(--transition-speed) ease;
+}
+
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+/* Input Field Styling */
+form label {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+    display: block;
+}
+
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    background-color: var(--secondary-color);
+}
+
+/* Input focus effects */
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color);
+    background-color: var(--input-hover);
+    outline: none;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Dropdown Styling */
+select {
+    appearance: none;
+    background: var(--secondary-color) url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIj48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMyA0bDUgNUw4IDQgNi42IDMuNiA1IDVMMyA0eiIvPjwvc3ZnPg==') no-repeat right 12px center;
+    background-size: 10px;
+    padding-right: 2rem;
+}
+
+/* Button Styling */
+button {
+    display: block;
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1.2rem;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Form transitions and animations */
+form:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form {
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    button {
+        font-size: 1.1rem;
+    }
+}

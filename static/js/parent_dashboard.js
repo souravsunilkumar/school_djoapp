@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // Utility function to get CSRF token
     function getCSRFToken() {
         const tokenElement = $('[name=csrfmiddlewaretoken]');
         return tokenElement.length ? tokenElement.val() : '';
@@ -19,7 +18,6 @@ $(document).ready(function () {
                     $('#student_select').append(`<option value="${student.id}" ${student.selected ? 'selected' : ''}>${student.first_name} ${student.last_name}</option>`);
                 });
 
-                // Update the guardian message with the selected student's name
                 const selectedStudent = $('#student_select option:selected').text();
                 $('#guardian_message').text(`You are parent/guardian of ${selectedStudent}`);
             },
@@ -28,12 +26,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    // Update guardian message when student selection changes
-    $('#student_select').on('change', function () {
-        const selectedStudent = $(this).find('option:selected').text();
-        $('#guardian_message').text(`You are parent/guardian of ${selectedStudent}`);
-    });
 
     // Show attendance modal
     $('#view_attendance_btn').on('click', function () {
@@ -66,10 +58,9 @@ $(document).ready(function () {
             success: function (data) {
                 const dates = data.dates;
                 const reportBody = data.attendance_records;
-                const reasons = data.reasons || {}; // Assuming `reasons` is returned with the response
+                const reasons = data.reasons || {};
                 const studentName = data.student_name;
 
-                // Transpose the table
                 let headerHtml = '<th>Date</th><th>Status</th><th>Reason</th>';
                 let bodyHtml = '';
 
@@ -101,12 +92,13 @@ $(document).ready(function () {
                 $('#notification_message').empty();
                 if (data.notifications.length > 0) {
                     data.notifications.forEach(function (notification) {
+                        const redirectUrl = notification.is_absent ? '/parent/absent_page/' : '/parent/assignment_page/';
                         $('#notification_message').append(`
-                            <div class="notification-item">
-                                <p>${notification.message}</p>
-                                <button class="view_notifications_btn" data-notification-id="${notification.id}">View Notifications</button>
-                            </div>
-                        `);
+                        <div class="notification-item">
+                            <p>${notification.message}</p>
+                            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+                        </div>
+                    `);
                     });
                 } else {
                     $('#notification_message').text('No new notifications.');
@@ -118,23 +110,16 @@ $(document).ready(function () {
         });
     });
 
-    // Redirect to absent_page.html when clicking on a notification button
-    $(document).on('click', '.view_notifications_btn', function () {
-        window.location.href = '/parent/absent_page/';
-    });
-
     // Close notification section
     $('#close_notification_btn').on('click', function () {
-        $('#notification_section').hide(); // Hide the notification section
+        $('#notification_section').hide();
     });
 
-    // Hide notification section when clicking outside of it
-    $(window).on('click', function (event) {
-        if (!$(event.target).closest('#notification_section, #notification_icon').length) {
-            $('#notification_section').hide(); // Hide if click is outside the notification section
-        }
+    // Close attendance modal
+    $('#close_modal_btn').on('click', function () {
+        $('#attendance_modal').hide();
     });
 
-    // Initialize the dashboard data
+    // Initial fetch of parent data
     fetchParentData();
 });

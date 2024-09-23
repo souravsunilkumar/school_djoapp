@@ -160,6 +160,12 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     student_name = models.CharField(max_length=255, null=True, blank=True)
     absence_date = models.DateField(null=True, blank=True)
+    TYPE_CHOICES = (
+        ('absent', 'Absent Notification'),
+        ('assignment', 'Assignment Notification'),
+    )
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES,default='absent')
+    
 
     def __str__(self):
         return f"Notification for {self.parent.username if self.parent else 'No Parent'} - {self.message[:20]}"
@@ -238,7 +244,7 @@ class Marks(models.Model):
 class Assignment(models.Model):
     assignment_id = models.AutoField(primary_key=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    subject = models.CharField(max_length=10,null=True)
+    subject = models.CharField(max_length=10, null=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     class_assigned = models.CharField(max_length=20)
     division_assigned = models.CharField(max_length=10)
@@ -246,8 +252,7 @@ class Assignment(models.Model):
     description = models.TextField()
     due_date = models.DateField()
     date_assigned = models.DateField(auto_now_add=True)
-    
-
+    academic_year = models.CharField(max_length=10,null=True) 
     def __str__(self):
         return f"{self.title} - {self.teacher} - {self.class_assigned} {self.division_assigned} - Due: {self.due_date}"
     
@@ -268,14 +273,15 @@ class AssignmentNotification(models.Model):
 
 class StudentAssignmentSubmission(models.Model):
     submission_id = models.AutoField(primary_key=True)
-    school = models.ForeignKey(School, on_delete=models.CASCADE,null=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE,null=True)
-    class_assigned = models.CharField(max_length=20)
-    division_assigned = models.CharField(max_length=10)
-    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
-    submission_date = models.DateField(auto_now_add=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, null=True, blank=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True)
+    class_assigned = models.CharField(max_length=20, blank=True)
+    division_assigned = models.CharField(max_length=10, blank=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, blank=True)
+    is_submitted = models.BooleanField(default=False)
+    submission_date = models.DateField(null=True, blank=True)  # Ensure this can be null
     marks_obtained = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     total_marks = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    
+
     def __str__(self):
         return f"Submission by {self.student} for {self.assignment.title}"

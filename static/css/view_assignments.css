@@ -1,0 +1,111 @@
+/* Reset styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body and typography */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6f7ff; /* Light futuristic blue */
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: #0366d6; /* Futuristic blue */
+}
+
+/* Slider container */
+.slider-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    overflow-x: scroll;
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+
+.slider::-webkit-scrollbar {
+    display: none; /* Hide scrollbar in Chrome */
+}
+
+/* Slider buttons */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.slider-prev {
+    left: 10px;
+}
+
+.slider-next {
+    right: 10px;
+}
+
+/* Assignment cards */
+.assignment-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.assignment-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Assignment text styling */
+.assignment-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #0366d6;
+}
+
+.assignment-card p {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Assignment link */
+.assignment-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.assignment-card a:hover {
+    color: #0366d6;
+}
+
+/* Card interaction effect */
+.slider.active .assignment-card {
+    cursor: grabbing;
+}

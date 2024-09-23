@@ -1,0 +1,178 @@
+/* Reset some basic styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif; /* Basic font */
+    background: linear-gradient(180deg, #ffffff, #f0f0f0); /* Light gradient background */
+    color: #333; /* Dark text for readability */
+    line-height: 1.6;
+    padding: 20px;
+    height: 100vh; /* Ensure full viewport height */
+    overflow: hidden; /* Prevent overflow */
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 3rem; /* Larger header size */
+    color: #007bff; /* Blue color for header */
+    text-shadow: 0 1px 3px rgba(0, 123, 255, 0.5); /* Subtle shadow for depth */
+    animation: fadeInDown 0.5s ease; /* Animation for the header */
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Notification list styles */
+#assignment_notification_list {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 12px; /* Softer edges */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.notification-item {
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 123, 255, 0.2); /* Light blue line */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.notification-item:last-child {
+    border-bottom: none; /* No line for the last item */
+}
+
+.notification-item:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
+    transform: scale(1.02); /* Slight scale on hover */
+}
+
+/* Button styles */
+button {
+    background: linear-gradient(90deg, #007bff, #0056b3); /* Gradient button */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 30px; /* Pill-shaped button */
+    padding: 12px 20px; /* Adjusted padding */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1rem; /* Button text size */
+    position: relative;
+    overflow: hidden; /* For the effect */
+    transition: background 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+button:hover {
+    background: linear-gradient(90deg, #0056b3, #007bff); /* Reverse gradient on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Modal styles */
+#assignment_detail_modal {
+    display: none; /* Initially hidden */
+    position: fixed; /* Fixed positioning */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.7); /* Darker semi-transparent background */
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    animation: fadeIn 0.3s ease; /* Fade in animation */
+}
+
+#assignment_modal_content {
+    background: linear-gradient(180deg, #ffffff, #e0e0e0); /* Light gradient background */
+    padding: 30px;
+    border-radius: 15px; /* Rounded corners */
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Max width for larger screens */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow for depth */
+    animation: zoomIn 0.3s ease; /* Zoom in effect for the modal content */
+    backdrop-filter: blur(10px); /* Blur effect for a futuristic touch */
+}
+
+/* Title styles */
+#assignment_modal_content h2 {
+    font-size: 2rem; /* Larger title size */
+    color: #007bff; /* Bright blue color for title */
+    margin-bottom: 15px; /* Spacing */
+    text-align: center; /* Center align */
+    text-shadow: 0 2px 5px rgba(0, 123, 255, 0.5); /* Subtle shadow for depth */
+    letter-spacing: 1px; /* Spacing between letters */
+}
+
+/* Paragraph styles */
+#assignment_modal_content p {
+    margin: 10px 0; /* Spacing between paragraphs */
+    color: #333; /* Dark text for readability */
+    font-size: 1.1rem; /* Slightly larger text */
+    line-height: 1.5; /* Improved line height */
+    text-align: justify; /* Justify text for a clean look */
+}
+
+/* Futuristic effect for modal content */
+#assignment_modal_content {
+    border: 1px solid #007bff; /* Blue border for the modal */
+    border-image: linear-gradient(45deg, #007bff, #0056b3) 1; /* Gradient border */
+}
+
+/* Close button styles */
+#close_assignment_modal {
+    float: right; /* Position close button */
+    font-size: 24px; /* Close button size */
+    color: #007bff; /* Bright blue color for close button */
+    cursor: pointer; /* Pointer cursor */
+    transition: color 0.3s, transform 0.3s; /* Transition for hover effect */
+}
+
+#close_assignment_modal:hover {
+    color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.1); /* Slightly grow the close button */
+}
+
+/* Student statuses styles */
+#student_statuses {
+    margin-top: 20px; /* Increased margin for separation */
+    border-top: 1px solid rgba(0, 123, 255, 0.3); /* Light blue line */
+    padding-top: 10px;
+}
+
+#student_statuses p {
+    padding: 5px 0; /* Spacing for student status */
+    color: #555; /* Slightly lighter text */
+    font-size: 1rem; /* Regular text size */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+#student_statuses p:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
+    border-left: 5px solid #007bff; /* Highlighting effect */
+    transform: translateX(5px); /* Slide effect on hover */
+}
+
+/* Additional styles for responsiveness */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem; /* Smaller header on mobile */
+    }
+
+    button {
+        width: 100%; /* Full-width button on mobile */
+    }
+}

@@ -732,3 +732,115 @@ def add_assignment(request):
             return JsonResponse({'error': str(e)}, status=400)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def view_assignments_page(request):
+    return render(request,'teacher/view_assignments.html')
+
+def get_teacher_assignments(request):
+    if request.user.is_authenticated and hasattr(request.user, 'teacher'):
+        teacher = request.user.teacher
+        assignments = Assignment.objects.filter(teacher=teacher).values(
+            'assignment_id',  
+            'title',
+            'subject',
+            'class_assigned',
+            'division_assigned',
+            'due_date',
+            'description'
+        )
+        return JsonResponse({'assignments': list(assignments)})
+    else:
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    
+def add_assignment_mark(request, assignment_id):
+    assignment = get_object_or_404(Assignment, pk=assignment_id)
+    return render(request, 'teacher/add_assignment_mark.html', {
+        'assignment': assignment,
+        'assignment_id': assignment.assignment_id  # Pass the assignment ID
+    })
+
+def get_assignment_details(request, assignment_id):
+    assignment = get_object_or_404(Assignment, pk=assignment_id)
+    data = {
+        'title': assignment.title,
+        'description': assignment.description,
+        'class_assigned': assignment.class_assigned,
+        'division_assigned': assignment.division_assigned,
+        'due_date': assignment.due_date,
+    }
+    return JsonResponse(data)
+
+@login_required
+def get_assignment_students(request, class_assigned, division_assigned, assignment_id):
+    if not request.user.is_authenticated or not hasattr(request.user, 'teacher'):
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+    # Get the logged-in teacher's school
+    teacher = request.user.teacher
+    school = teacher.school
+
+    # Fetch the assignment and verify the school matches
+    assignment = get_object_or_404(Assignment, pk=assignment_id, school=school)
+
+    # Filter students by class, division, and school
+    students = Student.objects.filter(
+        class_assigned=class_assigned,
+        division_assigned=division_assigned,
+        school=school  # Ensure students belong to the same school as the teacher
+    )
+    
+    student_data = []
+    for student in students:
+        # Check if a submission exists for the student and assignment
+        try:
+            submission = StudentAssignmentSubmission.objects.get(student=student, assignment=assignment)
+            is_submitted = submission.is_submitted
+            marks_obtained = submission.marks_obtained
+            total_marks = submission.total_marks
+            submission_date = submission.submission_date
+        except StudentAssignmentSubmission.DoesNotExist:
+            # If no submission exists, return default values
+            is_submitted = False
+            marks_obtained = None
+            total_marks = None
+            submission_date = None
+
+        student_data.append({
+            'id': student.id,
+            'first_name': student.first_name,
+            'last_name': student.last_name,
+            'roll_number': student.roll_number,
+            'is_submitted': is_submitted,
+            'marks_obtained': marks_obtained,
+            'total_marks': total_marks,
+            'submission_date': submission_date,
+        })
+
+    return JsonResponse({'students': student_data})
+
+@csrf_exempt
+def submit_assignment_marks(request, assignment_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        for submission in data['submissions']:
+            student = get_object_or_404(Student, pk=submission['student_id'])
+            assignment = get_object_or_404(Assignment, pk=assignment_id)
+
+            StudentAssignmentSubmission.objects.update_or_create(
+                student=student,
+                assignment=assignment,
+                defaults={
+                    'is_submitted': submission.get('is_submitted', False),
+                    'marks_obtained': submission.get('marks_obtained', 0),
+                    'total_marks': submission.get('total_marks', 0),
+                    'submission_date': submission.get('submission_date'),  # Ensure this is provided
+                    'school': assignment.school,
+                    'class_assigned': assignment.class_assigned,
+                    'division_assigned': assignment.division_assigned,
+                }
+            )
+
+        return JsonResponse({'message': 'Marks submitted successfully!'})
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

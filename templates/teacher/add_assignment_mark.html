@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Assignment Marks</title>
+    <link rel="stylesheet" href="/static/css/add_assignment_mark.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_assignment_mark.js"></script>
+</head>
+<body>
+    <h1>Assignment Mark Submission</h1>
+    
+    <!-- Hidden input to pass assignment ID dynamically -->
+    <input type="hidden" id="assignment_id" value="{{ assignment_id }}">
+    <input type="hidden" id="class_assigned" value="{{ class_assigned }}">
+    <input type="hidden" id="division_assigned" value="{{ division_assigned }}">
+
+    <div id="assignment_details">
+        <h2 id="assignment_title"></h2>
+        <p id="assignment_description"></p>
+        <p><strong>Class:</strong> <span id="assignment_class"></span></p>
+        <p><strong>Division:</strong> <span id="assignment_division"></span></p>
+        <p><strong>Due Date:</strong> <span id="assignment_due_date"></span></p>
+    </div>
+
+    <table id="student_assignment_marks">
+        <thead>
+            <tr>
+                <th>Roll Number</th>
+                <th>Name</th>
+                <th>Submitted</th>
+                <th>Marks Obtained</th>
+                <th>Total Marks</th>
+                <th>Submission Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
+
+    <button id="submit_marks_btn">Submit Marks</button>
+</body>
+</html>

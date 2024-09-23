@@ -108,7 +108,57 @@ def attendance_report(request):
 @login_required
 def parent_notifications(request):
     parent = Parent.objects.get(user=request.user)
-    notifications = Notification.objects.filter(parent=parent).order_by('-timestamp')
+    students = parent.students.all()
+
+    # Fetch absence notifications
+    absence_notifications = Notification.objects.filter(parent=parent).order_by('-timestamp')
+
+    # Fetch assignment notifications for students linked to this parent
+    assignment_notifications = AssignmentNotification.objects.filter(
+        class_assigned__in=[student.class_assigned for student in students],
+        division_assigned__in=[student.division_assigned for student in students],
+        school=parent.school
+    ).order_by('-date_sent')
+
+    # Absence notification data
+    notification_data = [
+        {
+            'id': notification.id,
+            'message': notification.message,
+            'timestamp': notification.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            'is_read': notification.is_read,
+            'student_name': notification.student_name,  # Assuming you have a method to get student full name
+            'student_id': notification.student.id if notification.student else None,  # Include student ID
+            'date': notification.absence_date.strftime('%Y-%m-%d') if notification.absence_date else None,
+            'is_absent': notification.type == 'absent'  # Adjust this based on how you categorize notifications
+        }
+        for notification in absence_notifications
+    ]
+
+    # Assignment notification data
+    assignment_notification_data = [
+        {
+            'id': assignment.notification_id,
+            'message': f"{assignment.teacher.first_name} {assignment.teacher.last_name} has added an assignment for {assignment.subject}. Due date: {assignment.assignment.due_date}",
+            'timestamp': assignment.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
+            'is_read': False,  # Assuming assignment notifications are unread initially
+            'class_assigned': assignment.class_assigned,
+            'division_assigned': assignment.division_assigned,
+            
+        }
+        for assignment in assignment_notifications
+    ]
+
+    # Combine absence and assignment notifications
+    combined_notifications = notification_data + assignment_notification_data
+    combined_notifications.sort(key=lambda x: x['timestamp'], reverse=True)  # Sort by timestamp
+
+    return JsonResponse({'notifications': combined_notifications})
+
+@login_required
+def absent_notifications(request):
+    parent = Parent.objects.get(user=request.user)
+    notifications = Notification.objects.filter(parent=parent, type='absent').order_by('-timestamp')
 
     notification_data = [
         {
@@ -118,7 +168,8 @@ def parent_notifications(request):
             'is_read': notification.is_read,
             'student_name': notification.student_name,  # Assuming you have a method to get student full name
             'student_id': notification.student.id if notification.student else None,  # Include student ID
-            'date': notification.absence_date.strftime('%Y-%m-%d') if notification.absence_date else None
+            'date': notification.absence_date.strftime('%Y-%m-%d') if notification.absence_date else None,
+            'is_absent': notification.type == 'absent'  # Adjust this based on how you categorize notifications
         }
         for notification in notifications
     ]
@@ -328,3 +379,62 @@ def get_student_progress(request):
 
 def absent_page(request): 
     return render(request,'parent/absent_page.html')
+
+def assignment_page(request): 
+    return render(request,'parent/assignment_page.html')
+
+@login_required
+def parent_assignment_notifications(request):
+    parent = Parent.objects.get(user=request.user)
+    students = parent.students.all()
+
+    # Fetch assignment notifications for students linked to this parent
+    assignment_notifications = AssignmentNotification.objects.filter(
+        class_assigned__in=[student.class_assigned for student in students],
+        division_assigned__in=[student.division_assigned for student in students],
+        school=parent.school
+    ).order_by('-date_sent')
+
+    notification_data = [
+        {
+            'id': notification.notification_id,
+            'message': f"{notification.teacher.first_name} {notification.teacher.last_name} assigned '{notification.assignment.title}' for {notification.subject}.",
+            'date_sent': notification.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
+            'assignment_id': notification.assignment.assignment_id,
+            'is_read': notification.is_read
+        }
+        for notification in assignment_notifications
+    ]
+
+    return JsonResponse({'notifications': notification_data})
+
+@login_required
+def assignment_details(request, assignment_id):
+    # Fetch the assignment based on the ID
+    assignment = get_object_or_404(Assignment, pk=assignment_id)
+
+    # Get the logged-in parent
+    parent = get_object_or_404(Parent, user=request.user)
+
+    # Retrieve students linked to the logged-in parent
+    students = parent.students.filter(class_assigned=assignment.class_assigned, division_assigned=assignment.division_assigned)
+
+    # Prepare the response
+    response_data = {
+        "title": assignment.title,
+        "teacher": f"{assignment.teacher.first_name} {assignment.teacher.last_name}",  # Full name
+        "subject": assignment.subject,
+        "due_date": assignment.due_date,
+        "description": assignment.description,
+        "students": []
+    }
+
+    # Populate student data with initial status
+    for student in students:
+        response_data["students"].append({
+            "name": f"{student.first_name} {student.last_name}",
+            "submitted": "not submitted",  # Initial status
+            "marks": 0  # Initial marks
+        })
+
+    return JsonResponse(response_data)

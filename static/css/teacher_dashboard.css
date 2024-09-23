@@ -210,6 +210,34 @@ a[href="/management/add_students_marks/"]:hover {
     background-color: #218838;
 }
 
+a[href="/management/add_assignment_page/"] {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+a[href="/management/add_assignment_page/"]:hover {
+    background-color: #218838;
+}
+
+a[href="/management/view_assignments_page/"] {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #d20b0be3;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+a[href="/management/view_assignments_page/"]:hover {
+    background-color: #a52424;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {

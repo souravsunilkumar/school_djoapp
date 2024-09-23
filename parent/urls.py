@@ -12,6 +12,7 @@ urlpatterns = [
     path('attendance_report/', attendance_report, name='attendance_report'),
     path('notifications/', parent_notifications, name='parent_notifications'),
     path('mark_notifications_as_read/', mark_notifications_as_read, name='mark_notifications_as_read'),
+    path('absent_notifications/', absent_notifications, name='absent_notifications'),
     path('submit_leave_reason/', submit_leave_reason, name='submit_leave_reason'),
     path('check_reason_given/', check_reason_given, name='check_reason_given'),
 
@@ -21,6 +22,9 @@ urlpatterns = [
     path('get_student_marks/', get_student_marks, name='get_student_marks'),
     path('get_student_progress/', get_student_progress, name='get_student_progress'),
     path('absent_page/', absent_page, name='absent_page'),
+    path('assignment_page/', assignment_page, name='assignment_page'),
+    path('parent_assignment_notifications/', parent_assignment_notifications, name='assignment_notifications'),
+    path('assignment_details/<int:assignment_id>/', assignment_details, name='assignment_details'),
     
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

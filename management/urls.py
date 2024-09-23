@@ -48,4 +48,12 @@ urlpatterns = [
     path('add_assignment_page/', add_assignment_page, name='add_assignment_page'),
     path('add_assignment/', add_assignment, name='add_assignment'),
 
+    path('view_assignments_page/', view_assignments_page, name='view_assignments_page'),
+    path('get_teacher_assignments/', get_teacher_assignments, name='get_teacher_assignments'),
+
+    path('add_assignment_mark/<int:assignment_id>/', add_assignment_mark, name='add_assignment_mark'),
+    path('get_assignment_details/<int:assignment_id>/', get_assignment_details, name='get_assignment_details'),
+    path('get_assignment_students/<str:class_assigned>/<str:division_assigned>/<int:assignment_id>/', get_assignment_students, name='get_assignment_students'),
+    path('submit_assignment_marks/<int:assignment_id>/', submit_assignment_marks, name='submit_assignment_marks'),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

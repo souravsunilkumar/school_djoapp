@@ -4,9 +4,9 @@ $(document).ready(function () {
         return tokenElement.length ? tokenElement.val() : '';
     }
 
-    function loadNotifications() {
+    function loadAbsentNotifications() {
         $.ajax({
-            url: '/parent/notifications/',
+            url: '/parent/absent_notifications/',
             method: 'GET',
             success: function (data) {
                 const notificationList = $('#notification_list');
@@ -19,13 +19,13 @@ $(document).ready(function () {
                                 <p>${notification.message}</p>
                                 <button class="give_reason_btn" 
                                     data-student-name="${notification.student_name}" 
-                                    data-date="${notification.date}" 
+                                    data-date="${notification.absence_date}" 
                                     data-notification-id="${notification.id}">
                                     Add Reason
                                 </button>
                             </div>
                         `);
-                        
+
                         // Check if reason is given for this notification
                         checkReasonGiven(notification.id, notificationItem.find('.give_reason_btn'));
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                console.error('Error fetching notifications:', error);
+                console.error('Error fetching absent notifications:', error);
             }
         });
     }
@@ -48,9 +48,7 @@ $(document).ready(function () {
             headers: {
                 'X-CSRFToken': getCSRFToken()
             },
-            data: JSON.stringify({
-                notification_id: notificationId
-            }),
+            data: JSON.stringify({ notification_id: notificationId }),
             contentType: 'application/json',
             success: function (data) {
                 if (data.reason_given) {
@@ -75,11 +73,8 @@ $(document).ready(function () {
         }
 
         $('#reason_modal').data('notification-id', notificationId);
-
-        // Update the modal heading with the student's name and date
         $('#reason_modal_heading').text(`Why was ${studentName} absent on ${date}?`);
 
-        // Center the modal
         $('#reason_modal').css({
             top: '50%',
             left: '50%',
@@ -87,7 +82,6 @@ $(document).ready(function () {
             opacity: 1
         }).show();
 
-        // Show the modal overlay
         $('#reason_modal_overlay').show();
     });
 
@@ -123,7 +117,6 @@ $(document).ready(function () {
                 $('#reason_modal').hide();
                 $('#reason_modal_overlay').hide();
 
-                // Mark notification as read and update button text
                 markNotificationsAsRead([notificationId]);
                 $(`button.give_reason_btn[data-notification-id="${notificationId}"]`).text('Reason Given')
                     .removeClass('give_reason_btn')
@@ -135,6 +128,6 @@ $(document).ready(function () {
         });
     });
 
-    // Load notifications on page load
-    loadNotifications();
+    // Load absent notifications on page load
+    loadAbsentNotifications();
 });

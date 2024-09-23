@@ -1,6 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #80deea);
     margin: 0;
     padding: 0;
 }
@@ -8,14 +8,17 @@ body {
 .container {
     max-width: 1200px;
     margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px; /* Increased padding for spaciousness */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #00796b;
+    margin-bottom: 30px;
+    font-size: 2.5em; /* Larger heading font */
 }
 
 .date-range {
@@ -25,7 +28,7 @@ h1 {
 }
 
 .date-range label {
-    margin: 0 10px;
+    margin: 0 15px;
     font-weight: bold;
 }
 
@@ -37,6 +40,7 @@ h1 {
     overflow-x: auto; /* Allow horizontal scrolling */
     margin: 0 auto;
     border: 1px solid #ddd; /* Optional border for the table wrapper */
+    border-radius: 12px; /* Rounded corners */
 }
 
 #attendance-report {
@@ -47,18 +51,18 @@ h1 {
 
 #attendance-report th, #attendance-report td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px; /* Increased padding */
     text-align: center;
     white-space: nowrap; /* Prevent text wrapping */
+    transition: background-color 0.3s; /* Smooth background transition */
 }
 
 #attendance-report th {
-    background-color: #4CAF50;
+    background-color: #00796b; /* Header background color */
     color: white;
 }
 
 #attendance-report .sticky-column {
-    position: -webkit-sticky; /* For Safari */
     position: sticky;
     left: 0;
     background-color: #fff;
@@ -80,14 +84,22 @@ h1 {
 
 #download_pdf {
     display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #4CAF50;
+    margin: 30px auto;
+    padding: 15px 30px; /* Increased button padding */
+    background-color: #00796b; /* Button background color */
     color: white;
     border: none;
+    border-radius: 6px; /* Rounded corners */
     cursor: pointer;
+    font-size: 1.1em; /* Larger font size for button */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
 }
 
 #download_pdf:hover {
-    background-color: #45a049;
+    background-color: #004d40; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+#download_pdf:focus {
+    outline: none; /* Remove outline on focus */
 }

@@ -46,6 +46,7 @@ urlpatterns = [
     path('leave_reason_page/', leave_reason_page, name='leave_reason_page'),
 
     path('add_assignment_page/', add_assignment_page, name='add_assignment_page'),
+    path('get_assignment_academic_years/', get_assignment_academic_years, name='get_assignment_academic_years'),
     path('add_assignment/', add_assignment, name='add_assignment'),
 
     path('view_assignments_page/', view_assignments_page, name='view_assignments_page'),

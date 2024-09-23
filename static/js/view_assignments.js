@@ -1,7 +1,33 @@
 $(document).ready(function () {
-    function loadAssignments() {
+    function loadAcademicYears() {
+        console.log('Loading academic years...');
         $.ajax({
-            url: '/management/get_teacher_assignments/',  // URL to fetch assignments
+            type: 'GET',
+            url: '/management/get_assignment_academic_years/',
+            success: function (response) {
+                console.log('Received academic years:', response);
+                var academicYearDropdown = $('#academicYearSelect');
+                academicYearDropdown.empty().append('<option value="">Select Academic Year</option>');
+
+                if (Array.isArray(response.academic_years) && response.academic_years.length > 0) {
+                    console.log('Populating academic years dropdown...');
+                    $.each(response.academic_years, function (index, year) {
+                        console.log('Adding academic year:', year);
+                        academicYearDropdown.append('<option value="' + year + '">' + year + '</option>');
+                    });
+                } else {
+                    console.log('No academic years found.');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching academic years.', error);
+            }
+        });
+    }
+
+    function loadAssignments(academicYear) {
+        $.ajax({
+            url: `/management/get_teacher_assignments/?academic_year=${academicYear}`,
             method: 'GET',
             success: function (data) {
                 const assignmentsSlider = $('#assignments_slider');
@@ -23,7 +49,7 @@ $(document).ready(function () {
                         assignmentsSlider.append(assignmentHtml);
                     });
                 } else {
-                    assignmentsSlider.append('<p>No assignments available.</p>');
+                    assignmentsSlider.append('<p>No assignments available for this academic year.</p>');
                 }
             },
             error: function (error) {
@@ -32,7 +58,17 @@ $(document).ready(function () {
         });
     }
 
-    // Slider functionality
+    $('#academicYearSelect').change(function () {
+        const selectedYear = $(this).val();
+        if (selectedYear) {
+            loadAssignments(selectedYear);
+        }
+    });
+
+    // Load academic years on page load
+    loadAcademicYears();
+
+    // Slider functionality (same as before)
     let isDown = false;
     let startX;
     let scrollLeft;
@@ -63,7 +99,6 @@ $(document).ready(function () {
         slider.scrollLeft(scrollLeft - walk);
     });
 
-    // Slider button controls
     $('.slider-next').click(function () {
         slider.animate({ scrollLeft: '+=300' }, 300);
     });
@@ -71,7 +106,4 @@ $(document).ready(function () {
     $('.slider-prev').click(function () {
         slider.animate({ scrollLeft: '-=300' }, 300);
     });
-
-    // Load assignments on page load
-    loadAssignments();
 });

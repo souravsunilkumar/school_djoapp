@@ -6,57 +6,41 @@ body {
     padding: 0;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
 h1 {
     text-align: center;
     color: #00796b;
-    margin-bottom: 30px;
+    margin: 30px 0;
     font-size: 2.5em; /* Larger heading font */
 }
 
-/* Student selection styles */
+/* Form styles */
+#marksFilterForm {
+    max-width: 600px; /* Max width for the form */
+    margin: 0 auto; /* Center the form */
+    padding: 20px; /* Padding for spacing */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
 label {
     font-weight: bold;
-    display: block;
+    display: block; /* Block display for labels */
     margin-bottom: 10px;
 }
 
-#student-select {
+select {
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Space between elements */
     border: 1px solid #00796b; /* Green border */
     border-radius: 6px; /* Rounded corners */
     width: 100%; /* Full width for the dropdown */
-    max-width: 400px; /* Max width for better layout */
-}
-
-/* Date range styles */
-.date-range {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.date-input {
-    padding: 10px;
-    margin: 0 10px; /* Space between date inputs */
-    border: 1px solid #00796b; /* Green border */
-    border-radius: 6px; /* Rounded corners */
-    max-width: 150px; /* Max width for date inputs */
 }
 
 /* Button styles */
-#view-attendance-btn {
+button {
     display: block;
-    margin: 20px auto;
+    margin: 0 auto; /* Center the button */
     padding: 12px 20px; /* Increased padding */
     background-color: #00796b; /* Button background color */
     color: white;
@@ -67,15 +51,14 @@ label {
     transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
 }
 
-#view-attendance-btn:hover {
+button:hover {
     background-color: #004d40; /* Darker shade on hover */
     transform: scale(1.05); /* Slightly increase size on hover */
 }
 
-/* Attendance table styles */
-#attendance-result {
+/* Table styles */
+#marksTableContainer {
     margin-top: 20px;
-    display: none; /* Hidden initially */
 }
 
 table {
@@ -104,38 +87,4 @@ tr:nth-child(even) {
 
 tr:hover {
     background-color: #e0f7fa; /* Hover effect */
-}
-
-/* Attendance status colors */
-.present {
-    color: green; /* Present */
-}
-
-.absent {
-    color: red; /* Absent */
-}
-
-.sunday {
-    color: blue; /* Sunday */
-}
-
-.reason {
-    color: #2196f3; /* Blue for reason */
-}
-
-/* Keyframe animation for row appearance */
-@keyframes rowAppear {
-    from {
-        opacity: 0;
-        transform: translateY(10px); /* Start slightly below */
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0); /* End at normal position */
-    }
-}
-
-/* Apply row animation */
-tr.animate-row {
-    animation: rowAppear 0.5s ease-out;
 }

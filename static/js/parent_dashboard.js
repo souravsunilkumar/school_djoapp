@@ -91,15 +91,21 @@ $(document).ready(function () {
             success: function (data) {
                 $('#notification_message').empty();
                 if (data.notifications.length > 0) {
-                    data.notifications.forEach(function (notification) {
+                    const notificationsToShow = data.notifications.slice(0, 5); // Get the last five notifications
+                    notificationsToShow.forEach(function (notification) {
                         const redirectUrl = notification.is_absent ? '/parent/absent_page/' : '/parent/assignment_page/';
                         $('#notification_message').append(`
-                        <div class="notification-item">
-                            <p>${notification.message}</p>
-                            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
-                        </div>
-                    `);
+                    <div class="notification-item">
+                        <p>${notification.message}</p>
+                        <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+                    </div>
+                `);
                     });
+
+                    // Show the "Show Earlier Notifications" button if there are more than 5 notifications
+                    if (data.notifications.length > 5) {
+                        $('#show_more_notifications_btn').show().data('notifications', data.notifications);
+                    }
                 } else {
                     $('#notification_message').text('No new notifications.');
                 }
@@ -108,6 +114,25 @@ $(document).ready(function () {
                 console.error('Error fetching notifications:', error);
             }
         });
+    });
+
+    // Show earlier notifications when the button is clicked
+    $('#show_more_notifications_btn').on('click', function () {
+        const allNotifications = $(this).data('notifications');
+        $('#notification_message').empty();
+
+        allNotifications.forEach(function (notification) {
+            const redirectUrl = notification.is_absent ? '/parent/absent_page/' : '/parent/assignment_page/';
+            $('#notification_message').append(`
+        <div class="notification-item">
+            <p>${notification.message}</p>
+            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+        </div>
+    `);
+        });
+
+        // Hide the button after showing all notifications
+        $(this).hide();
     });
 
     // Close notification section

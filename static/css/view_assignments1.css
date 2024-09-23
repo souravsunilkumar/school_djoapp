@@ -1,0 +1,130 @@
+html, body {
+    height: 100%; /* Ensure full height for body and html */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #80deea); /* Gradient background */
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.5s ease;
+}
+
+h1 {
+    text-align: center;
+    color: #00796b; /* Deep teal */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    font-size: 1.2em;
+    color: #00796b; /* Same deep teal */
+}
+
+#academicYearSelect {
+    width: 250px;
+    padding: 12px;
+    margin: 10px auto;
+    border: 2px solid #00796b; /* Deep teal border */
+    border-radius: 8px;
+    background: #ffffff; /* White background */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 1em;
+}
+
+#academicYearSelect:focus {
+    border-color: #004d40; /* Darker teal on focus */
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Teal glow */
+    outline: none;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+.slider {
+    display: flex;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    scroll-behavior: smooth;
+    padding: 20px 0; /* Spacing around the slider */
+    scrollbar-width: thin; /* Firefox */
+}
+
+.slider::-webkit-scrollbar {
+    height: 10px; /* Height of the scrollbar */
+}
+
+.slider::-webkit-scrollbar-thumb {
+    background: #00796b; /* Scrollbar color */
+    border-radius: 10px; /* Round scrollbar */
+}
+
+.assignment-card {
+    background: linear-gradient(135deg, #ffffff, #f1f8e9); /* Gradient card background */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    padding: 20px;
+    min-width: 320px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex: 0 0 auto;
+}
+
+.assignment-card:hover {
+    transform: translateY(-8px); /* Lift effect on hover */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.assignment-card a {
+    text-decoration: none;
+    color: #333; /* Dark text color */
+}
+
+.assignment-card h3 {
+    color: #d32f2f; /* Vibrant red for titles */
+    margin-bottom: 10px;
+}
+
+.assignment-card p {
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.slider-btn {
+    background-color: #00796b; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.slider-btn:hover {
+    background-color: #004d40; /* Darker teal on hover */
+    transform: scale(1.05); /* Slight grow on hover */
+}
+
+.slider-btn:focus {
+    outline: none;
+}
+
+/* Add media queries for responsive design */
+@media (max-width: 600px) {
+    #academicYearSelect {
+        width: 100%; /* Full width on small screens */
+    }
+
+    .assignment-card {
+        min-width: 90%; /* Adjust card width */
+    }
+}

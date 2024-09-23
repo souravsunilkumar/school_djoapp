@@ -62,8 +62,9 @@ $(document).ready(function () {
 
         if (Array.isArray(students) && students.length > 0) {
             students.forEach(function (student) {
-                const statusText = `${student.name}: Not Submitted (Marks: ${student.marks || 0})`;
-                statusesContainer.append(`<p>${statusText}</p>`);
+                const statusClass = student.submitted === 'submitted' ? 'submitted' : 'not-submitted';
+                const statusText = `${student.name}: ${student.submitted.charAt(0).toUpperCase() + student.submitted.slice(1)} (Marks: ${student.marks})`;
+                statusesContainer.append(`<p class="${statusClass}">${statusText}</p>`);
             });
         } else {
             statusesContainer.append('<p>No students linked.</p>');

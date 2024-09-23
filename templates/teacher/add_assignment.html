@@ -32,10 +32,18 @@
         <label for="due_date">Due Date:</label>
         <input type="date" id="due_date" name="due_date" required>
 
+        <!-- New/Select Academic Year -->
+        <label for="academicYearSelect">Select Academic Year:</label>
+        <select id="academicYearSelect" name="academic_year">
+            <option value="">Select Academic Year</option>
+        </select>
+
+        <label for="newAcademicYear">Or Add New Academic Year:</label>
+        <input type="text" id="newAcademicYear" name="new_academic_year" placeholder="Type new academic year">
+
         <button type="submit">Add Assignment</button>
     </form>
 
-    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/static/js/add_assignment.js"></script>
 </body>

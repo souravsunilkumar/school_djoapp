@@ -1,189 +1,112 @@
-/* Global styles */
-body {
+html, body {
+    height: 100%; /* Ensure full height for body and html */
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: radial-gradient(circle at center, #1532a6, #0f3060);
-    color: #f0f0f0;
+    background: linear-gradient(135deg, #e0f7fa, #80deea); /* Warm gradient background */
+    background-attachment: fixed; /* Keep background fixed during scrolling */
+    color: #222;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    overflow: auto;
-    animation: fadeIn 1s ease-in-out;
-}
-
-/* Header */
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #ffc107; /* Yellow */
-    text-shadow: 0 0 10px #ffc107, 0 0 20px #ffc107;
-    animation: glow 6s infinite ease-in-out alternate;
-}
-
-/* Assignment details section */
-#assignment_details {
-    text-align: center;
-    margin-bottom: 40px;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    width: 90%;
-    animation: slideDown 1.2s ease-in-out;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(51, 177, 255, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease; /* Smooth transition */
+    box-sizing: border-box; /* Include padding in total height */
 }
 
-/* Header for assignment details */
-#assignment_details h2 {
-    font-size: 1.8rem;
-    color: #ffc107; /* Yellow */
-    margin-bottom: 10px;
-}
-
-/* Assignment details paragraphs */
-#assignment_details p {
-    margin: 8px 0;
-    font-size: 1.1rem;
-    color: #ddd;
-}
-
-/* Enhanced hover effect for assignment details box */
-#assignment_details:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7); /* Enhanced shadow */
-    background: rgba(255, 255, 255, 0.15); /* Slightly brighter background on hover */
-}
-
-/* Smooth transition for the title */
-#assignment_details h2:hover {
-    color: #33b1ff; /* Blue */
-    transition: color 0.3s ease; /* Smooth color change */
-}
-
-/* Table styles */
-#student_assignment_marks {
-    width: 90%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    background-color: rgba(30, 30, 30, 0.8);
-}
-
-#student_assignment_marks th, #student_assignment_marks td {
-    padding: 12px 15px;
+h1 {
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #00796b; /* Vibrant red */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-#student_assignment_marks th {
-    background-color: rgba(51, 177, 255, 0.2); /* Light Blue */
-    color: #33b1ff; /* Blue */
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-size: 1.1rem;
+#assignment_details {
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px; /* Constrain width */
+    margin-bottom: 30px;
 }
 
-#student_assignment_marks td {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #ddd;
+#assignment_details h2 {
+    color: #00796b; /* Deep teal */
 }
 
-/* Table rows hover effect */
-#student_assignment_marks tbody tr:hover {
-    background-color: rgba(51, 177, 255, 0.1); /* Light Blue on hover */
-    transform: translateY(-3px);
-    transition: all 0.3s ease;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    max-width: 800px; /* Increased width */
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    border-radius: 12px;
+    overflow: hidden; /* Round corners */
 }
 
-/* Button */
+th, td {
+    padding: 16px; /* Increased padding for better spacing */
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0; /* Light border */
+}
+
+th {
+    background: #00796b; /* Deep teal for header */
+    color: white;
+    font-size: 1.1em; /* Slightly larger font for headers */
+}
+
+tr:hover {
+    background: #f1f1f1; /* Light hover effect */
+}
+
+input[type="number"],
+input[type="date"],
+input[type="checkbox"] {
+    border: 2px solid #00796b; /* Deep teal border */
+    border-radius: 8px;
+    padding: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding included in width */
+}
+
+input[type="number"]:focus,
+input[type="date"]:focus {
+    border-color: #004d40; /* Darker teal on focus */
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Teal glow */
+    outline: none;
+}
+
 #submit_marks_btn {
-    padding: 12px 25px;
+    background-color: #00796b; /* Button color */
+    color: white;
     border: none;
-    background: linear-gradient(45deg, #33b1ff, #ffc107); /* Blue to Yellow */
-    color: #fff;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-radius: 50px;
+    border-radius: 8px;
+    padding: 12px 20px;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(51, 177, 255, 0.5);
-    transition: all 0.4s ease;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 1em;
+    width: 200px; /* Fixed width for button */
 }
 
 #submit_marks_btn:hover {
-    background: linear-gradient(45deg, #ffc107, #33b1ff); /* Yellow to Blue */
-    box-shadow: 0 0 20px rgba(51, 177, 255, 0.7), 0 0 20px rgba(255, 109, 61, 0.7);
-    transform: scale(1.05);
+    background-color: #004d40; /* Darker teal on hover */
+    transform: scale(1.05); /* Slight grow on hover */
 }
 
-/* Input fields */
-input[type="number"], input[type="date"] {
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #222;
-    border: 1px solid #33b1ff; /* Blue */
-    color: #fff;
-    text-align: center;
-    width: 100%;
+#submit_marks_btn:focus {
+    outline: none;
 }
 
-input[type="checkbox"] {
-    transform: scale(1.2);
-    cursor: pointer;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+/* Add media queries for responsive design */
+@media (max-width: 600px) {
+    #assignment_details,
+    table {
+        width: 100%; /* Full width on small screens */
     }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes glow {
-    from {
-        text-shadow: 
-            0 0 20px #ffc107, /* Yellow glow */
-            0 0 40px #ffc107,
-            0 0 60px #ff6d3d, /* Orange glow */
-            0 0 80px #ff6d3d;
-    }
-    50% {
-        text-shadow: 
-            0 0 40px #33b1ff, /* Blue glow */
-            0 0 60px #33b1ff,
-            0 0 80px #6a5acd, /* Purple glow */
-            0 0 100px #6a5acd;
-    }
-    to {
-        text-shadow: 
-            0 0 60px #ff4500, /* Red-Orange glow */
-            0 0 80px #ff4500,
-            0 0 100px #1e90ff, /* Dodger Blue glow */
-            0 0 120px #1e90ff;
-    }
-}
-
-/* Hover effect for table cells */
-#student_assignment_marks tbody tr:hover td {
-    background-color: rgba(51, 177, 255, 0.1); /* Light Blue */
-    transition: background-color 0.3s ease;
 }

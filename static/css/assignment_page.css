@@ -6,13 +6,13 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif; /* Basic font */
-    background: linear-gradient(180deg, #ffffff, #f0f0f0); /* Light gradient background */
-    color: #333; /* Dark text for readability */
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    background: linear-gradient(180deg, #f0f4f8, #e1e8ed); /* Light gradient background */
+    color: #2c3e50; /* Darker text for readability */
     line-height: 1.6;
     padding: 20px;
     height: 100vh; /* Ensure full viewport height */
-    overflow: hidden; /* Prevent overflow */
+    overflow: scroll; 
 }
 
 /* Header styles */
@@ -20,8 +20,8 @@ h1 {
     text-align: center;
     margin: 20px 0;
     font-size: 3rem; /* Larger header size */
-    color: #007bff; /* Blue color for header */
-    text-shadow: 0 1px 3px rgba(0, 123, 255, 0.5); /* Subtle shadow for depth */
+    color: #3498db; /* Bright blue for header */
+    text-shadow: 0 2px 5px rgba(52, 152, 219, 0.3); /* Subtle shadow for depth */
     animation: fadeInDown 0.5s ease; /* Animation for the header */
 }
 
@@ -42,15 +42,15 @@ h1 {
     margin: 20px auto;
     padding: 20px;
     background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-    border-radius: 12px; /* Softer edges */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    border-radius: 15px; /* Softer edges */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Light shadow for depth */
 }
 
 .notification-item {
     padding: 15px;
-    border-bottom: 1px solid rgba(0, 123, 255, 0.2); /* Light blue line */
+    border-bottom: 1px solid rgba(52, 152, 219, 0.2); /* Light blue line */
     transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 10px; /* Rounded corners */
 }
 
 .notification-item:last-child {
@@ -58,13 +58,13 @@ h1 {
 }
 
 .notification-item:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
+    background-color: rgba(52, 152, 219, 0.1); /* Light blue hover effect */
     transform: scale(1.02); /* Slight scale on hover */
 }
 
 /* Button styles */
 button {
-    background: linear-gradient(90deg, #007bff, #0056b3); /* Gradient button */
+    background: linear-gradient(90deg, #3498db, #2980b9); /* Gradient button */
     color: #ffffff; /* White text */
     border: none;
     border-radius: 30px; /* Pill-shaped button */
@@ -77,7 +77,7 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(90deg, #0056b3, #007bff); /* Reverse gradient on hover */
+    background: linear-gradient(90deg, #2980b9, #3498db); /* Reverse gradient on hover */
     transform: translateY(-2px); /* Slight lift on hover */
 }
 
@@ -97,30 +97,29 @@ button:hover {
 }
 
 #assignment_modal_content {
-    background: linear-gradient(180deg, #ffffff, #e0e0e0); /* Light gradient background */
+    background: linear-gradient(180deg, #ffffff, #e1e8ed); /* Light gradient background */
     padding: 30px;
     border-radius: 15px; /* Rounded corners */
     width: 90%; /* Responsive width */
     max-width: 600px; /* Max width for larger screens */
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow for depth */
     animation: zoomIn 0.3s ease; /* Zoom in effect for the modal content */
-    backdrop-filter: blur(10px); /* Blur effect for a futuristic touch */
+    backdrop-filter: blur(10px); /* Blur effect for a modern touch */
 }
 
 /* Title styles */
 #assignment_modal_content h2 {
     font-size: 2rem; /* Larger title size */
-    color: #007bff; /* Bright blue color for title */
+    color: #3498db; /* Bright blue color for title */
     margin-bottom: 15px; /* Spacing */
     text-align: center; /* Center align */
-    text-shadow: 0 2px 5px rgba(0, 123, 255, 0.5); /* Subtle shadow for depth */
-    letter-spacing: 1px; /* Spacing between letters */
+    text-shadow: 0 2px 5px rgba(52, 152, 219, 0.3); /* Subtle shadow for depth */
 }
 
 /* Paragraph styles */
 #assignment_modal_content p {
     margin: 10px 0; /* Spacing between paragraphs */
-    color: #333; /* Dark text for readability */
+    color: #2c3e50; /* Dark text for readability */
     font-size: 1.1rem; /* Slightly larger text */
     line-height: 1.5; /* Improved line height */
     text-align: justify; /* Justify text for a clean look */
@@ -128,42 +127,68 @@ button:hover {
 
 /* Futuristic effect for modal content */
 #assignment_modal_content {
-    border: 1px solid #007bff; /* Blue border for the modal */
-    border-image: linear-gradient(45deg, #007bff, #0056b3) 1; /* Gradient border */
+    border: 1px solid #3498db; /* Blue border for the modal */
+    border-image: linear-gradient(45deg, #3498db, #2980b9) 1; /* Gradient border */
 }
 
 /* Close button styles */
 #close_assignment_modal {
     float: right; /* Position close button */
     font-size: 24px; /* Close button size */
-    color: #007bff; /* Bright blue color for close button */
+    color: #3498db; /* Bright blue color for close button */
     cursor: pointer; /* Pointer cursor */
     transition: color 0.3s, transform 0.3s; /* Transition for hover effect */
 }
 
 #close_assignment_modal:hover {
-    color: #0056b3; /* Darker blue on hover */
+    color: #2980b9; /* Darker blue on hover */
     transform: scale(1.1); /* Slightly grow the close button */
 }
 
 /* Student statuses styles */
 #student_statuses {
     margin-top: 20px; /* Increased margin for separation */
-    border-top: 1px solid rgba(0, 123, 255, 0.3); /* Light blue line */
+    border-top: 1px solid rgba(52, 152, 219, 0.3); /* Light blue line */
     padding-top: 10px;
 }
 
+/* Default styling for all student status elements */
 #student_statuses p {
-    padding: 5px 0; /* Spacing for student status */
-    color: #555; /* Slightly lighter text */
+    padding: 10px; /* Increase padding for better readability */
     font-size: 1rem; /* Regular text size */
-    transition: background-color 0.3s; /* Smooth background color transition */
+    border-radius: 8px; /* Rounded corners */
+    margin: 5px 0; /* Spacing between items */
+    color: #fff; /* White text color for better contrast */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
 }
 
-#student_statuses p:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
-    border-left: 5px solid #007bff; /* Highlighting effect */
-    transform: translateX(5px); /* Slide effect on hover */
+/* Status: Not Submitted */
+#student_statuses p.not-submitted {
+    background: linear-gradient(90deg, #e74c3c, #c0392b); /* Red gradient for not submitted */
+    border-left: 5px solid #c0392b; /* Solid red border on the left */
+}
+
+#student_statuses p.not-submitted:hover {
+    background: linear-gradient(90deg, #e67e22, #d35400); /* Slightly lighter gradient on hover */
+    transform: translateX(5px); /* Slight sliding effect on hover */
+}
+
+/* Status: Submitted */
+#student_statuses p.submitted {
+    background: linear-gradient(90deg, #2ecc71, #27ae60); /* Green gradient for submitted */
+    border-left: 5px solid #27ae60; /* Solid green border on the left */
+}
+
+#student_statuses p.submitted:hover {
+    background: linear-gradient(90deg, #58d68d, #2ecc71); /* Lighter gradient on hover */
+    transform: translateX(5px); /* Slight sliding effect on hover */
+}
+
+/* Marks specific styles */
+#student_statuses p span.marks {
+    font-weight: bold; /* Make the marks bold for better emphasis */
+    display: inline-block;
+    margin-left: 10px; /* Space between the status text and marks */
 }
 
 /* Additional styles for responsiveness */

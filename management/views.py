@@ -690,6 +690,21 @@ def add_assignment_page(request):
     return render(request,'teacher/add_assignment.html')
 
 @login_required
+def get_assignment_academic_years(request):
+    try:
+        # Get the school of the logged-in teacher
+        teacher = request.user.teacher
+        school = teacher.school
+
+        # Get distinct academic years from assignments linked to the teacher's school
+        academic_years = Assignment.objects.filter(school=school).values_list('academic_year', flat=True).distinct()
+
+        return JsonResponse({'academic_years': list(academic_years)})
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+@login_required
 @csrf_exempt
 def add_assignment(request):
     if request.method == 'POST':
@@ -703,6 +718,7 @@ def add_assignment(request):
             title = request.POST.get('title')
             description = request.POST.get('description')
             due_date = request.POST.get('due_date')
+            academic_year = request.POST.get('academic_year')
 
             # Create the assignment
             assignment = Assignment.objects.create(
@@ -713,7 +729,8 @@ def add_assignment(request):
                 division_assigned=division_assigned,
                 title=title,
                 description=description,
-                due_date=due_date
+                due_date=due_date,
+                academic_year=academic_year
             )
 
             # Create the notification
@@ -737,11 +754,15 @@ def add_assignment(request):
 def view_assignments_page(request):
     return render(request,'teacher/view_assignments.html')
 
+@login_required
 def get_teacher_assignments(request):
     if request.user.is_authenticated and hasattr(request.user, 'teacher'):
         teacher = request.user.teacher
-        assignments = Assignment.objects.filter(teacher=teacher).values(
-            'assignment_id',  
+        academic_year = request.GET.get('academic_year')
+
+        # Filter assignments by teacher and academic year
+        assignments = Assignment.objects.filter(teacher=teacher, academic_year=academic_year).values(
+            'assignment_id',
             'title',
             'subject',
             'class_assigned',
@@ -757,7 +778,7 @@ def add_assignment_mark(request, assignment_id):
     assignment = get_object_or_404(Assignment, pk=assignment_id)
     return render(request, 'teacher/add_assignment_mark.html', {
         'assignment': assignment,
-        'assignment_id': assignment.assignment_id  # Pass the assignment ID
+        'assignment_id': assignment.assignment_id  
     })
 
 def get_assignment_details(request, assignment_id):

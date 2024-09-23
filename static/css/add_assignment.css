@@ -1,134 +1,141 @@
-/* Root variables for easier theming */
+/* add_assignment.css */
+
+/* Define root variables for easier customization */
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #ffffff;
-    --bg-color: #f4f4f9;
-    --form-bg: #ffffff;
-    --border-color: #ddd;
-    --input-hover: #e8f0fe;
-    --font-family: 'Roboto', sans-serif;
-    --transition-speed: 0.3s;
+    --primary-color: #5f27cd;
+    --primary-dark: #341f97;
+    --secondary-color: #ff4757;
+    --background-color: #f1f2f6;
+    --form-background: #ffffff;
+    --text-color: #2f3542;
+    --border-color: #ced6e0;
+    --border-radius: 15px;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition-speed: 0.4s;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
+/* Basic styles */
 body {
     font-family: var(--font-family);
-    background-color: var(--bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background: linear-gradient(135deg, #d2d6e5, #e1e4ea);
+    margin: 0;
     padding: 20px;
-}
-
-/* Container Styling */
-form {
-    background-color: var(--form-bg);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
-    transition: all var(--transition-speed) ease;
+    color: var(--text-color);
 }
 
 h2 {
-    color: var(--primary-color);
+    color: var(--primary-dark);
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    letter-spacing: 1px;
+    margin-bottom: 25px;
+    font-size: 2.5em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Input Field Styling */
-form label {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #333;
+/* Form styles */
+form {
+    background: var(--form-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 35px;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    position: relative;
+}
+
+/* Hover effect for form */
+form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Label styles */
+label {
     display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
+/* Input styles */
 input[type="text"],
 input[type="date"],
-textarea,
-select {
+select,
+textarea {
     width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
+    padding: 14px;
+    margin-bottom: 20px;
     border: 2px solid var(--border-color);
-    border-radius: 6px;
-    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
-    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    background-color: #f7f9fc;
 }
 
-/* Input focus effects */
+/* Focus effect for inputs */
 input[type="text"]:focus,
 input[type="date"]:focus,
-textarea:focus,
-select:focus {
+select:focus,
+textarea:focus {
     border-color: var(--primary-color);
-    background-color: var(--input-hover);
+    box-shadow: 0 0 8px rgba(95, 39, 205, 0.5);
     outline: none;
 }
 
+/* Textarea styles */
 textarea {
-    min-height: 120px;
     resize: vertical;
+    height: 120px;
 }
 
-/* Dropdown Styling */
-select {
-    appearance: none;
-    background: var(--secondary-color) url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDEwIDEwIj48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMyA0bDUgNUw4IDQgNi42IDMuNiA1IDVMMyA0eiIvPjwvc3ZnPg==') no-repeat right 12px center;
-    background-size: 10px;
-    padding-right: 2rem;
-}
-
-/* Button Styling */
+/* Button styles */
 button {
-    display: block;
-    width: 100%;
-    padding: 0.8rem;
-    font-size: 1.2rem;
     background-color: var(--primary-color);
-    color: var(--secondary-color);
+    color: white;
     border: none;
-    border-radius: 8px;
+    padding: 16px 24px;
+    border-radius: var(--border-radius);
     cursor: pointer;
-    transition: background-color var(--transition-speed) ease;
+    font-size: 18px;
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed), transform var(--transition-speed);
+    width: 100%;
+    font-weight: bold;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: var(--primary-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 
 button:focus {
     outline: none;
+    box-shadow: 0 0 5px rgba(95, 39, 205, 0.5);
 }
 
-/* Form transitions and animations */
-form:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+/* Disabled select styles */
+select:disabled {
+    background-color: #ecf0f1;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Option padding */
+option {
+    padding: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
     form {
-        padding: 1.5rem;
+        padding: 25px;
     }
 
     h2 {
-        font-size: 1.75rem;
+        font-size: 2.2em;
     }
 
     button {
-        font-size: 1.1rem;
+        padding: 14px;
+        font-size: 16px;
     }
 }

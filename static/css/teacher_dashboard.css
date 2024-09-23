@@ -1,197 +1,108 @@
-/* General Styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html, body {
+    height: 100%; /* Ensure full height for body and html */
     margin: 0;
     padding: 0;
-    background: linear-gradient(135deg, #ece9e6 0%, #ffffff 100%);
-    color: #333;
+    background: linear-gradient(135deg, #e0f7fa, #80deea); /* Warm gradient background */
+    color: #222;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 h1 {
     text-align: center;
-    font-size: 2.5rem;
-    color: #333;
-    margin-top: 20px;
+    color: #00796b; /* Deep teal */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 .dashboard-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 800px; /* Constrain width */
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
 }
 
-/* Welcome message */
-#welcome-message {
-    font-size: 1.2rem;
-    color: #555;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.notification-icon {
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    cursor: pointer; 
 }
 
-/* Class teacher status */
-#class-teacher-status {
-    background-color: #e9ecef;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    text-align: center;
-    color: #495057;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Notification Icon */
-.notification-icon img {
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.notification-icon img:hover {
-    transform: scale(1.1);
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
-}
-
-/* Notification Modal */
 .notification-modal {
-    display: none;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.3s ease-in-out;
+    position: absolute; 
+    top: 60px; 
+    right: 20px; 
+    width: 300px; 
+    background-color: #fff; 
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Bring to front */
 }
 
-.notification-item {
+.modal-content {
     padding: 10px;
-    margin-bottom: 8px;
-    background: #f8f9fa;
-    border-left: 4px solid #007bff;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
 }
 
-.notification-item:hover {
-    background-color: #e2e6ea;
+.modal-footer {
+    text-align: right;
 }
 
-.notification-item.unread {
-    background-color: #fff3cd;
-    border-left-color: #ffc107;
-}
-
-.notification-item p {
-    margin: 0;
-    font-size: 1rem;
-    color: #333;
-}
-
-/* Notification Links */
-.notification-item a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    font-weight: normal;
-    transition: color 0.3s ease;
-}
-
-.notification-item a:hover {
-    color: #0056b3; /* Optional: Add color change on hover if needed */
-}
-
-/* Close Modal Button */
-.modal-close {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.modal-close:hover {
-    background-color: #0056b3;
-}
-
-/* Leave reason modal */
-#reason-modal {
-    display: none;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    width: 400px;
-    z-index: 999;
-    animation: scaleUp 0.3s ease-in-out;
-}
-
-.modal-content h4 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* Students Table */
 #students-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default */
 }
 
-#students-table {
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
-#students-table th, #students-table td {
-    padding: 12px 15px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
+th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-#students-table th {
-    background-color: #007bff;
-    color: #fff;
-}
-
-#students-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#students-table td a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-#students-table td a:hover {
-    text-decoration: underline;
-}
-
-/* Actions Links */
-#actions a {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 10px 0;
-    background-color: #007bff;
+th {
+    background: #00796b; /* Deep teal for header */
     color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
+    font-size: 1.1em;
 }
 
-#actions a:hover {
-    background-color: #0056b3;
+tr:hover {
+    background: #f1f1f1;
+}
+
+/* Button styles for links */
+a {
+    display: inline-block; /* Make links behave like buttons */
+    background-color: #00796b; /* Button color */
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px 0; /* Space between buttons */
+}
+
+a:hover {
+    background-color: #004d40; /* Darker teal on hover */
+    transform: scale(1.05); /* Slight grow on hover */
+}
+
+a:focus {
+    outline: none; /* Remove focus outline */
 }
 
 /* Add Marks link */
@@ -238,62 +149,23 @@ a[href="/management/view_assignments_page/"]:hover {
     background-color: #a52424;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0; /* Light border between notifications */
 }
 
-@keyframes scaleUp {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+.unread {
+    font-weight: bold; /* Bold text for unread notifications */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
+/* Media queries for responsive design */
+@media (max-width: 600px) {
     .dashboard-container {
-        padding: 15px;
+        width: 100%; /* Full width on small screens */
     }
 
-    #students-table th, #students-table td {
-        padding: 8px;
+    #notification_modal {
+        width: 90%; /* Adjust modal width */
     }
 }
-
-/* Notification Links Styled as Buttons */
-.notification-link {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 5px 0;
-    background-color: #007bff; /* Primary color */
-    color: white;
-    text-decoration: none; /* Remove underline */
-    border-radius: 6px; /* Rounded corners */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-weight: bold; /* Make text bold */
-}
-
-.notification-link:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    transform: scale(1.05); /* Slightly increase button size on hover */
-}
-
-/* Optional: Add focus styling */
-.notification-link:focus {
-    outline: 2px solid #0056b3; /* Outline on focus for better accessibility */
-}
-

@@ -1,161 +1,209 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #e8f5e9; /* Light green background */
-    color: #1b5e20; /* Dark green text */
-    position: relative; /* Allows for absolute positioning of the notification icon */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    overflow-x: hidden;
 }
 
 h1 {
-    color: #388e3c; /* Slightly darker green for headings */
+    font-size: 2.5rem;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+#guardian_message {
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin-bottom: 30px;
 }
 
 label {
+    font-size: 1.1rem;
+    color: #2d3748;
     font-weight: bold;
 }
 
-select {
-    padding: 8px;
-    border: 1px solid #4caf50; /* Green border */
-    border-radius: 4px; /* Rounded corners */
-    background-color: #fff; /* White background */
-}
-
-.notification-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-}
-
-.notification {
-    display: none; /* Hidden by default */
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    width: 300px;
-    background-color: #fff;
-    border: 1px solid #ccc;
+/* Select Dropdown */
+#student_select {
     padding: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.notification-item {
-    margin-bottom: 10px;
-}
-
-.give_reason_btn {
-    background-color: #4caf50; /* Green button */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 5px 0;
+    width: 300px;
+    font-size: 1rem;
     border-radius: 5px;
-    cursor: pointer;
-}
-
-.give_reason_btn:hover {
-    background-color: #388e3c;
-}
-
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
     border: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure modal is above other content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: all 0.3s ease;
 }
 
-textarea {
-    width: 100%;
-    border: 1px solid #4caf50; /* Green border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 8px;
+#student_select:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 
+/* Buttons */
 button {
-    background-color: #4caf50; /* Green button */
-    color: white;
+    background-color: #2563eb;
+    color: #fff;
     border: none;
-    padding: 8px 12px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 5px 0;
+    padding: 10px 20px;
+    font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #388e3c;
+    background-color: #1d4ed8;
+    transform: translateY(-3px);
 }
 
-.modal {
-    display: none; /* Hidden by default */
-    position: absolute; /* Absolute positioning */
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition for transform and opacity */
-    transform-origin: center; /* Ensure it scales from the center */
-    opacity: 0; /* Start hidden */
-    width: 300px; /* Adjust width as needed */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+button:active {
+    transform: translateY(1px);
 }
 
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    z-index: 999;
+#view_attendance_btn {
+    margin-top: 20px;
 }
 
-.modal-overlay.active {
-    display: block; /* Show overlay when active */
-}
-
-#reason_modal_message {
-    margin-top: 10px;
-    font-size: 16px;
-}
-
-textarea {
-    width: 100%;
-    border: 1px solid #4caf50; /* Green border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 8px;
-    margin-top: 10px;
-}
-
-.reason_given_btn {
-    background-color: #2196F3; /* Blue color */
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    text-align: center;
+a {
+    color: #2563eb;
+    font-weight: bold;
     text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 5px 0;
-    border-radius: 5px;
-    cursor: not-allowed; /* Indicate that the button is not clickable */
+    transition: color 0.3s ease;
 }
 
-.reason_given_btn:hover {
-    background-color: #1976D2; /* Darker blue */
+a:hover {
+    color: #1d4ed8;
+}
+
+/* Notification Icon */
+.notification-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.notification-icon:hover {
+    transform: rotate(10deg) scale(1.1);
+}
+
+/* Notification Section */
+#notification_section {
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #4a5568;
+}
+
+.view_notifications_link {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #2563eb;
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.view_notifications_link:hover {
+    background-color: #15e1f7;
+}
+
+#close_notification_btn, #show_more_notifications_btn {
+    margin-top: 10px;
+}
+
+/* Attendance Modal */
+#attendance_modal {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: fadeIn 0.5s ease;
+}
+
+#attendance_modal h2 {
+    font-size: 1.8rem;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+}
+
+#attendance_modal label {
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+#attendance_modal input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+#attendance_report {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#attendance_report th, #attendance_report td {
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+#attendance_report th {
+    background-color: #f7fafc;
+    color: #1e3a8a;
+}
+
+#attendance_report td {
+    text-align: center;
+}
+
+#close_modal_btn {
+    margin-top: 20px;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

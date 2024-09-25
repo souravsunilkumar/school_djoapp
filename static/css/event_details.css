@@ -25,13 +25,13 @@ h1 {
     font-weight: bold;
 }
 
-/* Feature Image styling - made smaller */
+/* Feature Image styling */
 #feature-image {
     display: block;
     width: 100%;
-    max-width: 600px; /* Reduced size */
+    max-width: 600px; /* Maintains the original max size */
     height: auto;
-    max-height: 300px; /* Reduced height */
+    max-height: 300px; /* Maintains the original max height */
     margin: 20px auto;
     object-fit: contain;
     border-radius: 15px;
@@ -77,22 +77,20 @@ h1 {
     margin-bottom: 20px;
 }
 
-#youtube-links a {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #ff4f81;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+/* YouTube player styling */
+.youtube-player {
+    margin: 20px 0;
+    text-align: center;
 }
 
-#youtube-links a:hover {
-    background-color: #ff3d6d;
+.youtube-player iframe {
+    max-width: 100%; /* Ensures responsive iframe */
+    height: 315px; /* Fixed height for the iframe */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Event images styling - made larger */
+/* Event images styling */
 #event-images {
     display: flex;
     flex-wrap: wrap;
@@ -101,7 +99,7 @@ h1 {
 
 #event-images img {
     width: 400px; /* Increased width */
-    height: auto; /* Increased height */
+    height: auto; /* Height auto for aspect ratio */
     object-fit: contain;
     margin: 10px;
     border-radius: 10px;
@@ -118,9 +116,9 @@ h1 {
     h1 {
         font-size: 2.2em;
     }
-    
+
     #feature-image {
-        max-width: 100%;
+        max-width: 100%; /* Full width on mobile */
         max-height: 200px; /* Smaller for mobile */
     }
 
@@ -128,31 +126,20 @@ h1 {
         font-size: 1.3em;
     }
 
+    #event-date {
+        font-size: 1em; /* Smaller font for mobile */
+    }
+
     #event-images img {
         width: 100%; /* Full width on mobile */
         height: auto;
-        object-fit: contain;
         margin: 10px 0;
     }
-}
 
-/* Styles for YouTube player */
-.youtube-player {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.youtube-player iframe {
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Mobile responsiveness for YouTube player */
-@media (max-width: 768px) {
+    /* Responsive YouTube player */
     .youtube-player iframe {
-        width: 100%;
-        height: auto;
+        width: 100%; /* Full width for iframe on mobile */
+        height: 200px; /* Adjust height for mobile */
     }
 }
 

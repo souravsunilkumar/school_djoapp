@@ -1,6 +1,6 @@
 import json
 import logging
-from django.http import JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
@@ -11,8 +11,6 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-def events_page(request): 
-    return render(request,'events/event_page.html')
 
 def add_event_page(request): 
     return render(request,'events/add_event_page.html')
@@ -67,6 +65,10 @@ def add_event(request):
 
     return JsonResponse({'success': False}, status=400)
 
+def events_page(request): 
+    return render(request,'events/event_page.html')
+
+
 def event_page_data(request):
     # Fetch the logged-in school admin and their school
     school_admin = School_admin.objects.get(school_admin_username=request.user.username)
@@ -87,7 +89,37 @@ def event_page_data(request):
 
     return JsonResponse({'event_banners': banner_data})
 
+def all_events(request):
+    school_admin = School_admin.objects.get(school_admin_username=request.user.username)
+    school = school_admin.school
 
+    # Fetch events related to the logged-in school admin's school
+    events = Event.objects.filter(school=school).values('event_id', 'title', 'description', 'event_date')
+
+    # Convert QuerySet to a list
+    events_list = list(events)  # This converts the QuerySet to a list of dictionaries
+
+    return JsonResponse({'events': events_list})  # Return the events in JSON format
+
+
+
+
+def get_event_details(request, event_id):
+    try:
+        event = Event.objects.get(event_id=event_id)
+        media_files = event.media.all().values('id', 'media_file')
+        event_data = {
+            'event_id': event.event_id,
+            'title': event.title,
+            'description': event.description,
+            'event_date': event.event_date,
+            'feature_image_url': event.feature_image.url if event.feature_image else '',
+            'media_files': list(media_files)  # Include media file information
+        }
+        return JsonResponse(event_data)
+    except Event.DoesNotExist:
+        return HttpResponseNotFound('Event not found.')
+    
 def event_details_page(request):
     return render(request, 'events/event_details.html')
 
@@ -112,3 +144,48 @@ def event_details_data(request):
     }
     
     return JsonResponse({'event': event_data, 'media': media_data})
+
+def edit_event_page(request):
+    return render(request, 'events/edit_event.html')
+
+@csrf_exempt  # Use this only if CSRF protection is handled elsewhere
+@require_POST
+def update_event(request, event_id):
+    try:
+        event = Event.objects.get(event_id=event_id)
+
+        # Get and update event details
+        event.title = request.POST.get('title')
+        event.description = request.POST.get('description')
+        event.event_date = request.POST.get('event_date')
+
+        # Handle file upload for feature image
+        if request.FILES.get('feature_image'):
+            event.feature_image = request.FILES['feature_image']
+
+        event.save()  # Save the event first
+
+        # Handle file upload for additional media images
+        if request.FILES.getlist('media_files'):
+            media_files = request.FILES.getlist('media_files')
+            for media_file in media_files:
+                EventMedia.objects.create(event=event, media_file=media_file)
+
+        event.save()  # Save the event again
+        return JsonResponse({'message': 'Event updated successfully!'})
+    except Event.DoesNotExist:
+        return HttpResponseNotFound('Event not found.')
+
+@csrf_exempt  # Use this only if CSRF protection is handled elsewhere
+@require_POST
+def delete_media(request, media_id):
+    try:
+        media = EventMedia.objects.get(id=media_id)
+        media.delete()
+        return JsonResponse({'message': 'Media deleted successfully!'})
+    except EventMedia.DoesNotExist:
+        return HttpResponseNotFound('Media not found.')
+
+def delete_event(request, event_id):
+    Event.objects.filter(event_id=event_id).delete()
+    return JsonResponse({'status': 'success'})

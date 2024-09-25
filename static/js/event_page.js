@@ -1,10 +1,10 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Function to fetch event banners
     function loadEventBanners() {
         $.ajax({
             url: '/events/event_page_data/',
             method: 'GET',
-            success: function(response) {
+            success: function (response) {
                 const banners = response.event_banners;
                 const bannerSlider = $('#banner-slider');
 
@@ -26,7 +26,7 @@ $(document).ready(function() {
                     sliderWrapper.append(bannerItem);
 
                     // Add click event to each banner item
-                    bannerItem.on('click', function() {
+                    bannerItem.on('click', function () {
                         const eventId = $(this).data('event-id');
                         window.location.href = `/events/event_details/?id=${eventId}`;
                     });
@@ -50,13 +50,13 @@ $(document).ready(function() {
 
                     // If we're at the last slide (which is the clone), reset to the first slide
                     if (currentIndex === totalBanners) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             sliderWrapper.css('transition', 'none'); // Disable the transition
                             currentIndex = 0; // Reset to the first banner
                             sliderWrapper.css('transform', `translateX(0%)`); // Reset position
                         }, 500); // Wait for the current transition to finish before resetting
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             sliderWrapper.css('transition', 'transform 0.5s ease-in-out'); // Re-enable the transition
                         }, 600); // Re-enable the transition after the reset
                     }
@@ -68,6 +68,61 @@ $(document).ready(function() {
         });
     }
 
-    // Call the function to load banners when the page is ready
+    // Function to load all events into the table
+    function loadAllEvents() {
+        $.ajax({
+            url: '/events/all_events/',  // Endpoint to fetch all events
+            method: 'GET',
+            success: function (response) {
+                const events = response.events; // Accessing the events from the response
+                const eventTableBody = $('#event-table tbody');
+                eventTableBody.empty(); // Clear existing rows
+
+                // Append each event to the table
+                events.forEach(event => {
+                    const row = $(`
+                    <tr data-event-id="${event.event_id}">
+                        <td>${event.title}</td>
+                        <td>${event.description}</td>
+                        <td>${event.event_date}</td>
+                        <td>
+                            <button class="edit-event">Edit</button>
+                            <button class="delete-event">Delete</button>
+                        </td>
+                    </tr>
+                `);
+                    eventTableBody.append(row);
+                });
+
+                // Add click event listeners for edit and delete buttons
+                $('.edit-event').on('click', function () {
+                    const eventId = $(this).closest('tr').data('event-id');
+                    window.location.href = `/events/edit_event_page?id=${eventId}`; // Redirect to edit page
+                });
+
+                $('.delete-event').on('click', function () {
+                    const eventId = $(this).closest('tr').data('event-id');
+                    if (confirm('Are you sure you want to delete this event?')) {
+                        $.ajax({
+                            url: `/events/delete_event/${eventId}/`, // Delete endpoint
+                            method: 'DELETE',
+                            success: function () {
+                                alert('Event deleted successfully!');
+                                loadAllEvents(); // Refresh the event table
+                            },
+                            error: function () {
+                                alert('Error deleting event. Please try again.');
+                            }
+                        });
+                    }
+                });
+            },
+            error: function () {
+                alert('Error loading events. Please try again.');
+            }
+        });
+    }
+    // Call the functions to load banners and all events when the page is ready
     loadEventBanners();
+    loadAllEvents();
 });

@@ -119,6 +119,9 @@ def user_login(request):
 def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
 
+def sub_admin_dashboard(request): 
+    return render(request,'sub_admin_dashboard.html')
+
 @login_required
 def admin_dashboard_data(request):
     try:

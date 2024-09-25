@@ -13,6 +13,7 @@ urlpatterns = [
     path('login/', login_page, name='login_page'),  
     path('api/login/', user_login, name='user_login'),
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('sub_admin_dashboard/', sub_admin_dashboard, name='sub_admin_dashboard'),
     path('api/admin_dashboard/', admin_dashboard_data, name='admin_dashboard_data'),
     path('api/register_sub_admin/', register_sub_admin, name='register_sub_admin'),
     path('api/register_employee/', register_employee, name='register_employee'),

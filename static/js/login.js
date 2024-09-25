@@ -11,7 +11,7 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: 'http://127.0.0.1:8000/setup_auth/api/login/', // API endpoint for login
+            url: '/setup_auth/api/login/', // API endpoint for login
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),

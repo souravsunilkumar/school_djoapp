@@ -32,17 +32,12 @@ class School_admin(models.Model):
 
 class Employee(models.Model):
     TEACHER = "Teacher"
-    PEON = "Peon"
-    SECURITY = "Security"
     WARDEN = "Warden"
-    OFFICE_STAFF = "Office Staff"
 
     DESIGNATION_CHOICES = [
         (TEACHER, "Teacher"),
-        (PEON, "Peon"),
-        (SECURITY, "Security"),
         (WARDEN, "Warden"),
-        (OFFICE_STAFF, "Office Staff"),
+        
     ]
 
     id = models.AutoField(primary_key=True)  # Explicit id field
@@ -285,3 +280,46 @@ class StudentAssignmentSubmission(models.Model):
 
     def __str__(self):
         return f"Submission by {self.student} for {self.assignment.title}"
+    
+
+class Event(models.Model):
+    event_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey('School', on_delete=models.CASCADE)
+    school_admin_username = models.CharField(max_length=15)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    event_date = models.DateField(null=True, blank=True)  # Date of the event
+    feature_image = models.ImageField(upload_to='event_images/', null=True, blank=True)  # Feature image field
+
+    def __str__(self):
+        return self.title
+
+
+class EventMedia(models.Model):
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='media')
+    media_file = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    youtube_link = models.URLField(max_length=200, blank=True, null=True)  # Optional YouTube link
+
+    def __str__(self):
+        return f"Media for {self.event.title}"
+    
+
+class EventBanner(models.Model):
+    school = models.ForeignKey('School', on_delete=models.CASCADE,null=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='banners')
+    banner_title = models.CharField(max_length=100)  # Title of the banner
+    banner_image = models.ImageField(upload_to='event_banners/', null=True, blank=True)  # Banner image field
+
+    def __str__(self):
+        return self.banner_title 
+    
+
+class EventNotification(models.Model):
+    event_notification_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey('School', on_delete=models.CASCADE)  # ForeignKey to School
+    school_admin_username = models.CharField(max_length=15)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='notifications')  # ForeignKey to Event
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title

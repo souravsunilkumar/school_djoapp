@@ -1,0 +1,163 @@
+/* General styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.event-details {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+    color: #3a3f51;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Feature Image styling - made smaller */
+#feature-image {
+    display: block;
+    width: 100%;
+    max-width: 600px; /* Reduced size */
+    height: auto;
+    max-height: 300px; /* Reduced height */
+    margin: 20px auto;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+#feature-image:hover {
+    transform: scale(1.05);
+}
+
+/* Event description and date */
+#event-description {
+    font-size: 1.5em;
+    line-height: 1.6;
+    text-align: justify;
+    margin: 20px 0;
+}
+
+#event-date {
+    font-size: 1.2em;
+    color: #7a7a7a;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Media section */
+#media-section {
+    margin-top: 40px;
+}
+
+#media-section h3 {
+    font-size: 2em;
+    color: #3a3f51;
+    margin-bottom: 15px;
+}
+
+/* YouTube links styling */
+#youtube-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#youtube-links a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #ff4f81;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#youtube-links a:hover {
+    background-color: #ff3d6d;
+}
+
+/* Event images styling - made larger */
+#event-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#event-images img {
+    width: 400px; /* Increased width */
+    height: auto; /* Increased height */
+    object-fit: contain;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s;
+}
+
+#event-images img:hover {
+    transform: scale(1.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2em;
+    }
+    
+    #feature-image {
+        max-width: 100%;
+        max-height: 200px; /* Smaller for mobile */
+    }
+
+    #event-description {
+        font-size: 1.3em;
+    }
+
+    #event-images img {
+        width: 100%; /* Full width on mobile */
+        height: auto;
+        object-fit: contain;
+        margin: 10px 0;
+    }
+}
+
+/* Styles for YouTube player */
+.youtube-player {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.youtube-player iframe {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness for YouTube player */
+@media (max-width: 768px) {
+    .youtube-player iframe {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Animation for fade-in */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}

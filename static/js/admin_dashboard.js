@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     // Fetch Admin Details and update the dashboard
     $.ajax({
-        url: 'http://127.0.0.1:8000/setup_auth/api/admin_dashboard/',  // Ensure this URL points to the correct view
+        url: '/setup_auth/api/admin_dashboard/',  // Ensure this URL points to the correct view
         type: 'GET',
         success: function(response) {
             console.log('Admin details fetched:', response);
@@ -44,7 +44,7 @@ $(document).ready(function() {
         console.log('Sub Admin registration form data:', formData);
 
         $.ajax({
-            url: 'http://127.0.0.1:8000/setup_auth/api/register_sub_admin/', // Ensure this matches the actual URL
+            url: '/setup_auth/api/register_sub_admin/', // Ensure this matches the actual URL
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
@@ -100,7 +100,7 @@ $(document).ready(function() {
         console.log('Employee registration form data:', formData);
 
         $.ajax({
-            url: 'http://127.0.0.1:8000/setup_auth/api/register_employee/', // Ensure this matches the actual URL
+            url: '/setup_auth/api/register_employee/', // Ensure this matches the actual URL
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),

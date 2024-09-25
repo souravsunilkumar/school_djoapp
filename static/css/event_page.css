@@ -1,0 +1,80 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h3 {
+    text-align: center;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Banner slider container */
+.banner-slider {
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 16 / 9; /* Fixed aspect ratio */
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+/* Wrapper that holds all banners in a single row */
+.slider-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth sliding transition */
+    height: 100%;
+}
+
+/* Each banner item */
+.banner-item {
+    min-width: 100%; /* Each banner takes up 100% of the slider width */
+    height: 100%; /* Ensure the banner item takes up the full height of the slider */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: #fff;
+}
+
+.banner-item img {
+    width: auto;
+    height: 100%; /* Image takes up the full height */
+    object-fit: contain;
+}
+
+.banner-item h3 {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/* Add Event button styling */
+a {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+a:hover {
+    background-color: #0056b3;
+}

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/admin_dashboard.css">
 </head>
 <body>
     <h1>Welcome, <span id="admin-name"></span>!</h1>
@@ -56,10 +57,8 @@
                <label for="emp_designation">Designation:</label>
                <select id="emp_designation" name="emp_designation" required>
                    <option value="Teacher">Teacher</option>
-                   <option value="Peon">Peon</option>
-                   <option value="Security">Security</option>
                    <option value="Warden">Warden</option>
-                   <option value="Office Staff">Office Staff</option>
+                   
                </select><br>
    
                <label for="emp_password">Password:</label>
@@ -74,9 +73,10 @@
        </div>
 
        <a href="/management/admin_assign_class_teacher/">Assign Class Teacher</a>
+       <a href="/events/events_page/">Events and Programs</a>
    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../static/js/admin_dashboard.js"></script>
+    <script src="/static/js/admin_dashboard.js"></script>
 </body>
 </html>

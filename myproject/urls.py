@@ -28,4 +28,10 @@ urlpatterns = [
     path('progress/', include('student_progress.urls')),
     path('management/', include('management.urls')),
     path('parent/', include('parent.urls')),
+    path('events/', include('events.urls')),
 ]
+
+# Only serve static and media files during development (when DEBUG = True)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

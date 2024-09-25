@@ -22,14 +22,14 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: 'http://127.0.0.1:8000/setup_auth/api/register/', // Ensure this matches the actual URL
+            url: '/setup_auth/api/register/', // Ensure this matches the actual URL
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function(response) {
                 if (response.success) {
                     alert(response.message);
-                    window.location.href = 'http://127.0.0.1:8000/setup_auth'; // Redirect or update the UI as needed
+                    window.location.href = '/setup_auth'; // Redirect or update the UI as needed
                 } else {
                     alert('Error: ' + response.message);
                 }

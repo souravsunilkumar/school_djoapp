@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID;
+    let currentIndex = 0;
+    let debounceTimeout;
+
     // Function to fetch event banners
     function loadEventBanners() {
         $.ajax({
@@ -15,10 +23,16 @@ $(document).ready(function () {
                 const sliderWrapper = $('<div class="slider-wrapper"></div>');
                 bannerSlider.append(sliderWrapper);
 
+                // Create left and right arrows for navigation
+                const leftArrow = $('<div class="arrow left-arrow">&#10094;</div>');
+                const rightArrow = $('<div class="arrow right-arrow">&#10095;</div>');
+                bannerSlider.append(leftArrow);
+                bannerSlider.append(rightArrow);
+
                 // Loop through banners and append to the slider wrapper
-                banners.forEach(banner => {
+                banners.forEach((banner, index) => {
                     const bannerItem = $(`
-                        <div class="banner-item" data-event-id="${banner.event_id}">
+                        <div class="banner-item" data-event-id="${banner.event_id}" data-index="${index}">
                             <img src="${banner.banner_image_url}" alt="${banner.banner_title}" />
                             <h3>${banner.banner_title}</h3>
                         </div>
@@ -30,40 +44,95 @@ $(document).ready(function () {
                         const eventId = $(this).data('event-id');
                         window.location.href = `/events/event_details/?id=${eventId}`;
                     });
+
+                    // Drag events for manual sliding
+                    bannerItem.on('mousedown touchstart', touchStart);
+                    bannerItem.on('mousemove touchmove', touchMove);
+                    bannerItem.on('mouseup touchend', touchEnd);
+                    bannerItem.on('mouseleave', touchEnd);
                 });
 
-                // Initialize automatic sliding
-                let currentIndex = 0;
-                const totalBanners = banners.length;
+                // Add click event for navigation arrows
+                leftArrow.on('click', function () {
+                    slideTo(currentIndex - 1);
+                });
 
-                // Clone the first banner and append it to the end of the slider
-                const firstBannerClone = sliderWrapper.children().first().clone();
-                sliderWrapper.append(firstBannerClone);
+                rightArrow.on('click', function () {
+                    slideTo(currentIndex + 1);
+                });
 
-                // Function to slide the banners in one direction
-                function slideBanners() {
-                    currentIndex++;
-
-                    // Apply the slide effect
-                    const translateXValue = -(currentIndex * 100); // Calculate the translation value
-                    sliderWrapper.css('transform', `translateX(${translateXValue}%)`);
-
-                    // If we're at the last slide (which is the clone), reset to the first slide
-                    if (currentIndex === totalBanners) {
-                        setTimeout(function () {
-                            sliderWrapper.css('transition', 'none'); // Disable the transition
-                            currentIndex = 0; // Reset to the first banner
-                            sliderWrapper.css('transform', `translateX(0%)`); // Reset position
-                        }, 500); // Wait for the current transition to finish before resetting
-
-                        setTimeout(function () {
-                            sliderWrapper.css('transition', 'transform 0.5s ease-in-out'); // Re-enable the transition
-                        }, 600); // Re-enable the transition after the reset
-                    }
+                // Function to handle manual sliding
+                function slideTo(index) {
+                    const totalBanners = banners.length;
+                    currentIndex = (index + totalBanners) % totalBanners; // Wrap the index
+                    currentTranslate = -(currentIndex * 100);
+                    sliderWrapper.css('transform', `translateX(${currentTranslate}%)`);
+                    prevTranslate = currentTranslate; // Update previous translate value
                 }
 
-                // Set an interval to automatically slide banners every 3 seconds
-                setInterval(slideBanners, 3000);
+                // Touch/Mouse event handlers
+                function touchStart(event) {
+                    isDragging = true;
+                    startPos = getPositionX(event);
+                    animationID = requestAnimationFrame(animation);
+                }
+
+                function touchMove(event) {
+                    if (!isDragging) return;
+                    const currentPosition = getPositionX(event);
+                    currentTranslate = prevTranslate + currentPosition - startPos;
+                }
+
+                function touchEnd() {
+                    isDragging = false;
+                    cancelAnimationFrame(animationID);
+
+                    const movedBy = currentTranslate - prevTranslate;
+
+                    if (movedBy < -50 && currentIndex < banners.length - 1) {
+                        slideTo(currentIndex + 1);
+                    } else if (movedBy > 50 && currentIndex > 0) {
+                        slideTo(currentIndex - 1);
+                    } else {
+                        slideTo(currentIndex); // Return to original position if not dragged enough
+                    }
+
+                    // Update previous translate value for future moves
+                    prevTranslate = currentTranslate;
+
+                    // Reset debounce timeout for automatic sliding after manual slide
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(startAutoSlide, 3000);
+                }
+
+                function getPositionX(event) {
+                    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+                }
+
+                function animation() {
+                    sliderWrapper.css('transform', `translateX(${currentTranslate}px)`);
+                    if (isDragging) requestAnimationFrame(animation);
+                }
+
+                // Automatic sliding every 3 seconds
+                function startAutoSlide() {
+                    clearInterval(autoSlideInterval); // Clear any existing interval
+                    autoSlideInterval = setInterval(function () {
+                        if (!isDragging) {
+                            slideTo(currentIndex + 1);
+                        }
+                    }, 3000);
+                }
+
+                // Start automatic sliding
+                let autoSlideInterval = setInterval(function () {
+                    if (!isDragging) {
+                        slideTo(currentIndex + 1);
+                    }
+                }, 3000);
+
+                // Start auto-slide timeout after manual interaction
+                debounceTimeout = setTimeout(startAutoSlide, 3000);
             }
         });
     }
@@ -71,10 +140,10 @@ $(document).ready(function () {
     // Function to load all events into the table
     function loadAllEvents() {
         $.ajax({
-            url: '/events/all_events/',  // Endpoint to fetch all events
+            url: '/events/all_events/',
             method: 'GET',
             success: function (response) {
-                const events = response.events; // Accessing the events from the response
+                const events = response.events;
                 const eventTableBody = $('#event-table tbody');
                 eventTableBody.empty(); // Clear existing rows
 
@@ -86,8 +155,8 @@ $(document).ready(function () {
                         <td>${event.description}</td>
                         <td>${event.event_date}</td>
                         <td>
-                            <button class="edit-event">Edit</button>
-                            <button class="delete-event">Delete</button>
+                            <button class="edit-button">Edit</button>
+                            <button class="delete-button">Delete</button>
                         </td>
                     </tr>
                 `);
@@ -95,20 +164,20 @@ $(document).ready(function () {
                 });
 
                 // Add click event listeners for edit and delete buttons
-                $('.edit-event').on('click', function () {
+                $('.edit-button').on('click', function () {
                     const eventId = $(this).closest('tr').data('event-id');
-                    window.location.href = `/events/edit_event_page?id=${eventId}`; // Redirect to edit page
+                    window.location.href = `/events/edit_event_page?id=${eventId}`;
                 });
 
-                $('.delete-event').on('click', function () {
+                $('.delete-button').on('click', function () {
                     const eventId = $(this).closest('tr').data('event-id');
                     if (confirm('Are you sure you want to delete this event?')) {
                         $.ajax({
-                            url: `/events/delete_event/${eventId}/`, // Delete endpoint
+                            url: `/events/delete_event/${eventId}/`,
                             method: 'DELETE',
                             success: function () {
                                 alert('Event deleted successfully!');
-                                loadAllEvents(); // Refresh the event table
+                                loadAllEvents();
                             },
                             error: function () {
                                 alert('Error deleting event. Please try again.');
@@ -122,6 +191,7 @@ $(document).ready(function () {
             }
         });
     }
+
     // Call the functions to load banners and all events when the page is ready
     loadEventBanners();
     loadAllEvents();

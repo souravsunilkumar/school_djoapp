@@ -103,11 +103,10 @@ def all_events(request):
 
 
 
-
 def get_event_details(request, event_id):
     try:
         event = Event.objects.get(event_id=event_id)
-        media_files = event.media.all().values('id', 'media_file')
+        media_files = event.media.all().values('id', 'media_file', 'youtube_link')  
         event_data = {
             'event_id': event.event_id,
             'title': event.title,
@@ -165,13 +164,27 @@ def update_event(request, event_id):
 
         event.save()  # Save the event first
 
-        # Handle file upload for additional media images
-        if request.FILES.getlist('media_files'):
-            media_files = request.FILES.getlist('media_files')
-            for media_file in media_files:
-                EventMedia.objects.create(event=event, media_file=media_file)
+        # Update EventBanner and EventNotification with the new title
+        event.banners.update(banner_title=event.title)  # Update all banners related to this event
+        event.notifications.update(title=event.title)  # Update all notifications related to this event
 
-        event.save()  # Save the event again
+        # Handle file upload for additional media images and YouTube links
+        media_files = request.FILES.getlist('media_files')
+        youtube_links = json.loads(request.POST.get('youtube_links', '[]'))  # Get list of YouTube links
+
+        # Update existing media or create new ones
+        existing_media = EventMedia.objects.filter(event=event)
+
+        # Update existing media with new YouTube links
+        for index, media in enumerate(existing_media):
+            if index < len(youtube_links):
+                media.youtube_link = youtube_links[index]  # Update YouTube link
+            media.save()  # Save changes to existing media
+
+        # Create new media files for any additional uploads
+        for index in range(len(existing_media), len(media_files)):
+            EventMedia.objects.create(event=event, media_file=media_files[index], youtube_link=youtube_links[index] if index < len(youtube_links) else None)
+
         return JsonResponse({'message': 'Event updated successfully!'})
     except Event.DoesNotExist:
         return HttpResponseNotFound('Event not found.')

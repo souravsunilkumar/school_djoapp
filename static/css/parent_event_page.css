@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    color: #2d3e50;
+}
+
+#events-container {
+    margin-top: 20px;
+}
+
+.event-banners {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.banner-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.banner-image {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.banner-title {
+    font-size: 16px;
+    font-weight: bold;
+}

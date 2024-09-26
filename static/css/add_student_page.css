@@ -1,0 +1,171 @@
+/* General Body Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e0e0f8;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main Container */
+h1 {
+    color: #00adb5;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.container {
+    background-color: #16213e;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 100%;
+}
+
+label {
+    font-size: 1.1rem;
+    color: #00adb5;
+    display: block;
+    margin-bottom: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #0f3460;
+    border: none;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 173, 181, 0.6);
+}
+
+select:disabled {
+    background-color: #394867;
+    cursor: not-allowed;
+}
+
+/* Smooth transitions between sections */
+#class-division-select, #student-select, #link-student-btn {
+    display: none;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+#school-select.selected ~ #class-division-select {
+    display: block;
+    opacity: 1;
+}
+
+#class-division-select.selected ~ #student-select {
+    display: block;
+    opacity: 1;
+}
+
+#student-select.selected ~ #link-student-btn {
+    display: block;
+    opacity: 1;
+}
+
+/* Button Styling */
+#link-student-btn {
+    background-color: #00adb5;
+    color: #ffffff;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#link-student-btn:hover {
+    background-color: #00ced6;
+    transform: translateY(-2px);
+}
+
+#link-student-btn:disabled {
+    background-color: #394867;
+    cursor: not-allowed;
+}
+
+/* Advanced effects for focus and interaction */
+select:hover {
+    border: 1px solid #00adb5;
+    box-shadow: 0 4px 8px rgba(0, 173, 181, 0.3);
+}
+
+select:focus {
+    box-shadow: 0 0 10px rgba(0, 173, 181, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    select, #link-student-btn {
+        font-size: 0.9rem;
+    }
+}
+
+/* Subtle glow effect for the container */
+.container {
+    background: #0f3460;
+    position: relative;
+    padding: 40px;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, #00adb5, #00ced6, #0f3460, #16213e);
+    background-size: 400%;
+    z-index: 1;
+    animation: animateGlow 10s ease-in-out infinite;
+    opacity: 0.1;
+    border-radius: 10px;
+}
+
+@keyframes animateGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Additional styling for input focus and transitions */
+select, #link-student-btn {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}

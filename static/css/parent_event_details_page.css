@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+.event-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.event-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.event-feature-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+#media-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2em;
+    margin: 20px 0;
+    color: #2980b9;
+}
+
+
+
+
+.youtube-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+}
+
+#image-gallery {
+    display: flex;
+    flex-direction: column; /* Change to column for downward layout */
+    align-items: center; /* Center align items */
+    margin-top: 20px;
+}
+
+.event-media-image {
+    width: 100%; /* Use full width of the container */
+    max-width: 600px; /* Limit width to prevent stretching */
+    height: auto; /* Keep aspect ratio */
+    margin: 10px 0; /* Add margin for spacing */
+    border-radius: 10px;
+    object-fit: contain; /* Prevent cropping and maintain aspect ratio */
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.event-media-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    .event-media-image {
+        width: 90%;
+    }
+
+    #media-container {
+        margin: 10px 0;
+    }
+
+    .youtube-player {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.5em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    .event-container {
+        padding: 10px;
+    }
+}

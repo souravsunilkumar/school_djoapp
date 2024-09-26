@@ -25,6 +25,19 @@ urlpatterns = [
     path('assignment_page/', assignment_page, name='assignment_page'),
     path('parent_assignment_notifications/', parent_assignment_notifications, name='assignment_notifications'),
     path('assignment_details/<int:assignment_id>/', assignment_details, name='assignment_details'),
-    
+
+    path('add_student_page/', add_student_page, name='add_student_page'),
+    path('get_schools/', get_schools, name='get_schools'),
+    path('get_classes_and_divisions/<int:school_id>/', get_classes_and_divisions, name='get_classes_and_divisions'),
+    path('get_students/<int:school_id>/<str:class_division>/', get_students, name='get_students'),
+    path('link_student/', link_student, name='link_student'),
+    path('parent_event_page/', parent_event_page, name='parent_event_page'),
+    path('get_event_banners/', get_event_banners, name='get_event_banners'),
+
+    path('parent_event_details_page/', parent_event_details_page, name='get_event_banners'),
+    path('get_event_details/<int:event_id>/', get_event_details, name='get_event_details'),
+
+
+
     
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

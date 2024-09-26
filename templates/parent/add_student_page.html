@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_student_page.js"></script>
+    <link rel="stylesheet" href="/static/css/add_student_page.css">
+</head>
+<body>
+    <h1>Add Student</h1>
+
+    <!-- Step 1: Select School -->
+    <label for="school-select">Select School:</label>
+    <select id="school-select">
+        <option value="">Select School</option>
+    </select><br>
+
+    <!-- Step 2: Select Class and Division -->
+    <label for="class-division-select">Select Class and Division:</label>
+    <select id="class-division-select" disabled>
+        <option value="">Select Class and Division</option><br>
+    </select><br>
+
+    <!-- Step 3: Select Student -->
+    <label for="student-select">Select Student:</label>
+    <select id="student-select" disabled>
+        <option value="">Select Student</option>
+    </select><br>
+
+    <button id="link-student-btn" disabled>Link Student</button><br>
+
+    <!-- Hidden input field for CSRF token -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+</body>
+</html>

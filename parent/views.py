@@ -449,3 +449,132 @@ def assignment_details(request, assignment_id):
         })
 
     return JsonResponse(response_data)
+
+
+
+
+
+def  add_student_page(request): 
+    return render(request,'parent/add_student_page.html')
+
+def get_schools(request):
+    schools = School.objects.all()
+    school_data = [{"school_id": school.school_id, "school_name": school.school_name} for school in schools]
+    return JsonResponse({"schools": school_data})
+
+def get_classes_and_divisions(request, school_id):
+    students = Student.objects.filter(school_id=school_id)
+    class_division_data = list(set(f"{student.class_assigned} - {student.division_assigned}" for student in students))
+    return JsonResponse({"classes": class_division_data})
+
+def get_students(request, school_id, class_division):
+    class_assigned, division_assigned = class_division.split(' - ')
+    students = Student.objects.filter(
+        school_id=school_id,
+        class_assigned=class_assigned,
+        division_assigned=division_assigned
+    )
+    student_data = [{"id": student.id, "first_name": student.first_name, "last_name": student.last_name} for student in students]
+    return JsonResponse({"students": student_data})
+
+@csrf_exempt
+def link_student(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+
+        # Get the parent for the currently logged-in user
+        parent = get_object_or_404(Parent, user=request.user)
+        student = get_object_or_404(Student, id=student_id)
+
+        # Link the student to the logged-in parent
+        parent.students.add(student)
+        parent.save()
+
+        return JsonResponse({"message": "Student linked successfully!"})
+    
+    # If the request is not POST, return a bad request response
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+def parent_event_page(request): 
+    return render(request,'parent/parent_event_page.html')
+
+def get_event_banners(request):
+    parent = Parent.objects.get(user=request.user)  # Get the logged-in parent
+    students = parent.students.all()  # Get all the students linked to the parent
+
+    # Dictionary to store school-wise events
+    school_events = {}
+
+    for student in students:
+        school = student.school
+
+        if school.school_id not in school_events:
+            # Get all events and banners for the school
+            events = Event.objects.filter(school=school).prefetch_related('banners')
+
+            # Store event details for the school
+            school_events[school.school_id] = {
+                'school_name': school.school_name,
+                'student_name': f"{student.first_name} {student.last_name}",
+                'events': []
+            }
+
+        # Add event details with their banners
+        for event in events:
+            school_events[school.school_id]['events'].append({
+                'event_id': event.event_id,  # Ensure event_id is included
+                'event_title': event.title,
+                'event_date': event.event_date,
+                'banners': [{
+                    'banner_title': banner.banner_title,
+                    'banner_image': banner.banner_image.url
+                } for banner in event.banners.all()]
+            })
+
+    # Prepare the response data
+    response_data = {
+        'school_events': list(school_events.values())
+    }
+
+    return JsonResponse(response_data)
+
+def parent_event_details_page(request): 
+    return render(request,'parent/parent_event_details_page.html')
+
+
+def get_event_details(request, event_id):
+    try:
+        # Fetch the event by its ID
+        event = Event.objects.get(pk=event_id)
+
+        # Fetch related media for the event
+        media_files = EventMedia.objects.filter(event=event)
+
+        # Prepare media data to include both media file and YouTube link
+        media_data = []
+        for media in media_files:
+            if media.media_file:
+                media_data.append({
+                    'type': 'file',
+                    'file': media.media_file.url
+                })
+            if media.youtube_link:
+                media_data.append({
+                    'type': 'youtube',
+                    'link': media.youtube_link
+                })
+
+        # Prepare response data
+        response_data = {
+            'title': event.title,
+            'description': event.description,
+            'event_date': event.event_date,
+            'feature_image': event.feature_image.url if event.feature_image else None,
+            'media': media_data
+        }
+
+        return JsonResponse(response_data)
+
+    except Event.DoesNotExist:
+        return JsonResponse({'error': 'Event not found'}, status=404)

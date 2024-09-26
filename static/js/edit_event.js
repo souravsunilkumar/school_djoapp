@@ -27,6 +27,7 @@ $(document).ready(function() {
                     $('#media-list').append(`
                         <li>
                             <img src="${mediaUrl}" alt="Media Image" style="max-width: 100px; margin-right: 10px;">
+                            <input type="url" class="youtube-link" placeholder="YouTube Link" value="${media.youtube_link || ''}"> <!-- Populate YouTube link -->
                             <button class="delete-media" data-media-id="${media.id}">Delete</button>
                         </li>
                     `);
@@ -44,6 +45,14 @@ $(document).ready(function() {
 
         const formData = new FormData(this);
         const csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+
+        // Gather YouTube links to include in the form data
+        const youtubeLinks = [];
+        $('.youtube-link').each(function() {
+            youtubeLinks.push($(this).val());
+        });
+
+        formData.append('youtube_links', JSON.stringify(youtubeLinks)); // Append YouTube links to FormData
 
         $.ajax({
             url: `/events/update_event/${eventId}/`,

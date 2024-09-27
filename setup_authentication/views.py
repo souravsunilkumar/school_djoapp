@@ -117,7 +117,7 @@ def user_login(request):
 
 
 def admin_dashboard(request):
-    return render(request, 'admin_dashboard.html')
+    return render(request, 'administrator/admin_dashboard.html')
 
 def sub_admin_dashboard(request): 
     return render(request,'sub_admin_dashboard.html')

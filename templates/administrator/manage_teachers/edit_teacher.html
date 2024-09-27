@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Teacher</title>
+    <link rel="stylesheet" href="">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Edit Teacher Details</h1>
+    <form id="edit-teacher-form" method="POST">
+        <input type="hidden" name="csrfmiddlewaretoken" id="csrf-token" value="{{ csrf_token }}">
+        <input type="hidden" name="teacher_id" id="teacher_id" value="{{ teacher.id }}">
+        <div>
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" id="first_name" value="{{ teacher.first_name }}" required>
+        </div>
+        <div>
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name" value="{{ teacher.last_name }}" required>
+        </div>
+        <div>
+            <label for="class_assigned">Class Assigned:</label>
+            <input type="text" name="class_assigned" id="class_assigned" value="{{ class_teacher.class_assigned }}">
+        </div>
+        <div>
+            <label for="division_assigned">Division Assigned:</label>
+            <input type="text" name="division_assigned" id="division_assigned" value="{{ class_teacher.division_assigned }}">
+        </div>
+        <button type="submit">Update Teacher</button>
+    </form>
+    <div id="confirmation-modal" style="display:none;">
+        <p id="modal-message"></p>
+        <button id="confirm-button">Yes</button>
+        <button id="cancel-button">No</button>
+    </div>
+    <script src="/static/js/edit_teacher.js"></script>
+</body>
+</html>

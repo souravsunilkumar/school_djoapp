@@ -432,7 +432,11 @@ def assignment_details(request, assignment_id):
     parent = get_object_or_404(Parent, user=request.user)
 
     # Retrieve students linked to the logged-in parent who belong to the class and division of the assignment
-    students = parent.students.filter(class_assigned=assignment.class_assigned, division_assigned=assignment.division_assigned)
+    students = parent.students.filter(
+        school=assignment.school, 
+        class_assigned=assignment.class_assigned, 
+        division_assigned=assignment.division_assigned
+    )
 
     # Prepare the response data
     response_data = {
@@ -446,22 +450,27 @@ def assignment_details(request, assignment_id):
 
     # Populate student data with actual submission status and marks
     for student in students:
-        # Check if a submission exists for this student and assignment
-        submission = StudentAssignmentSubmission.objects.filter(assignment=assignment, student=student).first()
+        # Check if the student's school, class, and division match the assignment
+        if (student.school == assignment.school and
+            student.class_assigned == assignment.class_assigned and
+            student.division_assigned == assignment.division_assigned):
+            
+            # Check if a submission exists for this student and assignment
+            submission = StudentAssignmentSubmission.objects.filter(assignment=assignment, student=student).first()
 
-        if submission and submission.is_submitted:
-            status = "submitted"
-            marks = f"{submission.marks_obtained}/{submission.total_marks}" if submission.marks_obtained is not None else "0"
-        else:
-            status = "not submitted"
-            marks = "0"
+            if submission and submission.is_submitted:
+                status = "submitted"
+                marks = f"{submission.marks_obtained}/{submission.total_marks}" if submission.marks_obtained is not None else "0"
+            else:
+                status = "not submitted"
+                marks = "0"
 
-        # Append the student data to the response
-        response_data["students"].append({
-            "name": f"{student.first_name} {student.last_name}",
-            "submitted": status,
-            "marks": marks
-        })
+            # Append the student data to the response
+            response_data["students"].append({
+                "name": f"{student.first_name} {student.last_name}",
+                "submitted": status,
+                "marks": marks
+            })
 
     return JsonResponse(response_data)
 

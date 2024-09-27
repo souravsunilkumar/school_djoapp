@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/admin_student_attendance_page.js"></script>
+</head>
+<body>
+    <h1>Student Attendance</h1>
+    
+    <!-- Display Student Name -->
+    <h2 id="student-name">{{ student.first_name }} {{ student.last_name }}</h2>
+
+    <label for="from-date">From Date:</label>
+    <input type="date" id="from-date">
+    
+    <label for="to-date">To Date:</label>
+    <input type="date" id="to-date">
+
+    <button id="fetch-attendance">Fetch Attendance</button>
+
+    <table id="attendance-table" border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Reason (if absent)</th>
+            </tr>
+        </thead>
+        <tbody id="attendance-list">
+            <!-- Attendance details will be populated here -->
+        </tbody>
+    </table>
+
+    <div id="no-attendance-message" style="display: none; margin-top: 20px; color: red;">
+        No attendance data found.
+    </div>
+
+    <script>
+        // Set student ID from Django context
+        const studentId = '{{ student.id }}'; // Use student ID passed from the context
+    </script>
+</body>
+</html>

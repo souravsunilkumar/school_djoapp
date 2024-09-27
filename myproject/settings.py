@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'parent',
     'rest_framework',
     'events',
+    'admin_management',
     
 ]
 

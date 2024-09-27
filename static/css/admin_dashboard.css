@@ -107,6 +107,23 @@ a[href="/events/events_page/"]:hover {
     background-color: #cc6300; /* Change background on hover */
 }
 
+a[href="/admin_management/school_management"] {
+    background-color: #078993;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+a[href="/admin_management/school_management"]:hover {
+    background-color: #095355; /* Change background on hover */
+}
+
 /* Layout and Responsiveness */
 @media (max-width: 600px) {
     h1 {

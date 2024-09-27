@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/admin_manage_students.js"></script>
+</head>
+<body>
+    <h1>Manage Students</h1>
+    
+    <label for="class-select">Select Class:</label>
+    <select id="class-select">
+        <option value="" selected disabled>Select class</option>
+        <!-- Classes will be populated dynamically -->
+    </select>
+    
+    <table id="students-table" border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Roll Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="students-list">
+            <!-- Students and their buttons will be displayed here -->
+        </tbody>
+    </table>
+
+    <div id="no-students-message" style="display: none; margin-top: 20px; color: red;">
+        No students added to the class.
+    </div>
+</body>
+</html>

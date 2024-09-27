@@ -24,6 +24,7 @@ class School_admin(models.Model):
     school_admin_first_name = models.CharField(max_length=50, null=True)
     school_admin_last_name = models.CharField(max_length=50, null=True)
     school_admin_username = models.CharField(max_length=15, null=True)  # Added field
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

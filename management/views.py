@@ -39,7 +39,7 @@ def get_teachers(request):
 
 def teacher_dashboard(request):
     """Render the teacher dashboard."""
-    return render(request, "teacher_dashboard.html")
+    return render(request, "teacher/teacher_dashboard.html")
 
 
 def teacher_dashboard_data(request):

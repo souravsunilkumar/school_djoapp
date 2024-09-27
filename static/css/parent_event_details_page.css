@@ -1,126 +1,158 @@
-* {
-    box-sizing: border-box;
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fc;
     margin: 0;
     padding: 0;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
     color: #333;
+    text-align: center;
 }
 
 .event-container {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
-    background: white;
+    background-color: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.event-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+/* Event Title */
+h1#event-title {
+    font-size: 3rem;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: color 0.3s ease-in-out;
 }
 
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    color: #2c3e50;
-    text-align: center;
+h1#event-title:hover {
+    color: #2563eb;
 }
 
+/* Feature Image */
 .event-feature-image {
     width: 100%;
     height: auto;
-    border-radius: 10px;
+    max-height: 600px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.event-feature-image:hover {
+    transform: scale(1.05);
+}
+
+/* Event Description and Date */
+p {
+    font-size: 1.25rem;
+    color: #555;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+#event-date {
+    font-style: italic;
+    color: #6b7280;
+}
+
+/* Media Section */
+#media-container {
+    margin-top: 40px;
+}
+
+#media-container h2 {
+    font-size: 2rem;
+    color: #1e40af;
     margin-bottom: 20px;
 }
 
-p {
-    font-size: 1.2em;
-    line-height: 1.5;
-    margin: 10px 0;
-}
-
-#media-container {
-    margin-top: 20px;
-    text-align: center;
-}
-
-h2 {
-    font-size: 2em;
-    margin: 20px 0;
-    color: #2980b9;
-}
-
-
-
-
-.youtube-player iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 10px;
-}
-
-#image-gallery {
+#youtube-container, #image-gallery {
     display: flex;
-    flex-direction: column; /* Change to column for downward layout */
-    align-items: center; /* Center align items */
-    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.youtube-player {
+    max-width: 100%;
+    width: 560px;
+    height: 315px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .event-media-image {
-    width: 100%; /* Use full width of the container */
-    max-width: 600px; /* Limit width to prevent stretching */
-    height: auto; /* Keep aspect ratio */
-    margin: 10px 0; /* Add margin for spacing */
-    border-radius: 10px;
-    object-fit: contain; /* Prevent cropping and maintain aspect ratio */
-    transition: transform 0.3s;
-    cursor: pointer;
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
 .event-media-image:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2em;
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .event-container {
+        padding: 15px;
     }
 
-    .event-media-image {
-        width: 90%;
+    h1#event-title {
+        font-size: 2.5rem;
     }
 
-    #media-container {
-        margin: 10px 0;
+    p {
+        font-size: 1.15rem;
+    }
+
+    #youtube-container, #image-gallery {
+        flex-direction: column;
     }
 
     .youtube-player {
         width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    h1#event-title {
+        font-size: 2rem;
+    }
+
+    .event-feature-image {
+        max-height: 400px;
+    }
+
+    .event-media-image {
+        max-height: 300px;
     }
 }
 
 @media (max-width: 480px) {
-    h2 {
-        font-size: 1.5em;
+    h1#event-title {
+        font-size: 1.75rem;
     }
 
     p {
-        font-size: 1em;
+        font-size: 1rem;
     }
 
-    .event-container {
-        padding: 10px;
+    .event-feature-image {
+        max-height: 250px;
+    }
+
+    .event-media-image {
+        max-height: 200px;
     }
 }

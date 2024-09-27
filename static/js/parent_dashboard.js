@@ -93,13 +93,21 @@ $(document).ready(function () {
                 if (data.notifications.length > 0) {
                     const notificationsToShow = data.notifications.slice(0, 5); // Get the last five notifications
                     notificationsToShow.forEach(function (notification) {
-                        const redirectUrl = notification.is_absent ? '/parent/absent_page/' : '/parent/assignment_page/';
+                        let redirectUrl;
+                    if (notification.is_absent) {
+                        redirectUrl = '/parent/absent_page/';
+                    } else if (notification.type === 'event') {
+                        redirectUrl = '/parent/parent_event_page/'; // Update to point to event page
+                    } else {
+                        redirectUrl = '/parent/assignment_page/';
+                    }
+
                         $('#notification_message').append(`
-                    <div class="notification-item">
-                        <p>${notification.message}</p>
-                        <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
-                    </div>
-                `);
+                        <div class="notification-item">
+                            <p>${notification.message}</p>
+                            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+                        </div>
+                    `);
                     });
 
                     // Show the "Show Earlier Notifications" button if there are more than 5 notifications
@@ -115,7 +123,6 @@ $(document).ready(function () {
             }
         });
     });
-
     // Show earlier notifications when the button is clicked
     $('#show_more_notifications_btn').on('click', function () {
         const allNotifications = $(this).data('notifications');

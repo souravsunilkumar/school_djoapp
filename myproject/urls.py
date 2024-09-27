@@ -19,10 +19,12 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from setup_authentication.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='auth_home'),
     path('attendance/', include('attendance.urls')),
     path('setup_auth/', include('setup_authentication.urls')),
     path('progress/', include('student_progress.urls')),

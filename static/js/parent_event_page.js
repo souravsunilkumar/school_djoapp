@@ -11,7 +11,7 @@ $(document).ready(function () {
                 
                 // Loop through each school
                 schoolEvents.forEach(function (schoolEvent) {
-                    eventsContainer.append(`<h2>Events of ${schoolEvent.school_name} - School of ${schoolEvent.student_name}</h2>`);
+                    eventsContainer.append(`<h2>Events of ${schoolEvent.school_name}</h2>`);
                     
                     schoolEvent.events.forEach(function (event) {
                         let bannersHtml = '<div class="event-banners">';

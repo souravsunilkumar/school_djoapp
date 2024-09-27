@@ -321,6 +321,7 @@ class EventNotification(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='notifications')  # ForeignKey to Event
     title = models.CharField(max_length=100)
     is_read = models.BooleanField(default=False)
+    type = models.CharField(max_length=20, default='event')
 
     def __str__(self):
         return self.title

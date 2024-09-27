@@ -113,12 +113,16 @@ def parent_notifications(request):
     # Fetch absence notifications
     absence_notifications = Notification.objects.filter(parent=parent).order_by('-timestamp')
 
-    # Fetch assignment notifications for students linked to this parent
+    # Fetch notifications for students linked to this parent
     assignment_notifications = AssignmentNotification.objects.filter(
         class_assigned__in=[student.class_assigned for student in students],
         division_assigned__in=[student.division_assigned for student in students],
         school=parent.school
     ).order_by('-date_sent')
+
+    # Fetch event notifications for the school linked to students of the parent
+    student_schools = students.values_list('school', flat=True).distinct()
+    event_notifications = EventNotification.objects.filter(school__in=student_schools).order_by('-event_notification_id')
 
     # Absence notification data
     notification_data = [
@@ -127,10 +131,10 @@ def parent_notifications(request):
             'message': notification.message,
             'timestamp': notification.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
             'is_read': notification.is_read,
-            'student_name': notification.student_name,  # Assuming you have a method to get student full name
-            'student_id': notification.student.id if notification.student else None,  # Include student ID
+            'student_name': notification.student_name,
+            'student_id': notification.student.id if notification.student else None,
             'date': notification.absence_date.strftime('%Y-%m-%d') if notification.absence_date else None,
-            'is_absent': notification.type == 'absent'  # Adjust this based on how you categorize notifications
+            'is_absent': notification.type == 'absent'
         }
         for notification in absence_notifications
     ]
@@ -141,16 +145,27 @@ def parent_notifications(request):
             'id': assignment.notification_id,
             'message': f"{assignment.teacher.first_name} {assignment.teacher.last_name} has added an assignment for {assignment.subject}. Due date: {assignment.assignment.due_date}",
             'timestamp': assignment.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
-            'is_read': False,  # Assuming assignment notifications are unread initially
+            'is_read': False,
             'class_assigned': assignment.class_assigned,
             'division_assigned': assignment.division_assigned,
-            
         }
         for assignment in assignment_notifications
     ]
 
-    # Combine absence and assignment notifications
-    combined_notifications = notification_data + assignment_notification_data
+    # Event notification data
+    event_notification_data = [
+        {
+            'id': event_notification.event_notification_id,
+            'message': event_notification.title,
+            'timestamp': event_notification.event.event_date.strftime('%Y-%m-%d %H:%M:%S'),  # Assuming event has a date field
+            'is_read': False,  # Assuming event notifications are unread initially
+            'type': event_notification.type,
+        }
+        for event_notification in event_notifications
+    ]
+
+    # Combine all notifications
+    combined_notifications = notification_data + assignment_notification_data + event_notification_data
     combined_notifications.sort(key=lambda x: x['timestamp'], reverse=True)  # Sort by timestamp
 
     return JsonResponse({'notifications': combined_notifications})
@@ -506,19 +521,28 @@ def get_event_banners(request):
     # Dictionary to store school-wise events
     school_events = {}
 
+    # Set to track processed schools to avoid duplicates
+    processed_schools = set()
+
     for student in students:
         school = student.school
 
-        if school.school_id not in school_events:
-            # Get all events and banners for the school
-            events = Event.objects.filter(school=school).prefetch_related('banners')
+        # If the school has already been processed, skip it
+        if school.school_id in processed_schools:
+            continue
 
-            # Store event details for the school
-            school_events[school.school_id] = {
-                'school_name': school.school_name,
-                'student_name': f"{student.first_name} {student.last_name}",
-                'events': []
-            }
+        # Mark the school as processed
+        processed_schools.add(school.school_id)
+
+        # Get all events and banners for the school
+        events = Event.objects.filter(school=school).prefetch_related('banners')
+
+        # Store event details for the school
+        school_events[school.school_id] = {
+            'school_name': school.school_name,
+            'student_name': f"{student.first_name} {student.last_name}",
+            'events': []
+        }
 
         # Add event details with their banners
         for event in events:

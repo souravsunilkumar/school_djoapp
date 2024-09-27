@@ -76,9 +76,9 @@ $(document).ready(function() {
                     data.attendance_list.forEach(function(att) {
                         const studentRow = `
                             <tr>
+                                <td>${att.student.first_name} ${att.student.last_name}</td>
                                 <td>${att.student.admission_number}</td>
                                 <td>${att.student.roll_number}</td>
-                                <td>${att.student.first_name} ${att.student.last_name}</td>
                                 <td>${att.student.class_assigned}</td>
                                 <td>${att.student.division_assigned}</td>
                                 ${att.attendance.map(entry => `<td>${entry.status}</td>`).join('')}

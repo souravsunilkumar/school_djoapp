@@ -367,3 +367,87 @@ def get_attendance(request):
         })
 
     return JsonResponse({'attendance_list': attendance_data})
+
+def admin_marks_page(request): 
+    return render(request, 'administrator/class_marks/admin_marks_page.html')
+
+@login_required
+def get_academic_years(request):
+    exams = Exam.objects.values_list('academic_year', flat=True).distinct()
+    assignments = Assignment.objects.values_list('academic_year', flat=True).distinct()
+    
+    # Combine and remove duplicates
+    academic_years = set(exams) | set(assignments)
+    
+    return JsonResponse({'academic_years': list(academic_years)})
+
+@login_required
+def get_student_marks(request):
+    academic_year = request.GET.get('academic_year')
+    class_assigned = request.GET.get('class_assigned')
+    division_assigned = request.GET.get('division_assigned')
+
+    # Fetch exam marks
+    marks = Marks.objects.filter(
+        exam__academic_year=academic_year,
+        class_assigned=class_assigned,
+        division_assigned=division_assigned
+    ).select_related('student', 'subject', 'exam')
+
+    # Format exam marks
+    marks_list = []
+    for mark in marks:
+        marks_list.append({
+            'student_name': f"{mark.student.first_name} {mark.student.last_name}",
+            'admission_number': mark.student.admission_number,
+            'roll_number': mark.student.roll_number,
+            'subject_name': mark.subject.subject_name,
+            'marks_obtained': mark.marks_obtained,
+            'total_marks': mark.out_of,
+            'exam_name': mark.exam.exam_name,
+            'type': 'exam'  # Indicate this is an exam mark
+        })
+
+    # Fetch assignment marks
+    assignment_marks = StudentAssignmentSubmission.objects.filter(
+        assignment__academic_year=academic_year,
+        student__class_assigned=class_assigned,
+        student__division_assigned=division_assigned
+    ).select_related('student', 'assignment')
+
+    # Group assignment marks by subject
+    assignment_dict = {}
+    for assignment_mark in assignment_marks:
+        key = (assignment_mark.student.admission_number, assignment_mark.student.roll_number, 
+               f"{assignment_mark.student.first_name} {assignment_mark.student.last_name}")
+        
+        if assignment_mark.assignment.subject not in assignment_dict:
+            assignment_dict[assignment_mark.assignment.subject] = {}
+        
+        if key not in assignment_dict[assignment_mark.assignment.subject]:
+            assignment_dict[assignment_mark.assignment.subject][key] = {}
+
+        assignment_dict[assignment_mark.assignment.subject][key][assignment_mark.assignment.title] = {
+            'marks_obtained': assignment_mark.marks_obtained,
+            'total_marks': assignment_mark.total_marks
+        }
+
+    # Prepare the final structured data for JSON response
+    final_marks_list = []
+    for subject, students in assignment_dict.items():
+        for key, assignments in students.items():
+            admission_number, roll_number, student_name = key
+            marks_entry = {
+                'subject_name': subject,
+                'admission_number': admission_number,
+                'roll_number': roll_number,
+                'student_name': student_name
+            }
+            # Include each assignment's marks in the entry
+            for assignment_title, marks in assignments.items():
+                marks_entry[assignment_title] = f"{marks['marks_obtained']}/{marks['total_marks']}"
+
+            final_marks_list.append(marks_entry)
+
+    # Combine exam and assignment marks
+    return JsonResponse({'marks': marks_list + final_marks_list})

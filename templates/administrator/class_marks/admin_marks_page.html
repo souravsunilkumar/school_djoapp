@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Marks Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/static/css/admin_marks_page.css">
+</head>
+<body>
+    <div class="container">
+        <h1>View Marks</h1>
+        <form id="marksForm">
+            <label for="academicYearSelect">Select Academic Year:</label>
+            <select id="academicYearSelect" name="academic_year" required>
+                <option value="" disabled selected>Select Academic Year</option>
+            </select>
+
+            <label for="classSelect">Select Class:</label>
+            <select id="classSelect" name="class_assigned" required>
+                <option value="" disabled selected>Select Class</option>
+            </select>
+
+            <label for="divisionSelect">Select Division:</label>
+            <select id="divisionSelect" name="division_assigned" required>
+                <option value="" disabled selected>Select Division</option>
+            </select>
+
+            <button type="submit">Get Marks</button>
+        </form>
+
+        <div id="examMarksContainer" style="display:none;">
+            <h2>Exam Marks</h2>
+            <div id="examMarks"></div>
+        </div>
+
+        <div id="assignmentMarksContainer" style="display:none;">
+            <h2>Student Assignment Marks</h2>
+            <div id="assignmentMarks"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/admin_marks_page.js"></script>
+</body>
+</html>

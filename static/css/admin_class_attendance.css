@@ -1,0 +1,135 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.date-range {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.date-range label {
+    flex: 1 1 100%;
+    margin: 10px 0;
+}
+
+.date-range select,
+.date-range input[type="date"],
+.date-range button {
+    flex: 1 1 45%; /* Adjusted for better responsiveness */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease;
+}
+
+.date-range select:focus,
+.date-range input[type="date"]:focus {
+    border-color: #00796b;
+    outline: none;
+}
+
+/* Table Styles */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+#attendanceTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#attendanceTable th,
+#attendanceTable td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    position: relative; /* For stacking contexts */
+    transition: background-color 0.3s ease;
+}
+
+#attendanceTable th {
+    background-color: #00796b; /* Header background color */
+    color: white; /* Text color */
+}
+
+.sticky-column-header {
+    position: sticky;
+    left: 0;
+    background-color: #00796b; /* Sticky header background color */
+    color: white; /* Text color */
+    z-index: 2; /* Higher z-index for sticky header */
+}
+
+#attendanceTable td:nth-child(1) { /* For Student Name column */
+    position: sticky;
+    left: 0;
+    background-color: white; /* Background color for sticky column */
+    z-index: 1; /* Lower z-index for sticky column */
+}
+
+#attendanceTable th:nth-child(1) { /* For Student Name header */
+    position: sticky;
+    left: 0;
+    background-color: #00796b; /* Ensure the header background color is set */
+    color: white; /* Ensure the text color is white */
+    z-index: 2; /* Higher z-index for sticky column header */
+}
+
+#attendanceTable tbody tr:hover {
+    background-color: #f1f1f1; /* Highlight on row hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .date-range {
+        flex-direction: column;
+    }
+
+    .date-range select,
+    .date-range input[type="date"],
+    .date-range button {
+        flex: 1 1 100%; /* Stack inputs on smaller screens */
+        margin: 10px 0;
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 10px; /* Adjust padding for smaller screens */
+        font-size: 14px; /* Smaller font for mobile devices */
+    }
+}
+
+@media (max-width: 480px) {
+    h1, h2 {
+        font-size: 1.5em; /* Smaller headings on very small screens */
+    }
+}

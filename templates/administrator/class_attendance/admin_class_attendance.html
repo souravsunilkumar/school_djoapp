@@ -5,52 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Attendance</title>
     <link rel="stylesheet" href="/static/css/admin_class_attendance.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>View Class Attendance</h1>
+    <div class="container">
+        <h1>Class Attendance</h1>
+        <form id="attendanceForm">
+            <div class="date-range">
+                <label for="classSelect">Select Class:</label>
+                <select id="classSelect" name="class_assigned" required>
+                    <option value="" disabled selected>Select Class</option>
+                </select>
 
-    <form id="attendanceForm">
-        <label for="classSelect">Select Class:</label>
-        <select id="classSelect" name="class_assigned" required>
-            <option value="" disabled selected>Select Class</option>
-            <!-- Options will be populated dynamically using JavaScript -->
-        </select><br>
+                <label for="divisionSelect">Select Division:</label>
+                <select id="divisionSelect" name="division_assigned" required>
+                    <option value="" disabled selected>Select Division</option>
+                </select>
 
-        <label for="divisionSelect">Select Division:</label>
-        <select id="divisionSelect" name="division_assigned" required>
-            <option value="" disabled selected>Select Division</option>
-            <!-- Options will be populated dynamically using JavaScript -->
-        </select><br>
+                <label for="startDate">From Date:</label>
+                <input type="date" id="startDate" name="start_date" required>
 
-        <label for="startDate">From Date:</label>
-        <input type="date" id="startDate" name="start_date" required><br>
+                <label for="endDate">To Date:</label>
+                <input type="date" id="endDate" name="end_date" required>
 
-        <label for="endDate">To Date:</label>
-        <input type="date" id="endDate" name="end_date" required><br>
+                <button type="submit">Get Attendance</button>
+            </div>
+        </form>
 
-        <button type="submit">Get Attendance</button>
-    </form>
-
-    <div id="attendanceReport">
-        <!-- Attendance data will be displayed here in a table -->
-        <table id="attendanceTable" border="1">
-            <thead>
-                <tr>
-                    <th>Admission Number</th>
-                    <th>Roll Number</th>
-                    <th>Student Name</th>
-                    <th>Class</th>
-                    <th>Division</th>
-                    <!-- Dates will be dynamically added here -->
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be dynamically populated here -->
-            </tbody>
-        </table>
+        <div id="report-section">
+            <h2>Attendance Report</h2>
+            <div class="table-wrapper">
+                <table id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th class="sticky-column-header">Student Name</th>
+                            <th>Admission Number</th>
+                            <th>Roll Number</th>
+                            <th>Class</th>
+                            <th>Division</th>
+                            <!-- Dates will be dynamically added here -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="/static/js/admin_class_attendance.js"></script>
 </body>
 </html>

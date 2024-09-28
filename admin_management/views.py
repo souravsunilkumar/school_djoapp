@@ -382,7 +382,7 @@ def get_academic_years(request):
     return JsonResponse({'academic_years': list(academic_years)})
 
 @login_required
-def get_student_marks(request):
+def get_class_student_marks(request):
     academic_year = request.GET.get('academic_year')
     class_assigned = request.GET.get('class_assigned')
     division_assigned = request.GET.get('division_assigned')

@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
+    background-color: #e9f5ff; /* Light blue background */
     color: #333;
     line-height: 1.6;
 }
@@ -27,20 +27,20 @@ h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
     text-align: center;
-    color: #4a4e69;
+    color: #003366; /* Dark blue */
 }
 
 h2 {
     font-size: 2rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
-    color: #22223b;
+    color: #004080; /* Medium blue */
 }
 
 h3 {
     font-size: 1.5rem;
     margin: 1rem 0;
-    color: #9a8cfc;
+    color: #0073e6; /* Light blue */
 }
 
 /* Form Styles */
@@ -53,20 +53,20 @@ form {
 
 label {
     font-weight: bold;
-    color: #4a4e69;
+    color: #003366; /* Dark blue */
 }
 
 select {
     padding: 0.75rem;
     font-size: 1rem;
-    border: 1px solid #c9c9c9;
+    border: 1px solid #0073e6; /* Light blue border */
     border-radius: 4px;
     transition: border-color 0.3s;
 }
 
 select:focus {
     outline: none;
-    border-color: #9a8cfc;
+    border-color: #004080; /* Medium blue on focus */
 }
 
 /* Button Styles */
@@ -74,7 +74,7 @@ button {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
     color: #fff;
-    background-color: #4a4e69;
+    background-color: #0073e6; /* Light blue button */
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -82,7 +82,7 @@ button {
 }
 
 button:hover {
-    background-color: #9a8cfc;
+    background-color: #005bb5; /* Darker blue on hover */
 }
 
 /* Marks Container */
@@ -103,12 +103,12 @@ table th, table td {
 }
 
 table th {
-    background-color: #9a8cfc;
+    background-color: #0073e6; /* Light blue table header */
     color: #fff;
 }
 
 table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f2f9ff; /* Very light blue for even rows */
 }
 
 @media (max-width: 768px) {

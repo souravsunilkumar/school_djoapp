@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('admin_marks_page', admin_marks_page, name='admin_marks_page'),
     path('api/get-academic-years/', get_academic_years, name='get_academic_years'),
-    path('api/get-student-marks/', get_student_marks, name='get_student_marks'),
+    path('api/get-student-marks/', get_class_student_marks, name='get_student_marks'),
 
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

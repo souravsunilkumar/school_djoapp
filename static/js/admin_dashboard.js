@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     // Fetch Admin Details and update the dashboard
     $.ajax({
-        url: '/setup_auth/api/admin_dashboard/',  // Ensure this URL points to the correct view
+        url: '/setup_auth/api/admin_dashboard/',
         type: 'GET',
         success: function(response) {
             console.log('Admin details fetched:', response);
@@ -16,79 +16,86 @@ $(document).ready(function() {
         }
     });
 
-    // Show Sub Admin Registration Form when the button is clicked
-    $('#show-register-form').click(function() {
-        console.log('Sub Admin register button clicked.');
-        $('#sub-admin-form').toggle(); // Toggle visibility of the form
+    // Show Sub Admin Registration Modal
+    $('#show-sub-admin-register-form').click(function() {
+        openModal('#sub-admin-modal');
+        $('#sub_admin_username').focus();
     });
+
+    // Show Employee Registration Modal
+    $('#show-employee-register-form').click(function() {
+        openModal('#employee-modal');
+        $('#emp_username').focus();
+    });
+
+    // Function to open modal and backdrop
+    function openModal(modalId) {
+        $(modalId).removeClass('hidden').attr('aria-hidden', 'false');
+        $('#modal-background').removeClass('hidden');
+    }
+
+    // Close modals when clicking the background or close button
+    $(document).on('click', '.modal-close, #modal-background', function() {
+        closeModals();
+    });
+
+    // Function to close modals and backdrop
+    function closeModals() {
+        $('.modal').addClass('hidden').attr('aria-hidden', 'true');
+        $('#modal-background').addClass('hidden');
+    }
 
     // Handle Sub Admin Registration Form submission via AJAX
     $('#sub-admin-register-form').on('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        var password = $('#password').val();
-        var confirmPassword = $('#confirm_password').val();
+        event.preventDefault();
+        let password = $('#password').val();
+        let confirmPassword = $('#confirm_password').val();
 
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             return;
         }
 
-        var formData = {
+        let formData = {
             sub_admin_username: $('#sub_admin_username').val(),
             sub_admin_first_name: $('#sub_admin_first_name').val(),
             sub_admin_last_name: $('#sub_admin_last_name').val(),
             password: password
         };
 
-        console.log('Sub Admin registration form data:', formData);
-
         $.ajax({
-            url: '/setup_auth/api/register_sub_admin/', // Ensure this matches the actual URL
+            url: '/setup_auth/api/register_sub_admin/',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function(response) {
-                console.log('Sub Admin registration response received:', response);
                 if (response.success) {
                     alert('Sub Admin registered successfully!');
-                    $('#sub-admin-form').hide(); // Hide the form after successful registration
-                    $('#sub-admin-register-form')[0].reset(); // Clear form fields
+                    closeModals();
+                    $('#sub-admin-register-form')[0].reset();
                 } else {
                     alert('Error: ' + response.message);
                 }
             },
             error: function(error) {
-                alert('There was an error submitting the form.');
+                alert('Error submitting form. Try again later.');
                 console.error('Sub Admin registration error:', error);
             }
         });
     });
 
-    // Hide the Sub Admin Registration Form when the "Cancel" button is clicked
-    $('#cancel-register').click(function() {
-        $('#sub-admin-form').hide(); // Hide the registration form
-    });
-
-    // Show Employee Registration Form when the button is clicked
-    $('#show-employee-register-form').click(function() {
-        console.log('Employee register button clicked.');
-        $('#employee-register-form').toggle(); // Toggle visibility of the form
-    });
-
-    // Handle Employee Registration Form submission via AJAX
+    // Handle Employee Registration Form submission
     $('#employee-registration-form').on('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        var password = $('#emp_password').val();
-        var confirmPassword = $('#emp_confirm_password').val();
+        event.preventDefault();
+        let password = $('#emp_password').val();
+        let confirmPassword = $('#emp_confirm_password').val();
 
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             return;
         }
 
-        var formData = {
+        let formData = {
             emp_username: $('#emp_username').val(),
             emp_first_name: $('#emp_first_name').val(),
             emp_last_name: $('#emp_last_name').val(),
@@ -97,32 +104,40 @@ $(document).ready(function() {
             password: password
         };
 
-        console.log('Employee registration form data:', formData);
-
         $.ajax({
-            url: '/setup_auth/api/register_employee/', // Ensure this matches the actual URL
+            url: '/setup_auth/api/register_employee/',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function(response) {
-                console.log('Employee registration response received:', response);
                 if (response.success) {
                     alert('Employee registered successfully!');
-                    $('#employee-register-form').hide(); // Hide the form after successful registration
-                    $('#employee-registration-form')[0].reset(); // Clear form fields
+                    closeModals();
+                    $('#employee-registration-form')[0].reset();
                 } else {
                     alert('Error: ' + response.message);
                 }
             },
             error: function(error) {
-                alert('There was an error submitting the form.');
+                alert('Error submitting form. Try again later.');
                 console.error('Employee registration error:', error);
             }
         });
     });
 
-    // Hide the Employee Registration Form when the "Cancel" button is clicked
-    $('#cancel-employee-register').click(function() {
-        $('#employee-register-form').hide(); // Hide the registration form
+    // Logout functionality
+    $('#logout_button').on('click', function() {
+        $.ajax({
+            url: '/setup_auth/api/logout/',
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = '/setup_auth/login/';
+                }
+            },
+            error: function(error) {
+                console.error('Logout error:', error);
+            }
+        });
     });
 });

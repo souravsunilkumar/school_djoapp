@@ -1,0 +1,135 @@
+html, body {
+    height: 100%; /* Full height for body and html */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa, #80deea); /* Warm gradient background */
+    background-attachment: fixed; /* Keep background fixed during scrolling */
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box; /* Include padding in total height */
+    min-height: 100vh; /* Ensure body takes full viewport height */
+}
+
+.edit-student-container {
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px; /* Constrain width on larger screens */
+    margin: 20px;
+    box-sizing: border-box; /* Ensure container padding is included in width */
+}
+
+/* Heading Styles */
+h1 {
+    text-align: center;
+    color: #00796b; /* Vibrant teal */
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Label and Input Styles */
+label {
+    font-weight: bold;
+    color: #00796b; /* Deep teal for labels */
+    display: block; /* Block display for better spacing */
+    margin-top: 15px; /* Spacing between labels */
+}
+
+input[type="text"],
+input[type="email"],
+select {
+    border: 2px solid #00796b; /* Deep teal border */
+    border-radius: 8px;
+    padding: 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding included in width */
+    margin-top: 5px; /* Space between label and input */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus {
+    border-color: #004d40; /* Darker teal on focus */
+    box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Teal glow */
+    outline: none;
+}
+
+/* Button Styles */
+button[type="submit"] {
+    background-color: #00796b; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 1em;
+    margin-top: 20px; /* Space between fields and button */
+    width: 100%; /* Full width for button */
+}
+
+button[type="submit"]:hover {
+    background-color: #004d40; /* Darker teal on hover */
+    transform: scale(1.05); /* Slight grow on hover */
+}
+
+button[type="submit"]:focus {
+    outline: none;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    /* Adjust container for tablets and smaller devices */
+    .edit-student-container {
+        padding: 20px;
+        max-width: 90%; /* Wider on smaller screens */
+        margin: 15px;
+    }
+
+    h1 {
+        font-size: 2em; /* Slightly smaller heading */
+    }
+
+    label {
+        margin-top: 10px; /* Reduce spacing between labels */
+    }
+
+    button[type="submit"] {
+        padding: 10px; /* Adjust padding for button */
+    }
+}
+
+/* Additional Adjustments for Small Mobile Screens */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em; /* Further reduce heading size */
+    }
+
+    .edit-student-container {
+        padding: 15px; /* Reduce padding for very small screens */
+        margin: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+        padding: 8px; /* Reduce input padding on mobile */
+    }
+
+    button[type="submit"] {
+        padding: 8px 15px; /* Smaller padding for buttons */
+        font-size: 0.9em; /* Slightly smaller font size */
+    }
+}

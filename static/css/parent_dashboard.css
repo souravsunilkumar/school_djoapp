@@ -66,19 +66,39 @@ button:active {
     transform: translateY(1px);
 }
 
-#view_attendance_btn {
+#logout_button{
+    background-color: #eb2525;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#logout_button:hover{ 
+    background-color: #901010;
+}
+#view_attendance_btn { 
     margin-top: 20px;
 }
 
 a {
-    color: #2563eb;
-    font-weight: bold;
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 8px;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px 0;
 }
 
 a:hover {
-    color: #1d4ed8;
+    background-color: #1d4ed8;
+    transform: translateY(-3px);
 }
 
 /* Notification Icon */
@@ -94,8 +114,18 @@ a:hover {
 /* Notification Section */
 #notification_section {
     border-radius: 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px 1500px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.3s ease-out;
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 200px;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: scroll;
 }
 
 .notification-item {
@@ -124,7 +154,8 @@ a:hover {
     background-color: #15e1f7;
 }
 
-#close_notification_btn, #show_more_notifications_btn {
+#close_notification_btn,
+#show_more_notifications_btn {
     margin-top: 10px;
 }
 
@@ -167,7 +198,8 @@ a:hover {
     font-size: 0.9rem;
 }
 
-#attendance_report th, #attendance_report td {
+#attendance_report th,
+#attendance_report td {
     padding: 10px;
     border: 1px solid #e2e8f0;
 }
@@ -191,6 +223,7 @@ a:hover {
         opacity: 0;
         transform: translateX(50px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -202,6 +235,7 @@ a:hover {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);

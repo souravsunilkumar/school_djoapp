@@ -75,7 +75,7 @@ $(document).ready(function () {
                                     <td>${student.first_name}</td>
                                     <td>${student.last_name}</td>
                                     <td>
-                                        <a href="/management/edit_student/${student.id}">Edit</a> |
+                                        <a href="/management/edit_student/${student.id}" class="edit-link" >Edit</a> 
                                         <a href="#" class="delete-student" data-id="${student.id}">Delete</a>
                                     </td>
                                 </tr>
@@ -118,4 +118,23 @@ $(document).ready(function () {
     }
 
     loadTeacherDashboard();
+
+    $('#logout_button').on('click', function() {
+        $.ajax({
+            url: '/setup_auth/api/logout/',
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    alert('Logged out successfully.');
+                    window.location.href = '/'; // Redirect to the login page
+                } else {
+                    alert('Logout failed: ' + response.message);
+                }
+            },
+            error: function(error) {
+                alert('There was an error during logout.');
+                console.error(error);
+            }
+        });
+    });
 });

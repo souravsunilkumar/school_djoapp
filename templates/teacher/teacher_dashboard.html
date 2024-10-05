@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <button id="logout_button">Logout</button>
     <div class="dashboard-container">
         <h1>Teacher Dashboard</h1>
 
@@ -28,8 +29,7 @@
         </div>
 
         <!-- Notification Modal -->
-        <div id="notification_modal" class="notification-modal"
-            style="position: absolute; top: 60px; right: 20px; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px;">
+        <div id="notification_modal" class="notification-modal">
             <div id="notifications-container">
                 <!-- Notifications will be populated here -->
             </div>
@@ -39,7 +39,7 @@
 
         <div id="students-container" style="display: none;">
             <h3>Students List:</h3>
-            <table id="students-table" border="1">
+            <table id="students-table">
                 <thead>
                     <tr>
                         <th>Roll Number</th>

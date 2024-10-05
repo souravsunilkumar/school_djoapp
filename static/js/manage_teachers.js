@@ -26,7 +26,7 @@ $(document).ready(function () {
                                 <td>${teacher.designation}</td>
                                 <td>${classTeacherInfo}</td>
                                 <td>
-                                    <button class="edit-teacher-btn" data-teacher-id="${teacher.id}">Edit</button>
+                                    <button class="edit-teacher-btn" data-teacher-id="${teacher.id}">Edit</button><br><br>
                                     <button class="delete-teacher-btn">Delete</button>
                                 </td>
                             </tr>

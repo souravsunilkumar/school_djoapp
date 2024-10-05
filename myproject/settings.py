@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'events',
     'admin_management',
+    'web_admin',
     
 ]
 
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'myproject.middleware.DisableCacheMiddleware'
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -127,6 +129,8 @@ USE_I18N = True
 USE_TZ = True
 
 
+LOGIN_URL = '/setup_auth/login/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -146,6 +150,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Set the session to expire in 2 weeks (1209600 seconds)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+
+# Ensure the session does not expire when the browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Optionally, set secure cookie options if you use HTTPS
+SESSION_COOKIE_SECURE = True
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

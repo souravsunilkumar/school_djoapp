@@ -8,7 +8,7 @@ body {
 
 .container {
     max-width: 800px;
-    margin: 20px auto;
+    margin: 20px; /* Set margin from all sides */
     padding: 30px;
     background-color: white;
     border-radius: 12px;
@@ -19,7 +19,6 @@ body {
 .container:hover {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
-
 h1, h2 {
     color: #333;
     text-align: center;
@@ -52,7 +51,7 @@ h1, h2 {
 
 .date-range select:focus,
 .date-range input[type="date"]:focus {
-    border-color: #00796b;
+    border-color: #007bff;
     outline: none;
 }
 
@@ -64,6 +63,8 @@ h1, h2 {
 #attendanceTable {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 12px; /* Set border radius for the table */
+    overflow: hidden; /* Ensures the border radius is applied correctly */
     margin-top: 20px;
 }
 
@@ -77,14 +78,14 @@ h1, h2 {
 }
 
 #attendanceTable th {
-    background-color: #00796b; /* Header background color */
+    background-color: #007bff; /* Header background color */
     color: white; /* Text color */
 }
 
 .sticky-column-header {
     position: sticky;
     left: 0;
-    background-color: #00796b; /* Sticky header background color */
+    background-color: #007bff; /* Sticky header background color */
     color: white; /* Text color */
     z-index: 2; /* Higher z-index for sticky header */
 }
@@ -99,7 +100,7 @@ h1, h2 {
 #attendanceTable th:nth-child(1) { /* For Student Name header */
     position: sticky;
     left: 0;
-    background-color: #00796b; /* Ensure the header background color is set */
+    background-color: #007bff; /* Ensure the header background color is set */
     color: white; /* Ensure the text color is white */
     z-index: 2; /* Higher z-index for sticky column header */
 }
@@ -108,7 +109,56 @@ h1, h2 {
     background-color: #f1f1f1; /* Highlight on row hover */
 }
 
+button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Vertical and horizontal padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    margin-top: 10px; /* Space above the button */
+    width: 100%; /* Full width */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+button:active {
+    background-color: #004494; /* Even darker background color on click */
+    transform: translateY(0); /* Remove lift effect when clicked */
+}
+
+button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a focus shadow effect */
+}
+
 /* Responsive Styles */
+@media (max-width: 1024px) {
+    .container {
+        padding: 20px; /* Reduced padding for medium screens */
+    }
+
+    h1, h2 {
+        font-size: 1.8em; /* Slightly smaller headings */
+    }
+
+    .date-range select,
+    .date-range input[type="date"],
+    .date-range button {
+        flex: 1 1 100%; /* Full width on smaller screens */
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+}
+
 @media (max-width: 768px) {
     .date-range {
         flex-direction: column;
@@ -131,5 +181,19 @@ h1, h2 {
 @media (max-width: 480px) {
     h1, h2 {
         font-size: 1.5em; /* Smaller headings on very small screens */
+    }
+
+    .container {
+        padding: 15px; /* Reduced padding for very small screens */
+    }
+
+    .date-range {
+        margin-bottom: 10px; /* Adjust margin for compact view */
+    }
+
+    #attendanceTable th,
+    #attendanceTable td {
+        padding: 8px; /* Adjust padding for very small screens */
+        font-size: 12px; /* Even smaller font for compact devices */
     }
 }

@@ -11,7 +11,7 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 $('#parent_name').text(data.parent_name);
-                $('#guardian_message').text(`You are parent/guardian of ${data.selected_student_name}`);
+                
 
                 $('#student_select').empty();
                 $.each(data.students, function (index, student) {
@@ -154,4 +154,23 @@ $(document).ready(function () {
 
     // Initial fetch of parent data
     fetchParentData();
+    
+    $('#logout_button').on('click', function() {
+        $.ajax({
+            url: '/setup_auth/api/logout/',
+            type: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    alert('Logged out successfully.');
+                    window.location.href = '/'; // Redirect to the login page
+                } else {
+                    alert('Logout failed: ' + response.message);
+                }
+            },
+            error: function(error) {
+                alert('There was an error during logout.');
+                console.error(error);
+            }
+        });
+    });
 });

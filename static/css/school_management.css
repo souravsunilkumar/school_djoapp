@@ -1,64 +1,95 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* General Page Styling */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #e9f5ff; /* Light blue background */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
     color: #333;
-    line-height: 1.6;
+    text-align: center; /* Center align all text */
 }
 
-/* Container */
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Heading Styles */
 h1 {
-    font-size: 2.5rem;
-    text-align: center;
-    color: #003366; /* Dark blue */
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px; /* Space below the heading */
 }
 
-/* Link Styles */
-a {
+/* Container for links */
+.container {
+    width: 100%;
+    max-width: 600px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    background-color: #fff; /* White background for visibility */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Button style for links */
+.button-link {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
-    margin: 1rem 0;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #007bff;
     text-decoration: none;
-    color: #fff;
-    background-color: #0073e6; /* Light blue background for links */
-    border-radius: 4px;
-    transition: background-color 0.3s, transform 0.3s; /* Add transition for hover effects */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin: 10px 0; /* Margin between buttons */
 }
 
-a:hover {
-    background-color: #005bb5; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+/* Hover effect for button */
+.button-link:hover {
+    background-color: #0056b3;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+
+/* Mobile (up to 600px wide) */
+@media (max-width: 600px) {
     h1 {
-        font-size: 2rem; /* Adjust heading size for small screens */
+        font-size: 1.5rem; /* Adjust heading size for mobile */
     }
-    a {
-        padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
+
+    .container {
+        padding: 15px; /* Adjust padding for mobile */
+        max-width: 90%; /* Make the container wider on mobile */
+    }
+
+    .button-link {
+        font-size: 0.9rem; /* Adjust button font size for mobile */
+        padding: 8px 15px; /* Adjust button padding for mobile */
     }
 }
 
-@media (min-width: 768px) {
+/* Tablet (600px to 768px wide) */
+@media (min-width: 601px) and (max-width: 768px) {
     h1 {
-        font-size: 3rem; /* Increase font size for larger screens */
+        font-size: 1.75rem; /* Adjust heading size for tablet */
+    }
+
+    .container {
+        padding: 20px; /* Standard padding for tablet */
+        max-width: 80%; /* Adjust container width for tablet */
+    }
+
+    .button-link {
+        font-size: 1rem; /* Standard button font size for tablet */
+        padding: 10px 20px; /* Standard button padding for tablet */
+    }
+}
+
+/* Desktop (over 768px wide) */
+@media (min-width: 769px) {
+    h1 {
+        font-size: 2rem; /* Standard heading size for desktop */
+    }
+
+    .container {
+        padding: 20px; /* Standard padding for desktop */
+        max-width: 600px; /* Standard container width for desktop */
+    }
+
+    .button-link {
+        font-size: 1rem; /* Standard button font size for desktop */
+        padding: 10px 20px; /* Standard button padding for desktop */
     }
 }

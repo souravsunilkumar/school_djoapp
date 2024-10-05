@@ -100,10 +100,10 @@ $(document).ready(function () {
     });
 
     $('.slider-next').click(function () {
-        slider.animate({ scrollLeft: '+=300' }, 300);
+        slider.animate({ scrollLeft: '+=410' }, 410);
     });
 
     $('.slider-prev').click(function () {
-        slider.animate({ scrollLeft: '-=300' }, 300);
+        slider.animate({ scrollLeft: '-=410' }, 410);
     });
 });

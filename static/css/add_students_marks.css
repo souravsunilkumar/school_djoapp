@@ -1,34 +1,58 @@
 /* General styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #e0f7fa, #80deea);
 }
 
+h1 {
+    text-align: center;
+    color: #00796b;
+    margin: 30px 0;
+    font-size: 2.5em; /* Larger heading font */
+}
+
+/* Container styles */
+.container {
+    max-width: 600px; /* Max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Padding for spacing */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Button styles */
 button {
-    background-color: #4CAF50;
+    background-color: #00796b;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     margin: 10px 0;
+    width: 100%; /* Full width for buttons */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #014b42;
 }
 
+/* Link styles */
+
 a {
-    color: #4CAF50;
-    text-decoration: none;
-    padding: 10px 0;
-    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #00796b; /* Green button */
+    color: white;
+    border-radius: 6px;
+    text-decoration: none; /* Remove underline */
 }
 
 a:hover {
-    text-decoration: underline;
+    background-color: #014b42; /* Keep hover color consistent */
+    text-decoration: none; /* Ensure no underline on hover */
 }
 
 /* Modals */
@@ -47,16 +71,19 @@ a:hover {
 #examModal > div, #subjectModal > div {
     background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px; /* Match container rounded corners */
     max-width: 500px;
     width: 100%;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* Modal header styles */
 h2 {
     margin-top: 0;
+    color: #00796b; /* Consistent heading color */
 }
 
+/* Close button styles */
 .close {
     float: right;
     font-size: 24px;
@@ -65,7 +92,7 @@ h2 {
 }
 
 .close:hover, .close:focus {
-    color: black;
+    color: #00796b; /* Consistent color on hover */
     cursor: pointer;
 }
 
@@ -88,11 +115,12 @@ input[type="text"], select {
 
 input[type="text"]:focus, select:focus {
     outline: none;
-    border-color: #4CAF50;
+    border-color: #00796b; /* Highlight border color */
 }
 
+/* Submit button styles */
 button[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #00796b;
     color: white;
     padding: 10px;
     border: none;
@@ -101,7 +129,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #00796b;
 }
 
 /* Button to open modals */
@@ -109,10 +137,15 @@ button[type="submit"]:hover {
     margin-bottom: 20px;
 }
 
-/* Responsiveness */
+/* Responsive adjustments */
 @media (max-width: 600px) {
     #examModal > div, #subjectModal > div {
         padding: 15px;
         max-width: 90%;
+    }
+    .container {
+        max-width: 85%; /* Full width for container on mobile */
+        padding: 15px; /* Less padding for mobile */
+        margin: 20px auto; /* Less margin on mobile */
     }
 }

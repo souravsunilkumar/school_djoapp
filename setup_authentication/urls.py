@@ -12,6 +12,9 @@ urlpatterns = [
     path('api/register/', register_school, name='register_school'),
     path('login/', login_page, name='login_page'),  
     path('api/login/', user_login, name='user_login'),
+    path('api/logout/', user_logout, name='user_logout'),
+    path('api/is_logged_in/', is_logged_in, name='is_logged_in'),
+
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
     path('sub_admin_dashboard/', sub_admin_dashboard, name='sub_admin_dashboard'),
     path('api/admin_dashboard/', admin_dashboard_data, name='admin_dashboard_data'),

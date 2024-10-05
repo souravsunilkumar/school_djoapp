@@ -14,13 +14,18 @@
     <!-- Display Student Name -->
     <h2 id="student-name">{{ student.first_name }} {{ student.last_name }}</h2>
 
-    <label for="from-date">From Date:</label>
-    <input type="date" id="from-date">
-    
-    <label for="to-date">To Date:</label>
-    <input type="date" id="to-date">
+    <!-- Container for Date Inputs and Button -->
+    <div class="container">
+        <div class="date-container">
+            <label for="from-date">From Date:</label>
+            <input type="date" id="from-date">
+            
+            <label for="to-date">To Date:</label>
+            <input type="date" id="to-date">
 
-    <button id="fetch-attendance">Fetch Attendance</button>
+            <button id="fetch-attendance">Fetch Attendance</button>
+        </div>
+    </div>
 
     <table id="attendance-table" border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
         <thead>

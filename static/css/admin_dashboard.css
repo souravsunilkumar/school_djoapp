@@ -8,31 +8,43 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Center vertically */
     min-height: 100vh;
+    text-align: center; /* Align all text to the center */
 }
 
-h1, h2 {
+/* Container Styling */
+.container {
     text-align: center;
-    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within container */
+    align-items: center; /* Center content horizontally */
+    width: 100%; /* Ensure container takes full width */
 }
 
-h1 {
-    font-size: 2rem;
-    margin-top: 1rem;
-}
-
-h2 {
-    font-size: 1.5rem;
-    margin: 1.5rem 0;
+/* Button Box Styling */
+.button-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center buttons vertically within the box */
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+    max-width: 400px; /* Contain links and buttons in a box */
+    margin-top: 20px;
 }
 
 /* Button Styles */
 button {
     background-color: #4CAF50;
     border: none;
-    padding: 10px 15px;
-    margin: 10px;
+    padding: 8px 12px; /* Reduced size */
+    margin: 10px 0;
     color: white;
     font-size: 1rem;
     cursor: pointer;
@@ -43,46 +55,33 @@ button:hover {
     background-color: #45a049;
 }
 
-/* Form Styles */
-form {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
-    margin-top: 20px;
+/* Specific Button Styles */
+.logout-button {
+    background-color: #d9534f;
 }
 
-input, select {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
+.logout-button:hover {
+    background-color: #c9302c;
 }
 
-label {
-    font-size: 1rem;
-    color: #333;
+.register-button {
+    background-color: #5bc0de;
 }
 
-/* Form Visibility Toggle */
-#sub-admin-form, #employee-register-form {
-    display: none;
+.register-button:hover {
+    background-color: #31b0d5;
 }
 
 /* Link Style */
 a {
-    background-color: #1e00ff;
+    background-color: #3fa2f6;
     color: white;
-    padding: 10px 15px;
+    padding: 8px 12px;
     text-decoration: none;
     border-radius: 5px;
     font-size: 1rem;
     display: inline-block;
     margin-top: 10px;
-    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
@@ -90,38 +89,139 @@ a:hover {
     background-color: #1c2276;
 }
 
-a[href="/events/events_page/"] {
-    background-color: #ff6f00;
+/* Employee Register Button */
+#show-employee-register-form {
+    background-color: #54c392;
+}
+
+#show-employee-register-form:hover {
+    background-color: #2e6b51;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center; /* Center modal vertically */
+    justify-content: center; /* Center modal horizontally */
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    display: none; /* Hide modal when not active */
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px; /* Increased padding for a spacious feel */
+    border-radius: 10px; /* More rounded corners */
+    width: 90%; /* Responsive width */
+    max-width: 500px; /* Limit maximum width */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    animation: fadeIn 0.3s; /* Fade-in animation */
+}
+
+/* Modal Header Styles */
+.modal-content h2 {
+    margin-bottom: 20px; /* Space below header */
+    font-size: 1.5rem; /* Font size for header */
+    color: #333; /* Color for header */
+}
+
+/* Form Styles */
+#employee-registration-form {
+    display: flex;
+    flex-direction: column; /* Stack form elements */
+    align-items: center; /* Center-align form fields */
+}
+
+/* Modal Field Styles */
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px; /* Space between fields */
+    width: 100%; /* Ensure full width within the modal */
+}
+
+/* Label Styles */
+.modal-field label {
+    font-size: 1rem; /* Consistent font size for labels */
+    margin-bottom: 5px; /* Space between label and input */
+    color: #555; /* Slightly darker color for better readability */
+    text-align: left; /* Align labels to the left */
+}
+
+/* Input and Select Styles */
+.modal-field input,
+.modal-field select {
+    padding: 10px; /* Padding for inputs */
+    border: 1px solid #ccc; /* Border styling */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1rem; /* Consistent font size */
+    transition: border-color 0.3s; /* Smooth border color transition */
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+    border-color: #4CAF50; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+/* Submit Button Styles in Modal */
+.modal-submit {
+    background-color: #4CAF50; /* Main action color */
     color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: inline-block;
-    margin-top: 10px;
+    border: none;
+    padding: 10px 15px; /* Consistent padding */
+    border-radius: 5px; /* Rounded corners */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1rem; /* Consistent font size */
+    width: 100%; /* Full width for submit button */
+    transition: background-color 0.3s; /* Smooth transition */
 }
 
-a[href="/events/events_page/"]:hover {
-    background-color: #cc6300; /* Change background on hover */
+.modal-submit:hover {
+    background-color: #45a049; /* Darker green on hover */
 }
 
-a[href="/admin_management/school_management"] {
-    background-color: #078993;
+/* Close Button Styles */
+button.modal-close {
+    background-color: #d41616; /* Main action color */
     color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    display: inline-block;
-    margin-top: 10px;
+    border: none;
+    padding: 10px 15px; /* Consistent padding */
+    border-radius: 5px; /* Rounded corners */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1rem; /* Consistent font size */
+    
+    transition: background-color 0.3s; /* Smooth transition */
 }
 
-a[href="/admin_management/school_management"]:hover {
-    background-color: #095355; /* Change background on hover */
+button.modal-close:hover {
+    background-color: #c9302c; /* Darker shade on hover */
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Error Message Styles */
+.error-message {
+    color: #d9534f; /* Red color for error messages */
+    font-size: 0.9rem; /* Smaller font size */
+    margin-top: 5px; /* Space above error messages */
 }
 
 /* Layout and Responsiveness */
@@ -129,17 +229,30 @@ a[href="/admin_management/school_management"]:hover {
     h1 {
         font-size: 1.5rem;
     }
-    
+
     h2 {
         font-size: 1.2rem;
+    }
+    
+    .modal-content {
+        width: 95%; /* Slightly wider on small screens */
+        padding: 20px; /* Reduce padding for smaller devices */
+    }
+    
+    
+
+    /* Adjust input fields for smaller screens */
+    .modal-field input,
+    .modal-field select {
+        font-size: 0.9rem; /* Slightly smaller font size on small screens */
+    }
+    
+    .modal-submit {
+        padding: 8px 10px; /* Reduced padding for smaller screens */
     }
     
     form {
         width: 100%;
         padding: 15px;
-    }
-
-    button {
-        width: 100%;
     }
 }

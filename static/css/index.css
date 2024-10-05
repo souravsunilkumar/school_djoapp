@@ -12,7 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, rgb(134, 168, 231), rgb(232, 109, 150));
+    background: linear-gradient(135deg, #ABB7E5, #84DDDA);
     background-size: 400% 400%;
     animation: gradientBackground 10s ease infinite;
 }
@@ -26,7 +26,7 @@ body {
 
 /* Container box */
 .box-container {
-    background-color: rgba(136, 231, 134, 0.9);
+    background-color: rgba(97, 233, 251, 0.9);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);

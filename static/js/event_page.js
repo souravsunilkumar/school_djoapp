@@ -155,7 +155,8 @@ $(document).ready(function () {
                         <td>${event.description}</td>
                         <td>${event.event_date}</td>
                         <td>
-                            <button class="edit-button">Edit</button>
+                            <button class="edit-button">Edit</button><br><br>
+
                             <button class="delete-button">Delete</button>
                         </td>
                     </tr>

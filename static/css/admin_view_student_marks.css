@@ -7,6 +7,16 @@ body {
     color: #333;
 }
 
+.container {
+    max-width: 800px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+/* Headings */
 h1 {
     font-size: 2.5em;
     color: #34495e;
@@ -23,23 +33,27 @@ h2 {
     padding-bottom: 5px;
 }
 
+/* Marks List */
 #marks-list {
     margin-top: 20px;
 }
 
 /* Table Styling */
 table {
-    width: 100%;
-    border-collapse: collapse;
+    width: 100%; /* Set width to 100% to fill container */
+    border-collapse: collapse; /* Collapses border for a cleaner look */
     background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures border-radius is applied */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow to tables */
 }
 
 th, td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; /* Add a bottom border for table rows */
+    word-wrap: break-word; /* Ensures long words will break into the next line */
 }
 
 th {
@@ -52,6 +66,7 @@ td {
     color: #333;
 }
 
+/* Hover Effect for Rows */
 tr:hover {
     background-color: #f1f1f1;
 }
@@ -79,7 +94,7 @@ tr:hover {
     }
 
     th, td {
-        padding: 10px;
+        padding: 10px; /* Reduce padding for medium screens */
     }
 }
 
@@ -92,11 +107,31 @@ tr:hover {
         font-size: 1.5em;
     }
 
+    /* Adjustments to ensure table fits the container */
     table {
         font-size: 0.8em;
+        display: block; /* Makes table block-level for better responsiveness */
+        overflow-x: auto; /* Enables horizontal scroll on small devices */
+        white-space: nowrap; /* Prevents table contents from wrapping */
+        width: 100%; /* Ensures table takes full width */
+        max-width: none; /* Allow full utilization of width */
     }
 
     th, td {
-        padding: 8px;
+        padding: 8px; /* Further reduce padding for small screens */
+    }
+
+    th {
+        font-size: 0.9em; /* Smaller font for headers on small screens */
+    }
+
+    td {
+        font-size: 0.9em; /* Smaller font for data on small screens */
+    }
+
+    /* Additional styles for better table appearance on small screens */
+    #marks-list {
+        overflow-x: auto; /* Enables horizontal scroll for marks list on small screens */
+        max-width: 100%; /* Ensure the marks-list fits within the container */
     }
 }

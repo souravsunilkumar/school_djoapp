@@ -11,17 +11,18 @@
 </head>
 
 <body>
+    <button id="logout_button">Logout</button>
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     <div align="center">
         <h1>Welcome, <span id="parent_name"></span></h1>
-        <p id="guardian_message"></p>
+        
 
         <label for="student_select">Select Student:</label>
         <select id="student_select">
             <!-- Options will be populated via AJAX -->
         </select>
 
-        <button id="view_attendance_btn">View Attendance Report</button>
+        <button id="view_attendance_btn">View Attendance Report</button><br><br>
     </div>
 
     <!-- Notification Icon -->
@@ -30,8 +31,7 @@
     </div>
 
     <!-- Notification Section (Hidden by default) -->
-    <div id="notification_section" class="notification"
-        style="display: none; position: absolute; top: 60px; right: 20px; width: 300px; background-color: #fff; border: 1px solid #ccc; padding: 10px;">
+    <div id="notification_section" class="notification">
         <div id="notification_message">No new notifications.</div>
         <button id="show_more_notifications_btn" style="display: none;">Show Earlier Notifications</button>
         <button id="close_notification_btn">Close</button>
@@ -41,9 +41,9 @@
     <div id="attendance_modal" style="display: none;">
         <h2 id="report_heading">Attendance Report</h2>
         <label for="from_date">From Date:</label>
-        <input type="date" id="from_date">
+        <input type="date" id="from_date"> <br>
         <label for="to_date">To Date:</label>
-        <input type="date" id="to_date">
+        <input type="date" id="to_date"><br>
         <button id="generate_report_btn">Generate Report</button>
         <table id="attendance_report" border="1">
             <thead>
@@ -58,8 +58,9 @@
     </div>
 
     <div>
+        
         <a href="/parent/view_student_marks_page">View student marks</a><br>
-        <a href="/parent/add_student_page">Add more students</a>
+        
     </div>
 </body>
 

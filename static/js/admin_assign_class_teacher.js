@@ -1,35 +1,39 @@
 $(document).ready(function() {
-    // Function to fetch and display the list of teachers in the dropdown
-    function fetchTeachers() {
-        $.ajax({
-            url: '/management/api/get_teachers/', // Corrected API endpoint
-            type: 'GET',
-            contentType: 'application/json',
-            success: function(response) {
-                if (response.teachers) {
-                    var teachersList = response.teachers;
-                    var teacherDropdown = $('#teacher');
-
-                    teacherDropdown.empty();
-                    teacherDropdown.append('<option value="">Select Teacher</option>');
-
-                    teachersList.forEach(function(teacher) {
-                        teacherDropdown.append('<option value="' + teacher.id + '">' + teacher.full_name + '</option>');
-                    });
+    // Initialize select2 with search and display all teachers initially
+    $('#teacher').select2({
+        placeholder: 'Select a Teacher',
+        width: '100%',
+        ajax: {
+            url: '/management/api/get_teachers/',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    search: params.term || ''  // Empty string if no search term, fetch all teachers
+                };
+            },
+            processResults: function(data) {
+                if (data.teachers) {
+                    return {
+                        results: data.teachers.map(function(teacher) {
+                            return {
+                                id: teacher.id,
+                                text: teacher.full_name
+                            };
+                        })
+                    };
                 } else {
-                    alert('Failed to load teachers: ' + response.error);
+                    console.error("No teachers found or invalid data format:", data);
+                    return {
+                        results: []
+                    };
                 }
             },
-            error: function(error) {
-                alert('There was an error loading the teachers.');
-                console.error(error);
-            }
-        });
-    }
+            cache: true
+        }
+    });
 
-    fetchTeachers();
-
-    // Handle the form submission for assigning a teacher as a class teacher
+    // Handle form submission for assigning the teacher
     $('#assign-teacher-form').on('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
 
@@ -44,7 +48,7 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: '/management/api/assign_class_teacher/', // API endpoint to assign class teacher
+            url: '/management/api/assign_class_teacher/',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),

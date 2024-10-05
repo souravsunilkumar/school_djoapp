@@ -49,7 +49,7 @@ $(document).ready(function () {
                         // Create a new table for this exam
                         $('#marks-list').append(`
                             <h2>${exam}</h2>
-                            <table id="${tableId}" border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                            <table id="${tableId}">
                                 <thead>
                                     <tr>
                                         <th>Subject</th>

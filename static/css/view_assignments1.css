@@ -74,9 +74,10 @@ label {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     margin: 15px;
     padding: 20px;
-    min-width: 320px;
+    min-width: 320px; /* Minimum width for cards */
+    max-width: 400px; /* Maximum width for cards */
     transition: transform 0.3s, box-shadow 0.3s;
-    flex: 0 0 auto;
+    flex: 0 0 auto; /* Prevent card from growing */
 }
 
 .assignment-card:hover {
@@ -120,11 +121,26 @@ label {
 
 /* Add media queries for responsive design */
 @media (max-width: 600px) {
+    h1 {
+        font-size: 2em; /* Smaller title on small screens */
+    }
+
     #academicYearSelect {
-        width: 100%; /* Full width on small screens */
+        width: 90%; /* Increase select width */
     }
 
     .assignment-card {
         min-width: 90%; /* Adjust card width */
+        margin: 10px auto; /* Center cards */
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 1.5em; /* Even smaller title */
+    }
+
+    .slider-btn {
+        padding: 8px 16px; /* Smaller button padding */
     }
 }

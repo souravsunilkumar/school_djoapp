@@ -12,14 +12,19 @@ h1 {
     color: #2c3e50;
 }
 
-/* Form Styles */
-#edit-teacher-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+/* Container for the main content */
+.container {
+    max-width: 600px; /* Adjusted max width */
+    margin: 0 auto; /* Center container */
+    padding: 20px; /* Padding for the container */
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+#edit-teacher-form {
+    margin: 20px 0; /* Margin for the form */
 }
 
 #edit-teacher-form div {
@@ -56,6 +61,7 @@ button[type="submit"], #confirm-button, #cancel-button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    width: 100%; /* Full width buttons */
 }
 
 button[type="submit"]:hover, 
@@ -93,7 +99,7 @@ button[type="submit"]:hover,
     }
 
     button[type="submit"], #confirm-button, #cancel-button {
-        width: 100%;
         padding: 12px 0;
+        width: 100%; /* Ensure buttons are full width */
     }
 }

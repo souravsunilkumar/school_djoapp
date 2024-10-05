@@ -88,3 +88,26 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #e0f7fa; /* Hover effect */
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em; /* Smaller heading font on mobile */
+    }
+
+    #marksFilterForm {
+        max-width: 80%; /* Full width for form on mobile */
+        padding: 15px; /* Less padding for mobile */
+        margin: 20px auto; /* Less margin on mobile */
+    }
+
+    button {
+        width: 100%; /* Full width button on mobile */
+        font-size: 1em; /* Smaller font size for buttons */
+    }
+    
+    th, td {
+        padding: 8px; /* Smaller padding for table cells on mobile */
+        font-size: 0.9em; /* Smaller font size for table */
+    }
+}

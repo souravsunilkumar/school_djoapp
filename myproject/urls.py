@@ -31,6 +31,7 @@ urlpatterns = [
     path('management/', include('management.urls')),
     path('parent/', include('parent.urls')),
     path('events/', include('events.urls')),
+    path('web_admin/', include('web_admin.urls')),
     path('admin_management/', include('admin_management.urls')),
 ]
 

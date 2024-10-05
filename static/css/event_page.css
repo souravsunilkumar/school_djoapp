@@ -59,6 +59,9 @@ body {
     box-sizing: border-box;
     text-align: center;
 }
+h2{
+    margin: 20px;
+}
 
 /* Navigation arrows */
 .arrow {
@@ -95,7 +98,8 @@ body {
     font-size: 1rem;
 }
 
-#event-table th, #event-table td {
+#event-table th,
+#event-table td {
     text-align: left;
     padding: 12px;
     border-bottom: 1px solid #ddd;
@@ -115,7 +119,7 @@ body {
 }
 
 /* Buttons inside the event table */
-#event-table .edit-button, 
+#event-table .edit-button,
 #event-table .delete-button {
     padding: 8px 12px;
     background-color: #007bff;
@@ -124,10 +128,12 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-right: 10px; /* Add margin to the right of the edit button */
 }
 
 #event-table .delete-button {
     background-color: #dc3545;
+    margin-right: 0; /* Ensure no right margin on the delete button */
 }
 
 #event-table .edit-button:hover {
@@ -162,16 +168,17 @@ body {
         font-size: 0.9rem;
     }
 
-    #event-table th, 
+    #event-table th,
     #event-table td {
         padding: 10px;
     }
 
     /* Resize buttons */
-    #event-table .edit-button, 
+    #event-table .edit-button,
     #event-table .delete-button {
         padding: 6px 10px;
         font-size: 0.8rem;
+        margin-right: 5px; /* Add gap between buttons */
     }
 
     /* Adjust arrow size for mobile */
@@ -203,16 +210,17 @@ body {
         font-size: 1rem;
     }
 
-    #event-table th, 
+    #event-table th,
     #event-table td {
         padding: 12px;
     }
 
     /* Resize buttons */
-    #event-table .edit-button, 
+    #event-table .edit-button,
     #event-table .delete-button {
         padding: 8px 12px;
         font-size: 0.9rem;
+        margin-right: 5px; /* Add gap between buttons */
     }
 
     /* Adjust arrow size */
@@ -225,7 +233,7 @@ body {
 /* Button style for a tag */
 .button-link {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 12px 22px; /* Increased padding */
     font-size: 1rem;
     color: white;
     background-color: #007bff;
@@ -233,6 +241,7 @@ body {
     border-radius: 5px;
     transition: background-color 0.3s ease;
     text-align: center;
+    margin: 20px; /* Set margin for gap from edges */
 }
 
 /* Hover effect for button */
@@ -266,15 +275,16 @@ body {
         font-size: 1.1rem;
     }
 
-    #event-table th, 
+    #event-table th,
     #event-table td {
         padding: 15px;
     }
 
-    #event-table .edit-button, 
+    #event-table .edit-button,
     #event-table .delete-button {
         padding: 10px 14px;
         font-size: 1rem;
+        margin-right: 10px; /* Add gap between buttons */
     }
 
     /* Adjust arrow size for desktop */

@@ -29,7 +29,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert(response.message);
-                    window.location.href = '/setup_auth'; // Redirect or update the UI as needed
+                    window.location.href = '/';
                 } else {
                     alert('Error: ' + response.message);
                 }

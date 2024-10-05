@@ -14,6 +14,15 @@ h1 {
     margin-bottom: 20px;
 }
 
+.container {
+    max-width: 800px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Add padding */
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
 label {
     font-size: 1.2em;
     color: #333;
@@ -39,7 +48,8 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Add border radius to the table */
+    overflow: hidden; /* Ensure child elements respect the border radius */
 }
 
 th, td {
@@ -59,8 +69,6 @@ tr:hover {
 }
 
 button {
-    background-color: #4a90e2;
-    color: #fff;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -69,8 +77,22 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #357ABD;
+button.view-marks {
+    background-color: #28a745; /* Green for View Marks */
+    color: #fff;
+}
+
+button.view-marks:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+button.view-attendance {
+    background-color: #007bff; /* Blue for View Attendance */
+    color: #fff;
+}
+
+button.view-attendance:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
 #no-students-message {

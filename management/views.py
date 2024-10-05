@@ -6,6 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from setup_authentication.models import *
 from django.views.decorators.http import require_GET, require_POST
+from django.utils.decorators import decorator_from_middleware
+from django.middleware.cache import CacheMiddleware
+from django.views.decorators.cache import cache_control
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -17,13 +21,21 @@ def get_teachers(request):
             school_admin = School_admin.objects.get(school_admin_username=username)
             school = school_admin.school
 
-            teachers = Teacher.objects.filter(school=school).values(
-                "id", "first_name", "last_name"
-            )
+            search_query = request.GET.get('search', '')
+
+            # Fetch all teachers or filter if search query is provided
+            if search_query:
+                teachers = Teacher.objects.filter(
+                    Q(first_name__icontains=search_query) | Q(last_name__icontains=search_query),
+                    school=school
+                )
+            else:
+                teachers = Teacher.objects.filter(school=school)
+
             teachers_list = [
                 {
-                    "id": teacher["id"],
-                    "full_name": f"{teacher['first_name']} {teacher['last_name']}",
+                    "id": teacher.id,
+                    "full_name": f"{teacher.first_name} {teacher.last_name}",
                 }
                 for teacher in teachers
             ]
@@ -36,7 +48,7 @@ def get_teachers(request):
 
     return JsonResponse({"error": "Invalid request method."})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def teacher_dashboard(request):
     """Render the teacher dashboard."""
     return render(request, "teacher/teacher_dashboard.html")

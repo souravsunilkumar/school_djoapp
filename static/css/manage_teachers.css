@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #e9f5ff; /* Light blue background */
+    background-color: #f4f4f9; /* Light blue background */
     color: #333;
     line-height: 1.6;
 }
@@ -32,9 +32,12 @@ h1 {
 
 /* Table Styles */
 table {
-    width: 100%;
+    width: 90%; /* Reduce width of the table */
+    margin: 1rem auto; /* Center table and add margin */
     border-collapse: collapse;
-    margin-top: 1rem;
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures border radius works properly */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Box shadow for the table */
 }
 
 th, td {
@@ -57,16 +60,28 @@ button {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     color: #fff;
-    background-color: #0073e6; /* Button background color */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s; /* Add transition for hover effects */
 }
 
-button:hover {
-    background-color: #005bb5; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+/* Edit Button Styles */
+.edit-teacher-btn {
+    background-color: #4CAF50; /* Green */
+}
+
+.edit-teacher-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Delete Button Styles */
+.delete-teacher-btn {
+    background-color: #f44336; /* Red */
+}
+
+.delete-teacher-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
 }
 
 /* Modal Styles */
@@ -89,16 +104,44 @@ button:hover {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .container {
+        padding: 1.5rem; /* Adjust padding for medium screens */
+    }
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem; /* Adjust heading size for small screens */
     }
+    
     button {
         padding: 0.5rem; /* Adjust button padding for smaller screens */
         font-size: 0.9rem; /* Adjust font size for buttons */
     }
+    
     table th, table td {
-        padding: 8px; /* Adjust padding for table cells */
+        padding: 10px; /* Adjust padding for table cells */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem; /* Smaller heading size for very small screens */
+    }
+
+    button {
+        padding: 0.4rem; /* Further reduce button padding for smaller screens */
+        font-size: 0.8rem; /* Further reduce font size for buttons */
+    }
+    
+    table th, table td {
+        padding: 8px; /* Adjust padding for table cells on small screens */
+        font-size: 0.9rem; /* Adjust font size for table cells */
+    }
+
+    .container {
+        padding: 1rem; /* Reduce padding for very small screens */
     }
 }
 
@@ -111,5 +154,5 @@ button:hover {
 /* Accessibility */
 button:focus, #delete-teacher-modal:focus {
     outline: none; /* Remove default outline */
-    box-shadow: 0 0 5px #0073e6; /* Add custom focus style */
+    box-shadow: 0 0 8px #0073e6; /* Add custom focus style */
 }

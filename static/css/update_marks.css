@@ -1,20 +1,16 @@
-/* update_marks.css */
-
-/* General body styling */
+/* General styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 20px;
-    color: #333;
+    padding: 0;
+    background: linear-gradient(135deg, #e0f7fa, #80deea);
 }
 
-/* Header styling */
 h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
     text-align: center;
+    color: #00796b;
+    margin: 30px 0;
+    font-size: 2.5em; /* Larger heading font */
 }
 
 /* Form styling */
@@ -35,18 +31,8 @@ label {
     color: #555;
 }
 
-/* Select styling */
-select {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    background-color: #fff;
-}
-
-/* Input styling */
+/* Select and Input styling */
+select, 
 input[type="number"] {
     width: 100%;
     padding: 10px;
@@ -54,29 +40,45 @@ input[type="number"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 15px;
+    background-color: #fff;
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
 }
 
-/* Button styling */
+/* Button styles */
 button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
+    background-color: #00796b;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    border-radius: 5px;
+    margin: 10px 0;
+    width: 100%; /* Full width for buttons */
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #014b42;
 }
 
+/* Link styles */
+
+a {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #00796b; /* Green button */
+    color: white;
+    border-radius: 6px;
+    text-decoration: none; /* Remove underline */
+}
+
+a:hover {
+    background-color: #014b42; /* Keep hover color consistent */
+    text-decoration: none; /* Ensure no underline on hover */
+}
 /* Table styling for students */
 #studentsTable {
     margin-bottom: 20px;
+    overflow-x: auto; /* Allows horizontal scrolling for small screens */
 }
 
 #studentsTable table {
@@ -85,7 +87,8 @@ button:hover {
     margin-bottom: 20px;
 }
 
-#studentsTable th, #studentsTable td {
+#studentsTable th,
+#studentsTable td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
@@ -93,4 +96,82 @@ button:hover {
 
 #studentsTable th {
     background-color: #f8f9fa;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    select,
+    input[type="number"],
+    button {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 12px;
+    }
+
+    #studentsTable th,
+    #studentsTable td {
+        padding: 8px;
+        font-size: 14px; /* Adjust font size for better readability */
+    }
+
+    #studentsTable {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        display: block; /* Allows scrollable behavior */
+    }
+
+    a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    form {
+        max-width: 85%; /* Full width for container on mobile */
+        padding: 15px; /* Less padding for mobile */
+        margin: 20px auto; /* Less margin on mobile */
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    select,
+    input[type="number"],
+    button {
+        font-size: 12px;
+    }
+
+    button {
+        padding: 10px;
+    }
+
+    #studentsTable th,
+    #studentsTable td {
+        padding: 6px;
+        font-size: 12px; /* Further adjust font size for small screens */
+    }
+
+    a {
+        font-size: 12px;
+    }
 }

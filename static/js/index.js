@@ -21,4 +21,5 @@ $(document).ready(function() {
         setTimeout(() => $(this).removeClass('active'), 300); // Remove active class after 300ms
         window.location.href = '/setup_auth/parent_register/';
     });
+    
 });

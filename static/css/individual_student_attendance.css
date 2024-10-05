@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1200px; /* Max width for larger screens */
     margin: 50px auto;
     padding: 30px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -15,6 +15,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+/* Heading style */
 h1 {
     text-align: center;
     color: #00796b;
@@ -138,4 +139,40 @@ tr:hover {
 /* Apply row animation */
 tr.animate-row {
     animation: rowAppear 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        max-width: 85%; /* Wider container on mobile */
+        padding: 15px; /* Adjust padding for mobile */
+        margin: 30px auto; /* Less margin on mobile */
+    }
+
+    h1 {
+        font-size: 2em; /* Smaller heading font on mobile */
+    }
+
+    .date-range {
+        flex-direction: column; /* Stack inputs vertically */
+        align-items: stretch; /* Stretch inputs to full width */
+    }
+
+    .date-input {
+        max-width: 100%; /* Full width for date inputs */
+        margin-bottom: 10px; /* Space between stacked inputs */
+    }
+
+    #student-select {
+        max-width: 100%; /* Full width for dropdown */
+    }
+
+    #view-attendance-btn {
+        width: 100%; /* Full width button */
+    }
+
+    th, td {
+        padding: 8px; /* Smaller padding for table cells */
+        font-size: 0.9em; /* Smaller font size for table */
+    }
 }

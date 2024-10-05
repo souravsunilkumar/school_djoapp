@@ -46,8 +46,8 @@ $(document).ready(function () {
                                 <td>${student.first_name}</td>
                                 <td>${student.last_name}</td>
                                 <td>
-                                    <button onclick="viewMarks(${student.id})">View Marks</button>
-                                    <button onclick="viewAttendance(${student.id})">View Attendance</button>
+                                    <button class="view-marks" onclick="viewMarks(${student.id})">View Marks</button><br><br>
+                                    <button class="view-attendance" onclick="viewAttendance(${student.id})">View Attendance</button>
                                 </td>
                             </tr>
                         `);

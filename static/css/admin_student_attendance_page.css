@@ -21,22 +21,39 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Container for form elements */
+.container {
+    background-color: #fff; /* White background for the container */
+    padding: 20px; /* Padding inside the container */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 0 auto; /* Center the container */
+    max-width: 600px; /* Limit the maximum width */
+}
+
+/* Date input alignment */
+.date-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically on small screens */
+    gap: 10px; /* Space between elements */
+}
+
 label {
     font-size: 1.2em;
-    margin-right: 10px;
     color: #2c3e50;
 }
 
+/* Input styling */
 input[type="date"] {
     padding: 10px;
     font-size: 1em;
-    margin-right: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
     color: #333;
 }
 
+/* Button styling */
 button {
     padding: 10px 20px;
     font-size: 1.1em;
@@ -55,30 +72,38 @@ button:hover {
 /* Attendance Table */
 table {
     width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
+    border-collapse: separate; /* Allow border radius to work */
+    border-spacing: 0; /* Remove spacing between cells */
+    background-color: #fff; /* Background color of the table */
     margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Ensure rounded corners are applied */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 th, td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    /* No border styling needed */
 }
 
 th {
-    background-color: #3498db;
-    color: #fff;
+    background-color: #3498db; /* Background color for header */
+    color: #fff; /* Text color for header */
     font-weight: bold;
 }
 
 td {
-    color: #333;
+    color: #333; /* Text color for table data */
+    background-color: #f9f9f9; /* Light background for table data */
+}
+
+tr:nth-child(even) td {
+    background-color: #f2f2f2; /* Alternate row color for better readability */
 }
 
 tr:hover {
-    background-color: #f2f2f2;
+    background-color: #e1e1e1; /* Highlight on hover */
 }
 
 /* No Attendance Message */
@@ -88,7 +113,6 @@ tr:hover {
     text-align: center;
     margin-top: 20px;
 }
-
 /* Responsive Design */
 @media (max-width: 768px) {
     h1 {
@@ -115,6 +139,15 @@ tr:hover {
 
     table {
         font-size: 0.9em;
+    }
+
+    .date-container {
+        flex-direction: column; /* Stack inputs vertically */
+        align-items: flex-start; /* Align inputs to the left */
+    }
+
+    button {
+        width: 100%; /* Full-width button on mobile */
     }
 }
 

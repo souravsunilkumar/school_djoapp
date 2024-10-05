@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,6 +15,10 @@ from .models import *
 import json 
 from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import decorator_from_middleware
+from django.middleware.cache import CacheMiddleware
+from django.views.decorators.cache import cache_control
+
 import logging
 # Create your views here.
 
@@ -23,7 +27,24 @@ logger = logging.getLogger(__name__)
 
 
 def home(request):
-    return render(request,'index.html')
+    """Redirect to the appropriate dashboard if the user is already logged in."""
+    if request.user.is_authenticated:
+        # Check if the user is in a specific group and redirect accordingly
+        if request.user.groups.filter(id=1).exists():
+            return redirect('/setup_auth/admin_dashboard/')
+        elif request.user.groups.filter(id=2).exists():
+            return redirect('/setup_auth/sub_admin_dashboard/')
+        elif request.user.groups.filter(id=3).exists():
+            return redirect('/management/teacher_dashboard/')
+        elif request.user.groups.filter(id=8).exists():
+            return redirect('/parent/parent_dashboard/')
+        elif request.user.groups.filter(id=9).exists():
+            return redirect('/web_admin/web_admin_dashboard/')
+        else:
+            return render(request, 'index.html')  # If user group is not recognized, show the home page
+    else:
+        # If the user is not logged in, render the default home page
+        return render(request, 'index.html')
 
 def register_page(request):
     return render(request, 'school_register.html')
@@ -65,11 +86,12 @@ def register_school(request):
                 school_admin_last_name=school_admin_last_name
             )
 
-            # Create the school admin profile and save school relation
+            # Create the school admin profile and link it to the user and school
             school_admin = School_admin.objects.create(
                 school_admin_first_name=school_admin_first_name,
                 school_admin_last_name=school_admin_last_name,
                 school_admin_username=school_admin_username,  # Save username here
+                user=user,  # Link the user to the school admin
                 school=school
             )
 
@@ -95,30 +117,66 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)  # Use Django's built-in login function
+
+                # Storing user info and group in session
+                request.session['username'] = user.username
+                request.session['user_id'] = user.id
+                user_group = None
+
+                # Determine user group and set redirect URL
                 if user.groups.filter(id=1).exists():
-                    # Redirect URL for the admin dashboard
-                    return JsonResponse({'success': True, 'redirect_url': '/setup_auth/admin_dashboard/'})
+                    request.session['user_group'] = 'admin'
+                    user_group = 'admin'
+                    redirect_url = '/setup_auth/admin_dashboard/'
                 elif user.groups.filter(id=2).exists():
-                    # Redirect URL for the sub-admin dashboard
-                    return JsonResponse({'success': True, 'redirect_url': '/setup_auth/sub_admin_dashboard/'})
+                    request.session['user_group'] = 'sub_admin'
+                    user_group = 'sub_admin'
+                    redirect_url = '/setup_auth/sub_admin_dashboard/'
                 elif user.groups.filter(id=3).exists():
-                    # Redirect URL for the teacher dashboard
-                    return JsonResponse({'success': True, 'redirect_url': '/management/teacher_dashboard/'})
+                    request.session['user_group'] = 'teacher'
+                    user_group = 'teacher'
+                    redirect_url = '/management/teacher_dashboard/'
                 elif user.groups.filter(id=8).exists():
-                    # Redirect URL for the teacher dashboard
-                    return JsonResponse({'success': True, 'redirect_url': '/parent/parent_dashboard/'})
+                    request.session['user_group'] = 'parent'
+                    user_group = 'parent'
+                    redirect_url = '/parent/parent_dashboard/'
+                elif user.groups.filter(id=9).exists():
+                    request.session['user_group'] = 'web_admin'
+                    user_group = 'web_admin'
+                    redirect_url = '/web_admin/web_admin_dashboard/'
                 else:
                     return JsonResponse({'success': False, 'message': 'User is not authorized.'})
+
+                print(f"User {user.username} logged in as {user_group}, session key: {request.session.session_key}")
+
+                return JsonResponse({'success': True, 'redirect_url': redirect_url})
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid credentials.'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
+
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
+@csrf_exempt
+def is_logged_in(request):
+    """Return the user's authentication status."""
+    if request.user.is_authenticated:
+        return JsonResponse({'is_authenticated': True})
+    return JsonResponse({'is_authenticated': False})
 
+@csrf_exempt
+def user_logout(request):
+    """Logout the user and end their session."""
+    if request.method == 'POST':
+        logout(request)
+        return JsonResponse({'success': True, 'message': 'Successfully logged out.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_dashboard(request):
     return render(request, 'administrator/admin_dashboard.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def sub_admin_dashboard(request): 
     return render(request,'sub_admin_dashboard.html')
 

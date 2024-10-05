@@ -16,8 +16,8 @@ html, body {
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     padding: 20px; /* Adjust padding */
-    max-width: 600px; /* Set a maximum width */
-    width: 100%; /* Full width on smaller screens */
+    max-width: 1200px; /* Set a maximum width */
+    width: 700px; /* Full width on smaller screens */
     box-sizing: border-box; /* Include padding in width calculation */
     overflow: hidden; /* Prevent overflow within the container */
 }
@@ -69,8 +69,10 @@ button:focus {
     outline: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
     .container {
-        padding: 15px; /* Adjust padding for smaller screens */
+        max-width: 350px; /* Set container width to 85% for screens smaller than 900px */
+        width: 350px;
+        padding: 30px; /* Maintain padding */
     }
 }

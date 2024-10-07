@@ -6,21 +6,16 @@
 }
 
 body {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #74ebd5, #acb6e5);
-    background-size: 200% 200%;
-    animation: backgroundShift 8s ease infinite;
-    color: #333;
+    background-image: url('/static/images/vimala central school.jpeg'); /* Set background image */
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat;
 }
 
-@keyframes backgroundShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
 
 h2 {
     font-size: 2rem;
@@ -30,17 +25,19 @@ h2 {
 }
 
 form {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.51);
     padding: 40px 30px;
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     width: 100%;
     max-width: 400px;
     transition: all 0.3s ease;
+    
+    backdrop-filter: blur(5px);
 }
 
 form:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 16px 1500px rgba(11, 218, 215, 0.151);
 }
 
 label {

@@ -52,6 +52,10 @@ urlpatterns = [
     path('view_assignments_page/', view_assignments_page, name='view_assignments_page'),
     path('get_teacher_assignments/', get_teacher_assignments, name='get_teacher_assignments'),
 
+    path('register_parent_page/', register_parent_page, name='register_parent_page'),
+    path('get_class_teacher_students/', get_class_teacher_students, name='get_class_teacher_students'),
+    path('register_parent/', register_parent, name='register_parent'),
+
     path('add_assignment_mark/<int:assignment_id>/', add_assignment_mark, name='add_assignment_mark'),
     path('get_assignment_details/<int:assignment_id>/', get_assignment_details, name='get_assignment_details'),
     path('get_assignment_students/<str:class_assigned>/<str:division_assigned>/<int:assignment_id>/', get_assignment_students, name='get_assignment_students'),

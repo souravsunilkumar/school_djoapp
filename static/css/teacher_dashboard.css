@@ -5,7 +5,6 @@ body {
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #e0f7fa, #80deea);
-    /* Warm gradient background */
     color: #222;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
@@ -17,8 +16,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #00796b;
-    /* Deep teal */
+    color: #00796b; /* Deep teal */
     font-size: 2.5em;
     margin-bottom: 20px;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -27,190 +25,12 @@ h1 {
 /* Dashboard container */
 .dashboard-container {
     width: 100%;
-    max-width: 800px;
-    /* Constrain width */
-    background: rgba(255, 255, 255, 0.9);
-    /* Slightly transparent white background */
+    max-width: 800px; /* Constrain width */
+    background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    margin: 30px;
-    /* Adds margin from all sides */
-}
-
-/* Notification icon */
-.notification-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-}
-
-/* Notification modal */
-.notification-modal {
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    width: 250px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    display: none;
-    /* Hidden by default */
-    z-index: 1000;
-    /* Bring to front */
-    border-radius: 8px;
-    box-shadow: 0 8px 20px 1500px #3c030350;
-    
-}
-
-.modal-content {
-    padding: 10px;
-}
-
-.modal-footer {
-    text-align: right;
-}
-
-/* Notification item */
-.notification-item {
-    padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
-    /* Light border between notifications */
-}
-
-#close_modal_btn{
-    background-color: #ef1a1a;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 10px 0;
-    width: 30%; /* Full width for buttons */
-}
-
-#close_modal_btn:hover {
-    background-color: #870606;
-}
-
-.unread {
-    font-weight: bold;
-    /* Bold text for unread notifications */
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    border-radius: 10px;
-}
-
-th,
-td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-th {
-    background: #00796b;
-    /* Deep teal for header */
-    color: white;
-    font-size: 1.1em;
-}
-
-tr:hover {
-    background: #f1f1f1;
-}
-
-/* Button styles for links */
-a {
-    display: inline-block;
-    /* Make links behave like buttons */
-    background-color: #00796b;
-    /* Button color */
-    color: white;
-    text-align: center;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-    margin: 5px 0;
-    
-}
-
-a:hover {
-    background-color: #004d40;
-    /* Darker teal on hover */
-    transform: scale(1.05);
-    /* Slight grow on hover */
-}
-
-a:focus {
-    outline: none;
-    /* Remove focus outline */
-}
-
-/* Add Marks and Assignment links */
-a[href="/management/add_students_marks/"],
-a[href="/management/add_assignment_page/"] {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    /* Green button */
-    color: white;
-    border-radius: 6px;
-}
-
-a[href="/management/add_students_marks/"]:hover,
-a[href="/management/add_assignment_page/"]:hover {
-    background-color: #218838;
-}
-
-a[href="/management/view_assignments_page/"] {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    /* Green button */
-    color: white;
-    border-radius: 6px;
-}
-
-a[href="/management/view_assignments_page/"]:hover {
-    background-color: #0b6921;
-}
-
-/* Logout Button */
-#logout_button {
-    background-color: #d32f2f;
-    /* Red background */
-    color: white;
-    padding: 10px 20px;
-    /* Button padding */
-    border: none;
-    /* Remove borders */
-    border-radius: 8px;
-    /* Rounded corners */
-    cursor: pointer;
-    /* Pointer cursor on hover */
-    font-size: 1em;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-bottom: 20px;
-    /* Adds space below the button */
-}
-
-#logout_button:hover {
-    background-color: #b71c1c;
-    /* Darker red on hover */
-    transform: scale(1.05);
-    /* Slight grow on hover */
-}
-
-#logout_button:focus {
-    outline: none;
-    /* Remove focus outline */
+    margin: 30px; /* Adds margin from all sides */
 }
 
 /* Edit and Delete Link Styles */
@@ -250,83 +70,139 @@ a[href="/management/view_assignments_page/"]:hover {
     transform: scale(1.05);
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
 
-    /* Dashboard container on small screens */
-    .dashboard-container {
-        padding: 15px;
-        width: 90%; /* Full width on small screens */
-        margin: 10px;
-        box-shadow: none;
-    }
+/* Notification icon */
+.notification-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
 
-    .notification-modal {
-        position: fixed; /* Change to fixed to stay in view */
-        top: 60px; /* Keep the top position */
-        right: 10px; /* Align to the right */
-        width: 50%; /* Width of the modal */
-        padding: 8px; /* Reduce padding inside the modal */
-        box-shadow: 0 2px 8px 1500px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
-    }
+/* Notification modal */
+.notification-modal {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 250px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Bring to front */
+    border-radius: 8px;
+    box-shadow: 0 8px 20px 1500px #3c030350;
+}
 
-    #notifications-container {
-        max-height: 250px; /* Reduce height on small screens */
-        overflow-y: auto; /* Add scroll if content exceeds the height */
-        margin-bottom: 8px; /* Adjust margin for smaller screens */
-    }
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
 
+th,
+td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background: #00796b; /* Deep teal for header */
+    color: white;
+    font-size: 1.1em;
+}
+
+tr:hover {
+    background: #f1f1f1;
+}
+
+/* Card Styles */
+.card-custom {
+    transition: transform 0.2s;
+    min-height: 120px; /* Set a minimum height for uniformity */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+    padding: 20px; /* Add padding inside cards */
+    border-radius: 8px; /* Rounded corners for cards */
+    background-color: white; /* Background for cards */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.card-custom:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+#actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between cards */
+}
+
+/* Button Styles */
+.btn-success {
+    background-color: #00796b; /* Deep teal */
+    border: none; /* Remove default border */
+    color: white; /* White text */
+    padding: 10px 20px; /* Button padding */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition for hover */
+}
+
+.btn-success:hover {
+    background-color: #004d40; /* Darker teal on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
     h1 {
-        font-size: 2em; /* Smaller title on mobile */
-        margin-bottom: 15px;
+        font-size: 2em;
+    }
+    #actions {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Adjust for smaller screens */
     }
 
-    table th,
-    table td {
-        padding: 12px; /* Reduce padding on small screens */
+    .dashboard-container {
+        padding: 15px; /* Reduced padding */
+        margin: 15px; /* Reduced margin */
     }
 
-    a {
-        padding: 10px 15px; /* Reduce padding on buttons */
-        font-size: 0.9em;
+    .notification-icon {
+        top: 15px;
+        right: 15px;
+        height: 25px;
+        width: 25px;
+    }
+
+    .card-custom {
+        margin-bottom: 15px; /* Reduce margin between cards */
+    }
+
+    th, td {
+        padding: 12px; /* Reduce padding for table */
     }
 }
 
-/* Extra small devices (max-width: 480px) */
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8em; /* Even smaller title */
-    }
-
-    a {
-        padding: 8px 10px; /* Smaller buttons */
-        font-size: 0.85em;
-    }
-
+/* Extra small screens */
+@media (max-width: 576px) {
     .dashboard-container {
-        padding: 15px;
-        width: 85%; /* Full width on small screens */
-        margin: 10px;
-        box-shadow: none;
+        width: 90%; /* Full width for very small screens */
     }
 
-    .students-container {
-        padding: 15px;
-        width: 85%; /* Full width on small screens */
-        box-shadow: none;
+    h1 {
+        font-size: 1.8em; /* Smaller heading size on very small devices */
     }
 
-    .notification-modal {
-        position: fixed; /* Change to fixed for consistent position */
-        top: 60px; /* Keep the top position */
-        right: 10px; /* Align to the rightmost end */
-        width: 50%; /* Width of the modal */
-        padding: 8px; /* Reduce padding */
-        box-shadow: 0 2px 8px 1500px rgba(0, 0, 0, 0.2); /* Optional shadow for visibility */
+    #actions {
+        display: flex;
+        flex-direction: column; /* Stack cards vertically */
     }
 
-    #notifications-container {
-        max-height: 250px; /* Further reduce height on extra small screens */
-        margin-bottom: 6px; /* Adjust margin for extra small screens */
+    .card-custom {
+        margin-bottom: 10px; /* Further reduce margin between cards */
     }
 }

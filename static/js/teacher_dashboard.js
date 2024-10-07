@@ -7,21 +7,21 @@ $(document).ready(function () {
             type: 'GET',
             success: function (response) {
                 var notificationsContainer = $('#notifications-container');
-
+    
                 if (response.success && response.notifications.length > 0) {
                     var notificationsList = response.notifications;
                     notificationsContainer.empty();  // Clear previous notifications
-
+    
                     notificationsList.forEach(function (notification) {
                         var notificationHtml = `
                             <div class="notification-item ${notification.is_read ? '' : 'unread'}">
                                 <a href="/management/leave_reason_page" class="notification-link">
                                     <p>${notification.message}</p>
                                 </a>
-                                
                             </div>
                         `;
-                        notificationsContainer.append(notificationHtml);
+                        // Prepend the notification to show the latest at the top
+                        notificationsContainer.prepend(notificationHtml);
                     });
                 } else {
                     notificationsContainer.html('<p>No notifications available.</p>');
@@ -33,7 +33,6 @@ $(document).ready(function () {
             }
         });
     }
-
     // Show notification modal
     $('#notification_icon').on('click', function () {
         $('#notification_modal').css('display', 'block'); // Show the notification modal

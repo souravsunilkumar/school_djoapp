@@ -293,10 +293,10 @@ def get_teacher_notifications(request):
             {"success": False, "notifications": []}
         )  # If no teacher is found
 
-    # Fetch notifications for the logged-in teacher
+    # Fetch notifications for the logged-in teacher, ordered by date descending
     notifications = TeacherNotification.objects.filter(
         teacher=logged_in_teacher, is_read=False
-    )
+    ).order_by('-reason__date')  # Order by the date in descending order
 
     # Prepare the data to send as JSON response
     notification_list = []
@@ -877,3 +877,62 @@ def submit_assignment_marks(request, assignment_id):
 
         return JsonResponse({'message': 'Marks submitted successfully!'})
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+def register_parent_page(request): 
+    return render(request,'teacher/register_parent.html')
+
+def get_class_teacher_students(request):
+    # Assume the logged-in user is a class teacher
+    class_teacher = Class_Teacher.objects.get(user=request.user)
+    students = Student.objects.filter(class_teacher=class_teacher)
+
+    student_data = [{'id': student.id, 'name': f'{student.first_name} {student.last_name}'} for student in students]
+    return JsonResponse({'students': student_data})
+
+def register_parent(request):
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.POST['first_name']
+        second_name = request.POST['second_name']
+        contact_number = request.POST['contact_number']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        student_id = request.POST['student']
+
+        # Ensure username is unique
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'error': 'Username already exists'}, status=400)
+
+        # Create user
+        user = User.objects.create_user(username=username, password=password)
+        user.first_name = first_name
+        user.last_name = second_name
+        user.email = email
+        user.save()
+
+        # Assign user to parent group (group_id=8)
+        parent_group = Group.objects.get(id=8)
+        user.groups.add(parent_group)
+
+        # Get the selected student and class teacher's school
+        student = Student.objects.get(id=student_id)
+        school = student.school
+
+        # Create Parent instance
+        parent = Parent.objects.create(
+            first_name=first_name,
+            second_name=second_name,
+            username=username,
+            user=user,
+            school=school,
+            contact_number=contact_number,
+            email=email,
+        )
+
+        # Add selected student to the parent's students field
+        parent.students.add(student)
+
+        return JsonResponse({'success': 'Parent registered successfully.'})
+    else:
+        return JsonResponse({'error': 'Invalid request method.'}, status=400)

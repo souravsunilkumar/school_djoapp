@@ -26,25 +26,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def home(request):
-    """Redirect to the appropriate dashboard if the user is already logged in."""
-    if request.user.is_authenticated:
-        # Check if the user is in a specific group and redirect accordingly
-        if request.user.groups.filter(id=1).exists():
-            return redirect('/setup_auth/admin_dashboard/')
-        elif request.user.groups.filter(id=2).exists():
-            return redirect('/setup_auth/sub_admin_dashboard/')
-        elif request.user.groups.filter(id=3).exists():
-            return redirect('/management/teacher_dashboard/')
-        elif request.user.groups.filter(id=8).exists():
-            return redirect('/parent/parent_dashboard/')
-        elif request.user.groups.filter(id=9).exists():
-            return redirect('/web_admin/web_admin_dashboard/')
-        else:
-            return render(request, 'index.html')  # If user group is not recognized, show the home page
-    else:
-        # If the user is not logged in, render the default home page
-        return render(request, 'index.html')
+
 
 def register_page(request):
     return render(request, 'school_register.html')
@@ -103,7 +85,21 @@ def register_school(request):
 
 
 def login_page(request):
-    """Render the login page."""
+    """Render the login page or redirect to the appropriate dashboard if the user is already logged in."""
+    if request.user.is_authenticated:
+        # Redirect to the appropriate dashboard based on user group
+        if request.user.groups.filter(id=1).exists():
+            return redirect('/setup_auth/admin_dashboard/')
+        elif request.user.groups.filter(id=2).exists():
+            return redirect('/setup_auth/sub_admin_dashboard/')
+        elif request.user.groups.filter(id=3).exists():
+            return redirect('/management/teacher_dashboard/')
+        elif request.user.groups.filter(id=8).exists():
+            return redirect('/parent/parent_dashboard/')
+        elif request.user.groups.filter(id=9).exists():
+            return redirect('/web_admin/web_admin_dashboard/')
+    
+    # If the user is not logged in or if their group is not recognized, render the login page
     return render(request, 'login.html')
 
 @csrf_exempt

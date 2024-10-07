@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/teacher_dashboard.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/static/js/teacher_dashboard.js"></script>
 </head>
 
 <body>
-    <button id="logout_button">Logout</button>
+    <button id="logout_button" class="btn btn-danger">Logout</button>
     <div class="dashboard-container">
         <h1>Teacher Dashboard</h1>
 
-        <div id="welcome-message">
+        <div id="welcome-message" class="mt-3">
             <!-- Dynamically populated welcome message -->
         </div>
 
@@ -33,13 +35,89 @@
             <div id="notifications-container">
                 <!-- Notifications will be populated here -->
             </div>
-            <button id="close_modal_btn" class="modal-close">Close</button>
+            <button id="close_modal_btn" class="modal-close btn btn-secondary">Close</button>
         </div>
 
+        <div id="actions">
+            <div class="card card-custom" style="grid-column: span 2;"> <!-- Card that spans 2 columns -->
+                <div class="card-body">
+                    <h5 class="card-title">Add Student</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;"> <!-- Default card -->
+                <div class="card-body">
+                    <h5 class="card-title">Register Parent</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1; grid-row: span 2;"> <!-- Tall card -->
+                <div class="card-body">
+                    <h5 class="card-title">Mark Student Attendance</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">View Student Attendance</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">View Attendance of Individual Student</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">View Student Marks</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">Fees Payments</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">Arts Competition</h5>
+                </div>
+            </div>
+            <div class="card card-custom" style="grid-column: span 1;">
+                <div class="card-body">
+                    <h5 class="card-title">Sports Competition</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="/management/add_students_marks/" class="card-link">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <h5 class="card-title">Add Exam Marks</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="/management/add_assignment_page/" class="card-link">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <h5 class="card-title">Add Assignment</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <a href="/management/view_assignments_page/" class="card-link">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <h5 class="card-title">View Assignment</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
-        <div id="students-container" style="display: none;">
+        <div id="students-container" style="display: none;" class="mt-4">
             <h3>Students List:</h3>
-            <table id="students-table">
+            <table id="students-table" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Roll Number</th>
@@ -54,18 +132,6 @@
             </table>
         </div>
 
-        <div id="actions" style="display: none;">
-            <a href="/management/add_students">Add Student</a><br>
-            <a href="/attendance/mark_student_attendance">Mark Student Attendance</a><br>
-            <a href="/attendance/view_attendance_report">View Student Attendance</a><br>
-            <a href="/attendance/individual_student_attendance">View Attendance of Individual Student</a><br>
-            <a href="/management/view_student_marks_page">View student marks</a><br>
-            <a href="/management/view_individual_student_marks">View marks of individual student</a>
-            
-        </div>
-        <a href="/management/add_students_marks/">Add Exam Marks</a><br> 
-        <a href="/management/add_assignment_page/">Add Asignment</a><br>
-        <a href="/management/view_assignments_page/">View Assignmets</a>
     </div>
 </body>
 

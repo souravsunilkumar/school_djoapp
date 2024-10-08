@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <button id="logout_button" class="btn btn-danger">Logout</button>
+    <button id="logout_button">Logout</button>
     <div class="dashboard-container">
         <h1>Teacher Dashboard</h1>
 
@@ -39,98 +39,106 @@
         </div>
 
         <div id="actions">
-            <div class="card card-custom" style="grid-column: span 2;"> <!-- Card that spans 2 columns -->
-                <div class="card-body">
+            <!-- Long card: spans 2 columns -->
+            <div class="card card-custom">
+                <a href="/management/view_students_page" class="card-body">
+                    <h5 class="card-title">View Students</h5>
+                </a>
+            </div>
+            <div class="card card-custom">
+                <a href="/management/add_students" class="card-body">
                     <h5 class="card-title">Add Student</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;"> <!-- Default card -->
-                <div class="card-body">
+        
+            <!-- Normal-sized card -->
+            <div class="card card-custom">
+                <a href="/management/register_parent_page/" class="card-body">
                     <h5 class="card-title">Register Parent</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1; grid-row: span 2;"> <!-- Tall card -->
-                <div class="card-body">
+        
+            <div class="card card-custom">
+                <a href="/attendance/mark_student_attendance" class="card-body">
                     <h5 class="card-title">Mark Student Attendance</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <div class="card card-custom">
+                <a href="/attendance/view_attendance_report" class="card-body">
                     <h5 class="card-title">View Student Attendance</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <!-- Normal-sized card -->
+            <div class="card card-custom">
+                <a href="/attendance/individual_student_attendance" class="card-body">
                     <h5 class="card-title">View Attendance of Individual Student</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <!-- Tall card: spans 2 rows -->
+            <div class="card card-custom">
+                <a href="/management/view_student_marks_page" class="card-body">
                     <h5 class="card-title">View Student Marks</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <!-- Normal-sized card -->
+            <div class="card card-custom">
+                <a href="/management/view_individual_student_marks" class="card-body">
+                    <h5 class="card-title">View Marks of Individual Student</h5>
+                </a>
+            </div>
+        
+            <!-- Long card: spans 2 columns -->
+            <div class="card card-custom">
+                <a href="#" class="card-body">
                     <h5 class="card-title">Fees Payments</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <!-- Normal-sized card -->
+            <div class="card card-custom">
+                <a href="" class="card-body">
                     <h5 class="card-title">Arts Competition</h5>
-                </div>
+                </a>
             </div>
-            <div class="card card-custom" style="grid-column: span 1;">
-                <div class="card-body">
+        
+            <!-- Normal-sized card -->
+            <div class="card card-custom">
+                <a href="" class="card-body">
                     <h5 class="card-title">Sports Competition</h5>
-                </div>
+                </a>
             </div>
         </div>
-        <div class="row mt-4">
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="/management/add_students_marks/" class="card-link">
-                    <div class="card card-custom">
+        <hr>
+       
+            <div class="small-card-container">
+                <a href="/management/add_students_marks/">
+                    <div class="small-card">
                         <div class="card-body">
                             <h5 class="card-title">Add Exam Marks</h5>
                         </div>
                     </div>
                 </a>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="/management/add_assignment_page/" class="card-link">
-                    <div class="card card-custom">
+            
+                <a href="/management/add_assignment_page/">
+                    <div class="small-card">
                         <div class="card-body">
                             <h5 class="card-title">Add Assignment</h5>
                         </div>
                     </div>
                 </a>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <a href="/management/view_assignments_page/" class="card-link">
-                    <div class="card card-custom">
+            
+                <a href="/management/view_assignments_page/">
+                    <div class="small-card">
                         <div class="card-body">
                             <h5 class="card-title">View Assignment</h5>
                         </div>
                     </div>
                 </a>
             </div>
-        </div>
-
-        <div id="students-container" style="display: none;" class="mt-4">
-            <h3>Students List:</h3>
-            <table id="students-table" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Roll Number</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Students data will be populated here dynamically -->
-                </tbody>
-            </table>
-        </div>
 
     </div>
 </body>

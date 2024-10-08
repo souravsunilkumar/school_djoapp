@@ -1,0 +1,115 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif; /* Set a clean font */
+    line-height: 1.6;               /* Improve line spacing */
+    margin: 0;                      /* Remove default margin */
+    padding: 0;                     /* Remove default padding */
+    background-color: #f4f4f4;      /* Light background color */
+}
+
+/* Container styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    
+}
+
+th,
+td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background: #00796b; /* Deep teal for header */
+    color: white;
+    font-size: 1.1em;
+}
+
+tr:hover {
+    background: #f1f1f1;
+}
+
+/* Edit and Delete Link Styles */
+.edit-link {
+    display: inline-block;
+    background-color: #ffeb3b;
+    /* Yellow background */
+    color: black;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px 0;
+}
+
+.edit-link:hover {
+    background-color: #fbc02d;
+    /* Darker yellow on hover */
+    transform: scale(1.05);
+}
+
+.delete-student {
+    display: inline-block;
+    background-color: #d20b0b;
+    /* Red background */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px 0;
+}
+
+.delete-student:hover {
+    background-color: #a52424;
+    /* Darker red on hover */
+    transform: scale(1.05);
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    .container {
+        width: 90%;
+        padding: 10px;
+    }
+
+    table {
+        width: 100%; /* Ensure table fits the width of the container */
+        display: block;
+        overflow-x: auto; /* Allow scrolling if the table is too wide */
+        
+    }
+
+    th,
+    td {
+        padding: 12px;
+        font-size: 0.9em; /* Adjust font size for smaller screens */
+    }
+}
+

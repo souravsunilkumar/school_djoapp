@@ -52,6 +52,8 @@ urlpatterns = [
     path('view_assignments_page/', view_assignments_page, name='view_assignments_page'),
     path('get_teacher_assignments/', get_teacher_assignments, name='get_teacher_assignments'),
 
+    path('view_students_page/', view_students_page, name='view_students_page'),
+
     path('register_parent_page/', register_parent_page, name='register_parent_page'),
     path('get_class_teacher_students/', get_class_teacher_students, name='get_class_teacher_students'),
     path('register_parent/', register_parent, name='register_parent'),

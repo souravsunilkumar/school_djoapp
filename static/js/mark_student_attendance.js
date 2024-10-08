@@ -66,6 +66,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert('Attendance marked successfully.');
+                    window.location.href = '/management/teacher_dashboard/';
                 } else {
                     alert('Failed to mark attendance: ' + response.message);
                 }

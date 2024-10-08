@@ -936,3 +936,7 @@ def register_parent(request):
         return JsonResponse({'success': 'Parent registered successfully.'})
     else:
         return JsonResponse({'error': 'Invalid request method.'}, status=400)
+    
+
+def view_students_page(request): 
+    return render(request,'teacher/view_students.html')

@@ -1,5 +1,4 @@
-/* General Styles */
-html,
+/* General styling */
 body {
     height: 100%;
     margin: 0;
@@ -15,17 +14,15 @@ body {
 }
 
 h1 {
+    color: #00adb5;
     text-align: center;
-    color: #00796b; /* Deep teal */
-    font-size: 2.5em;
     margin-bottom: 20px;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    font-size: 2rem;
+    font-weight: 600;
 }
-
-/* Dashboard container */
 .dashboard-container {
-    width: 100%;
-    max-width: 800px; /* Constrain width */
+    height: auto;
+    width: 1000px;
     background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -33,176 +30,335 @@ h1 {
     margin: 30px; /* Adds margin from all sides */
 }
 
-/* Edit and Delete Link Styles */
-.edit-link {
-    display: inline-block;
-    background-color: #ffeb3b;
-    /* Yellow background */
-    color: black;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-    margin: 5px 0;
-}
-
-.edit-link:hover {
-    background-color: #fbc02d;
-    /* Darker yellow on hover */
-    transform: scale(1.05);
-}
-
-.delete-student {
-    display: inline-block;
-    background-color: #d20b0b;
-    /* Red background */
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-    margin: 5px 0;
-}
-
-.delete-student:hover {
-    background-color: #a52424;
-    /* Darker red on hover */
-    transform: scale(1.05);
-}
-
-
-/* Notification icon */
-.notification-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+#logout_button{
+    background-color: #eb2525;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Notification modal */
-.notification-modal {
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    width: 250px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    display: none; /* Hidden by default */
-    z-index: 1000; /* Bring to front */
-    border-radius: 8px;
-    box-shadow: 0 8px 20px 1500px #3c030350;
+#logout_button:hover{ 
+    background-color: #901010;
 }
 
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    border-radius: 10px;
+/* Styling for the card layout */
+#actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Adjust grid layout to fit 4 columns */
+    gap: 5px;
+    margin-top: 30px;
 }
 
-th,
-td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-th {
-    background: #00796b; /* Deep teal for header */
-    color: white;
-    font-size: 1.1em;
-}
-
-tr:hover {
-    background: #f1f1f1;
-}
-
-/* Card Styles */
+/* Card customization for different sizes */
 .card-custom {
-    transition: transform 0.2s;
-    min-height: 120px; /* Set a minimum height for uniformity */
-    display: flex;
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
-    padding: 20px; /* Add padding inside cards */
-    border-radius: 8px; /* Rounded corners for cards */
-    background-color: white; /* Background for cards */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border-radius: 10px;
+    text-align: center;
+    padding: 8px;
+    height: 150px; /* Standard card height */
+    position: relative; /* Position for shimmer effect */
+    overflow: hidden; /* Ensure shimmer doesn't overflow */
+    transition: transform 0.3s ease;
+}
+
+/* Different background colors for each card */
+.card-custom:nth-child(1) {
+    background-color: #ffccbc; /* Light coral */
+}
+
+.card-custom:nth-child(2) {
+    background-color: #bbdefb; /* Light blue */
+}
+
+.card-custom:nth-child(3) {
+    background-color: #d1c4e9; /* Light purple */
+}
+
+.card-custom:nth-child(4) {
+    background-color: #c8e6c9; /* Light green */
+}
+
+.card-custom:nth-child(5) {
+    background-color: #ffe082; /* Light yellow */
+}
+
+.card-custom:nth-child(6) {
+    background-color: #b2dfdb; /* Light teal */
+}
+
+.card-custom:nth-child(7) {
+    background-color: #ffab91; /* Light orange */
+}
+
+.card-custom:nth-child(8) {
+    background-color: #d7ccc8; /* Light brown */
+}
+
+.card-custom:nth-child(9) {
+    background-color: #e1bee7; /* Light lavender */
+}
+
+.card-custom:nth-child(10) {
+    background-color: #f0f4c3; /* Light lime */
+}
+.card-custom:nth-child(11) {
+    background-color: #8ff188cc; /* Light lime */
+}
+/* Shimmer effect on hover */
+.card-custom::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+    transform: translate(0, 0);
+    transition: transform 0.6s ease-in-out;
+    z-index: 0;
+}
+
+.card-custom:hover::before {
+    transform: translate(100%, 100%);
 }
 
 .card-custom:hover {
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    transform: scale(1.05);
+    z-index: 1; /* Ensure card is on top */
 }
 
-#actions {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive columns */
-    gap: 20px; /* Space between cards */
+.card-custom a {
+    text-decoration: none;
+    color: inherit;
 }
 
-/* Button Styles */
-.btn-success {
-    background-color: #00796b; /* Deep teal */
+/* Responsive size variants */
+.card-custom:nth-child(1) {
+    grid-column: span 2;
+    height: 150px; /* Long card, regular height */
+}
+
+.card-custom:nth-child(5) {
+    grid-column: span 3;
+    height: 150px; /* Long card, regular height */
+}
+
+.card-custom:nth-child(10) {
+    grid-column: span 2;
+    height: 150px; /* Long card, regular height */
+}
+
+.card-custom:nth-child(4) {
+    grid-row: span 2;
+    height: 310px; /* Tall card, twice the height */
+}
+
+.card-custom:nth-child(7) {
+    grid-row: span 2;
+    height: 310px; /* Tall card, twice the height */
+}
+
+.card-custom:nth-child(6) {
+    grid-column: span 2;
+    height: 150px; /* Long card, regular height */
+}
+
+.card-custom:nth-child(9) {
+    grid-column: span 2;
+    height: 150px; /* Long card, regular height */
+}
+
+.card-custom:nth-child(8) {
+    grid-row: span 2;
+    height: 310px; /* Tall card, twice the height */
+}
+
+/* Card title styling */
+.card-custom h5 {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+    position: relative;
+    text-decoration: none;
+    z-index: 1; /* Ensure title is above shimmer */
+}
+
+/* Notification icon styling */
+.notification-icon {
+    cursor: pointer; /* Change cursor to pointer */
+    z-index: 1000; /* Ensure the icon is above other elements */
+}
+
+
+.notification-modal {
+    display: none; /* Initially hidden */
+    position: absolute; /* Change to absolute for positioning below the icon */
+    top: 60px; /* Adjust to place it below the icon */
+    right: 0; /* Align with the icon */
+    width: 300px; /* Width of the modal */
+    background-color: white; /* Background color */
+    border: 1px solid #ccc; /* Border around modal */
+    box-shadow: 0 4px 8px 1500px rgba(147, 143, 143, 0.495); /* Shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    z-index: 999; /* Ensure modal is above other elements */
+    padding: 20px; /* Padding inside the modal */
+}
+
+/* Notifications Container */
+#notifications-container {
+    max-height: 400px; /* Max height of the notifications area */
+    overflow-y: auto; /* Enable scrolling if content exceeds max height */
+    margin-bottom: 10px; /* Margin at the bottom */
+}
+
+/* Individual Notification Item */
+.notification-item {
+    padding: 10px; /* Padding inside each notification */
+    border-bottom: 1px solid #eee; /* Light border between notifications */
+    transition: background-color 0.3s; /* Transition for hover effect */
+    text-decoration: none; /* Remove underline */
+}
+
+/* If notification items are links */
+.notification-item a {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Inherit color from parent */
+}
+
+.notification-item:hover {
+    background-color: #f0f0f0; /* Light background on hover */
+}
+
+/* Close Button */
+.modal-close {
+    display: block; /* Block display for the button */
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding */
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
     border: none; /* Remove default border */
-    color: white; /* White text */
-    padding: 10px 20px; /* Button padding */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s; /* Transition for hover */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer */
 }
 
-.btn-success:hover {
-    background-color: #004d40; /* Darker teal on hover */
+.modal-close:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2em;
-    }
-    #actions {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Adjust for smaller screens */
-    }
+/* Additional styling for the bottom cards */
 
+.small-card-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap; /* Ensure cards stay in one row */
+    gap: 5px; /* Adjust the space between cards */
+    margin: auto;
+}
+
+.small-card-container a{
+    text-align: center;
+    text-decoration: none;
+}
+
+.small-card {
+    width: 320px; /* Adjust width to your preference */
+    background-color: #755dd4; /* Optional: Add background color */
+    border-radius: 10px; /* Rounded corners */
+    color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow */
+    transition: transform 0.2s; /* Optional: Add animation for hover */
+    
+}
+
+.small-card:hover {
+    transform: scale(1.05); /* Optional: Add hover effect */
+    text-decoration: none;
+    background-color: #4522d4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
     .dashboard-container {
-        padding: 15px; /* Reduced padding */
-        margin: 15px; /* Reduced margin */
+        width: 400px;
+        height: auto;
     }
 
-    .notification-icon {
-        top: 15px;
-        right: 15px;
-        height: 25px;
-        width: 25px;
+    .card-custom:nth-child(1) {
+        grid-column: span 2;
+        height: 400px;
+        grid-row: span 3;
+    }
+    .card-custom:nth-child(2) {
+        grid-column: span 2;
+        height: 200px;
+    }
+    .card-custom:nth-child(3) {
+        grid-column: span 4;
+        height: 200px;
+    }
+    .card-custom:nth-child(4) {
+        grid-column: span 4;
+        height: 100px; /* Long card, regular height */
+    }
+    .card-custom:nth-child(5) {
+        grid-column: span 2;
+        height: 400px;
+        grid-row: span 3; /* Span over 3 rows to create height */
     }
 
-    .card-custom {
-        margin-bottom: 15px; /* Reduce margin between cards */
+    /* Sixth card, normal height */
+    .card-custom:nth-child(6) {
+        grid-column: span 2;
+        height: 200px;
     }
 
-    th, td {
-        padding: 12px; /* Reduce padding for table */
+    /* Seventh card, placed next to the fifth card */
+    .card-custom:nth-child(7) {
+        grid-column: 3 / 5; /* Starts at column 3, spans across to column 5 */
+        grid-row: 2 / 3; /* Aligns vertically with the second row */
+        height: 200px;
     }
-}
-
-/* Extra small screens */
-@media (max-width: 576px) {
-    .dashboard-container {
-        width: 90%; /* Full width for very small screens */
+    .card-custom:nth-child(8) {
+        grid-column: span 2;
+        height: 200px;
     }
-
-    h1 {
-        font-size: 1.8em; /* Smaller heading size on very small devices */
+    .card-custom:nth-child(9) {
+        grid-column: span 2;
+        height: 200px;
     }
-
-    #actions {
+    .card-custom:nth-child(10) {
+        grid-column: span 2;
+        height: 200px;
+    }
+    .card-custom:nth-child(11) {
+        grid-column: span 4;
+        height: 100px;
+    }
+    .notification-modal {
+        width: 200px; /* Full width on small screens */
+    }
+    .small-card-container {
         display: flex;
-        flex-direction: column; /* Stack cards vertically */
+        flex-direction:column;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 20px auto;
+        align-items: center;
     }
-
-    .card-custom {
-        margin-bottom: 10px; /* Further reduce margin between cards */
+    
+    .small-card {
+        width: 370px; /* Adjust width to your preference */
+        
+        border-radius: 10px; /* Rounded corners */
+        font-size: 1rem;
+        color: #ffffff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow */
+        transition: transform 0.2s; /* Optional: Add animation for hover */
+        
     }
+    
 }

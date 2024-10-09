@@ -11,7 +11,7 @@ $(document).ready(function () {
             method: 'GET',
             success: function (data) {
                 $('#parent_name').text(data.parent_name);
-                
+
 
                 $('#student_select').empty();
                 $.each(data.students, function (index, student) {
@@ -94,18 +94,19 @@ $(document).ready(function () {
                     const notificationsToShow = data.notifications.slice(0, 5); // Get the last five notifications
                     notificationsToShow.forEach(function (notification) {
                         let redirectUrl;
-                    if (notification.is_absent) {
-                        redirectUrl = '/parent/absent_page/';
-                    } else if (notification.type === 'event') {
-                        redirectUrl = '/parent/parent_event_page/'; // Update to point to event page
-                    } else {
-                        redirectUrl = '/parent/assignment_page/';
-                    }
+
+                        if (notification.is_absent) {
+                            redirectUrl = '/parent/absent_page/';
+                        } else if (notification.type === 'event') {
+                            redirectUrl = '/parent/parent_event_page/'; // Update to point to event page
+                        } else {
+                            redirectUrl = '/parent/assignment_page/';
+                        }
 
                         $('#notification_message').append(`
                         <div class="notification-item">
                             <p>${notification.message}</p>
-                            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+                            <a href="#" class="view_notifications_link" data-id="${notification.id}" data-type="${notification.type}">View Notification</a>
                         </div>
                     `);
                     });
@@ -120,6 +121,36 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.error('Error fetching notifications:', error);
+            }
+        });
+    });
+
+    // Mark notification as read and redirect on click
+    $(document).on('click', '.view_notifications_link', function (e) {
+        e.preventDefault(); // Prevent the default link behavior
+        const notificationId = $(this).data('id');
+
+        $.ajax({
+            url: `/parent/notifications/read/${notificationId}/`,
+            method: 'POST',
+            data: {
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val() // Include CSRF token
+            },
+            success: function (data) {
+                let redirectUrl;
+
+                // Redirect based on the type received in the response
+                if (data.type === 'absence') {
+                    redirectUrl = '/parent/absent_page/';
+                } else if (data.type === 'event') {
+                    redirectUrl = '/parent/parent_event_page/';
+                } else {
+                    redirectUrl = '/parent/assignment_page/';
+                }
+                window.location.href = redirectUrl; // Redirect to the corresponding page
+            },
+            error: function (error) {
+                console.error('Error marking notification as read:', error);
             }
         });
     });
@@ -154,12 +185,12 @@ $(document).ready(function () {
 
     // Initial fetch of parent data
     fetchParentData();
-    
-    $('#logout_button').on('click', function() {
+
+    $('#logout_button').on('click', function () {
         $.ajax({
             url: '/setup_auth/api/logout/',
             type: 'POST',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     alert('Logged out successfully.');
                     window.location.href = '/'; // Redirect to the login page
@@ -167,7 +198,7 @@ $(document).ready(function () {
                     alert('Logout failed: ' + response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 alert('There was an error during logout.');
                 console.error(error);
             }

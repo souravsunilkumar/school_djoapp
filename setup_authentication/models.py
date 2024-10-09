@@ -260,7 +260,7 @@ class AssignmentNotification(models.Model):
     class_assigned = models.CharField(max_length=20)
     division_assigned = models.CharField(max_length=10)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
-    date_sent = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True,null=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
@@ -323,6 +323,7 @@ class EventNotification(models.Model):
     title = models.CharField(max_length=100)
     is_read = models.BooleanField(default=False)
     type = models.CharField(max_length=20, default='event')
+    timestamp = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
         return self.title

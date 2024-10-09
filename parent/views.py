@@ -48,6 +48,18 @@ def parent_dashboard(request):
 
     return JsonResponse(response_data)
 
+def unread_notifications_count(request):
+    parent = request.user.parent
+    unread_count = 0
+
+    if parent:
+        # Get the count of unread notifications for this parent
+        unread_count += Notification.objects.filter(parent=parent, is_read=False).count()
+        unread_count += AssignmentNotification.objects.filter(teacher__school=parent.school, is_read=False).count()
+        unread_count += EventNotification.objects.filter(school=parent.school, is_read=False).count()
+
+    return JsonResponse({'unread_count': unread_count})
+
 def get_attendance(request, student_id):
     # Adjust this based on your actual Attendance model and fields
     student = Student.objects.get(id=student_id)
@@ -113,23 +125,23 @@ def parent_notifications(request):
     # Fetch absence notifications
     absence_notifications = Notification.objects.filter(parent=parent).order_by('-timestamp')
 
-    # Fetch notifications for students linked to this parent
+    # Fetch assignment notifications for students linked to this parent
     assignment_notifications = AssignmentNotification.objects.filter(
         class_assigned__in=[student.class_assigned for student in students],
         division_assigned__in=[student.division_assigned for student in students],
         school=parent.school
-    ).order_by('-date_sent')
+    ).order_by('-timestamp')
 
     # Fetch event notifications for the school linked to students of the parent
     student_schools = students.values_list('school', flat=True).distinct()
-    event_notifications = EventNotification.objects.filter(school__in=student_schools).order_by('-event_notification_id')
+    event_notifications = EventNotification.objects.filter(school__in=student_schools).order_by('-timestamp')
 
     # Absence notification data
     notification_data = [
         {
             'id': notification.id,
             'message': notification.message,
-            'timestamp': notification.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            'timestamp': notification.timestamp,
             'is_read': notification.is_read,
             'student_name': notification.student_name,
             'student_id': notification.student.id if notification.student else None,
@@ -144,8 +156,8 @@ def parent_notifications(request):
         {
             'id': assignment.notification_id,
             'message': f"{assignment.teacher.first_name} {assignment.teacher.last_name} has added an assignment for {assignment.subject}. Due date: {assignment.assignment.due_date}",
-            'timestamp': assignment.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
-            'is_read': False,
+            'timestamp': assignment.timestamp,
+            'is_read': assignment.is_read,
             'class_assigned': assignment.class_assigned,
             'division_assigned': assignment.division_assigned,
         }
@@ -157,8 +169,8 @@ def parent_notifications(request):
         {
             'id': event_notification.event_notification_id,
             'message': event_notification.title,
-            'timestamp': event_notification.event.event_date.strftime('%Y-%m-%d %H:%M:%S'),  # Assuming event has a date field
-            'is_read': False,  # Assuming event notifications are unread initially
+            'timestamp': event_notification.timestamp,
+            'is_read': event_notification.is_read,
             'type': event_notification.type,
         }
         for event_notification in event_notifications
@@ -166,9 +178,44 @@ def parent_notifications(request):
 
     # Combine all notifications
     combined_notifications = notification_data + assignment_notification_data + event_notification_data
-    combined_notifications.sort(key=lambda x: x['timestamp'], reverse=True)  # Sort by timestamp
+
+    # Sort by timestamp in descending order
+    combined_notifications.sort(key=lambda x: x['timestamp'], reverse=True)
+
+    # Convert timestamps to string format for JSON response
+    for notification in combined_notifications:
+        notification['timestamp'] = notification['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
 
     return JsonResponse({'notifications': combined_notifications})
+
+@login_required
+@require_POST
+def mark_notification_as_read(request, notification_id):
+    # Attempt to find the notification in each model
+    try:
+        # Check for absence notifications
+        notification = Notification.objects.get(id=notification_id, parent__user=request.user)
+        notification.is_read = True
+        notification.save()
+        notification_type = 'absence'
+    except Notification.DoesNotExist:
+        try:
+            # Check for assignment notifications
+            notification = AssignmentNotification.objects.get(notification_id=notification_id)
+            notification.is_read = True
+            notification.save()
+            notification_type = 'assignment'
+        except AssignmentNotification.DoesNotExist:
+            try:
+                # Check for event notifications
+                notification = EventNotification.objects.get(event_notification_id=notification_id)
+                notification.is_read = True
+                notification.save()
+                notification_type = 'event'
+            except EventNotification.DoesNotExist:
+                return JsonResponse({'error': 'Notification not found'}, status=404)
+
+    return JsonResponse({'success': True, 'type': notification_type})
 
 @login_required
 def absent_notifications(request):
@@ -191,20 +238,6 @@ def absent_notifications(request):
 
     return JsonResponse({'notifications': notification_data})
 
-@login_required
-def mark_notifications_as_read(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            notification_ids = data.get('notification_ids', [])
-
-            # Mark specified notifications as read
-            Notification.objects.filter(id__in=notification_ids).update(is_read=True)
-            return JsonResponse({'success': True})
-        except Exception as e:
-            return JsonResponse({'success': False, 'message': str(e)})
-
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 def submit_leave_reason(request):
     try:
@@ -408,13 +441,13 @@ def parent_assignment_notifications(request):
         class_assigned__in=[student.class_assigned for student in students],
         division_assigned__in=[student.division_assigned for student in students],
         school=parent.school
-    ).order_by('-date_sent')
+    ).order_by('-timestamp')
 
     notification_data = [
         {
             'id': notification.notification_id,
             'message': f"{notification.teacher.first_name} {notification.teacher.last_name} assigned '{notification.assignment.title}' for {notification.subject}.",
-            'date_sent': notification.date_sent.strftime('%Y-%m-%d %H:%M:%S'),
+            'timestamp': notification.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
             'assignment_id': notification.assignment.assignment_id,
             'is_read': notification.is_read
         }

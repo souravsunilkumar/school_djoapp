@@ -19,7 +19,7 @@ $(document).ready(function () {
                                 <p>${notification.message}</p>
                                 <button class="give_reason_btn" 
                                     data-student-name="${notification.student_name}" 
-                                    data-date="${notification.absence_date}" 
+                                    data-date="${notification.date}" 
                                     data-notification-id="${notification.id}">
                                     Add Reason
                                 </button>

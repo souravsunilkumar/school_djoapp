@@ -7,8 +7,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
 /* Page Header */
@@ -23,6 +22,7 @@ h1 {
 #notification_list {
     width: 80%;
     max-width: 600px;
+    padding: 0 10px; /* Added padding for mobile */
 }
 
 /* Notification Item Styles */
@@ -42,8 +42,10 @@ h1 {
     margin: 0;
     color: #333;
     font-size: 16px;
+    flex: 1; /* Allow text to take available space */
 }
 
+/* Button Styles */
 button {
     padding: 8px 16px;
     border: none;
@@ -114,6 +116,7 @@ textarea {
     font-size: 14px;
 }
 
+/* Button Styles for Modal */
 #submit_reason_btn, #close_reason_modal_btn {
     padding: 10px 15px;
     border: none;
@@ -138,4 +141,49 @@ textarea {
 
 #close_reason_modal_btn:hover {
     background: #5a6268;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 20px; /* Smaller heading on mobile */
+    }
+
+    .notification-item {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    .notification-item p {
+        font-size: 14px; /* Smaller text for mobile */
+        margin-bottom: 10px; /* Add margin for spacing */
+    }
+
+    button {
+        width: 100%; /* Full width buttons on mobile */
+        margin-top: 5px; /* Space between buttons */
+    }
+
+    #notification_list {
+        width: 95%; /* Wider list on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px; /* Even smaller heading for small screens */
+    }
+
+    .notification-item p {
+        font-size: 12px; /* Smaller text for very small screens */
+    }
+
+    textarea {
+        height: 80px; /* Adjust textarea height on small screens */
+    }
+
+    #submit_reason_btn, #close_reason_modal_btn {
+        padding: 8px 12px; /* Smaller button padding */
+        font-size: 12px; /* Smaller font size for buttons */
+    }
 }

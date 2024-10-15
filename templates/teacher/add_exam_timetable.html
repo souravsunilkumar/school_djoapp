@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Timetable</title>
+    <link rel="stylesheet" href="/static/css/add_exam_timetable.css">
+</head>
+
+<body>
+    <h1>Add Exam Timetable</h1>
+    <div class="container">
+        <!-- Add Exam Button -->
+        <button id="openExamModalBtn">Add Exam</button>
+        <button id="addTimetableBtn">Add Timetable</button>
+
+        <!-- Modal for Adding Exam -->
+        <div id="examModal" style="display: none;">
+            <div>
+                <span class="close" data-modal="examModal" style="cursor: pointer;">&times;</span>
+                <h2>Add Exam</h2>
+                <form id="addExamForm">
+                    <label for="examName">Exam Name:</label>
+                    <input type="text" id="examName" name="exam_name" required>
+
+                    <div>
+                        <label for="academicYearSelect">Select Existing Academic Year:</label>
+                        <select id="academicYearSelect" name="academic_year"></select>
+
+                        <label for="newAcademicYear">Or <br> Add New Academic Year:</label>
+                        <input type="text" id="newAcademicYear" name="new_academic_year">
+                    </div>
+
+                    <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+                    <button type="submit">Add Exam</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Form for Adding Timetable -->
+        <div id="timetableForm" style="display: none;">
+            <h2>Add Exam Timetable</h2>
+            <form id="addTimetableForm">
+                <label for="academicYearSelectSubject">Select Academic Year:</label>
+                <select id="academicYearSelectSubject" name="academic_year" required></select>
+
+                <label for="examSelect">Select Exam:</label>
+                <select id="examSelect" name="exam_id" required></select>
+
+                <label for="numSubjects">Enter Number of Subjects:</label>
+                <input type="number" id="numSubjects" min="1" required>
+
+                <div id="subjectDetails"></div> <!-- To dynamically add fields for subjects, date, and time -->
+
+                <button type="submit">Save Timetable</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/add_exam_timetable.js"></script>
+</body>
+</html>

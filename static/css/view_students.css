@@ -100,16 +100,16 @@ tr:hover {
     }
 
     table {
-        width: 100%; /* Ensure table fits the width of the container */
+        width: 100%; 
         display: block;
-        overflow-x: auto; /* Allow scrolling if the table is too wide */
+        overflow-x: auto; 
         
     }
 
     th,
     td {
         padding: 12px;
-        font-size: 0.9em; /* Adjust font size for smaller screens */
+        font-size: 0.9em; 
     }
 }
 

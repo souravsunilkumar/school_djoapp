@@ -28,12 +28,27 @@
     <!-- Notification Icon -->
     <div id="notification_icon" class="notification-icon" style="position: absolute; top: 20px; right: 20px;">
         <img src="/static/images/notification.png" alt="Notifications" style="height: 30px; width: 30px;">
+        <!-- Red circle for notification count -->
+        <span id="notification_count" style="
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 10px;
+            width: 10px;
+            height: 10px;
+            text-align: center;
+        ">0</span>
     </div>
 
     <!-- Notification Section (Hidden by default) -->
     <div id="notification_section" class="notification">
         <div id="notification_message">No new notifications.</div>
-        <button id="show_more_notifications_btn" style="display: none;">Show Earlier Notifications</button>
+        <button id="show_more_notifications_btn">Show Earlier Notifications</button>
         <button id="close_notification_btn">Close</button>
     </div>
 

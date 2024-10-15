@@ -37,19 +37,17 @@ $(document).ready(function() {
     });
 
     // Prevent back navigation after logout
-    window.addEventListener('popstate', function(event) {
+    window.addEventListener('popstate', function (event) {
         // Check if the user is logged out
         $.ajax({
             url: '/setup_auth/api/is_logged_in/',  // Create an API endpoint that checks if the user is authenticated
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 if (!response.is_authenticated) {
-                    // If the user is logged out, exit the page (or redirect to a different page)
-                    window.close();  // Close the browser tab (note: this may not work in all browsers)
-                    window.location.href = "/";  // Optionally redirect to the home page
+                    window.location.href = "/";  // Redirect to the login page
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Error checking user authentication status:', error);
             }
         });

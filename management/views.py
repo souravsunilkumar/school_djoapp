@@ -940,3 +940,72 @@ def register_parent(request):
 
 def view_students_page(request): 
     return render(request,'teacher/view_students.html')
+
+
+def add_exam_timetable_page(request):
+    return render(request,'teacher/add_exam_timetable.html')
+
+@login_required
+def add_exam_timetable(request):
+    if request.method == 'POST':
+        try:
+            # Get the logged-in teacher's details
+            teacher = Class_Teacher.objects.get(user=request.user)
+            school = teacher.school
+            class_assigned = teacher.class_assigned
+            division_assigned = teacher.division_assigned
+
+            # Parse the JSON data from the request body
+            data = json.loads(request.body)
+
+            # Extract values from the parsed data
+            academic_year = data.get('academic_year')
+            exam_id = data.get('exam_id')  # Assuming this is correctly passed as the exam's ID
+            subjects = data.get('subjects')
+
+            # Fetch the exam object using the exam_id
+            exam = Exam.objects.get(exam_id=exam_id)  # Using the AutoField as the primary key
+
+            # Loop through each subject and create an entry in the ExamTimetable
+            for subject_data in subjects:
+                subject_name = subject_data.get('subject')  # Extract subject name
+                exam_date = subject_data.get('exam_date')    # Extract exam date
+                exam_time = subject_data.get('exam_time')    # Extract exam time
+
+                # Create an entry in the ExamTimetable
+                ExamTimetable.objects.create(
+                    academic_year=academic_year,
+                    school=school,
+                    exam=exam,
+                    class_assigned=class_assigned,
+                    division_assigned=division_assigned,
+                    subject=subject_name,  # Use the subject name directly as it's a CharField
+                    exam_date=exam_date,
+                    exam_time=exam_time
+                )
+
+            # Create a notification in the TimetableNotification model
+            notification_message = f"Timetable for {exam.exam_name} of academic year {academic_year} has been published."
+            TimetableNotification.objects.create(
+                school=school,
+                academic_year=academic_year,
+                exam=exam,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned,
+                message=notification_message
+            )
+
+            return JsonResponse({'success': True})
+
+        except Class_Teacher.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Teacher not found.'})
+        except Exam.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Exam not found.'})
+        except KeyError as e:
+            return JsonResponse({'success': False, 'error': f'Missing field: {str(e)}'})
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON data.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

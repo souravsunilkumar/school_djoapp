@@ -1,0 +1,16 @@
+
+.exam-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+.exam-details-table th, .exam-details-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.exam-details-table th {
+    background-color: #f2f2f2;
+}

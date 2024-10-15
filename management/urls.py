@@ -63,4 +63,7 @@ urlpatterns = [
     path('get_assignment_students/<str:class_assigned>/<str:division_assigned>/<int:assignment_id>/', get_assignment_students, name='get_assignment_students'),
     path('submit_assignment_marks/<int:assignment_id>/', submit_assignment_marks, name='submit_assignment_marks'),
 
+    path('add_exam_timetable_page/', add_exam_timetable_page, name='add_exam_timetable_page'),
+    path('add_exam_timetable/', add_exam_timetable, name='add_exam_timetable'),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

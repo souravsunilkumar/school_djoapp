@@ -12,7 +12,7 @@ urlpatterns = [
     path('attendance_report/', attendance_report, name='attendance_report'),
     path('notifications/', parent_notifications, name='parent_notifications'),
     path('notifications/read/<int:notification_id>/', mark_notification_as_read, name='mark_notification_as_read'),
-     path('parent/unread_notifications_count/', unread_notifications_count, name='unread_notifications_count'),
+    path('unread_notifications_count/', unread_notifications_count, name='unread_notifications_count'),
     path('absent_notifications/', absent_notifications, name='absent_notifications'),
     path('submit_leave_reason/', submit_leave_reason, name='submit_leave_reason'),
     path('check_reason_given/', check_reason_given, name='check_reason_given'),
@@ -37,6 +37,10 @@ urlpatterns = [
 
     path('parent_event_details_page/', parent_event_details_page, name='get_event_banners'),
     path('get_event_details/<int:event_id>/', get_event_details, name='get_event_details'),
+
+    path('timetables_page/', timetables_page, name='timetables_page'),
+    path('get_exam_timetables/', get_exam_timetables, name='get_exam_timetables'),
+    path('get_exam_details/', get_exam_details, name='get_exam_details'),
 
 
 

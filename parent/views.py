@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 from setup_authentication.models import *
 import json 
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
 from datetime import datetime,timedelta
 import logging
 # Create your views here.
@@ -49,14 +50,29 @@ def parent_dashboard(request):
     return JsonResponse(response_data)
 
 def unread_notifications_count(request):
-    parent = request.user.parent
-    unread_count = 0
+    try:
+        parent = Parent.objects.get(user=request.user)
+        unread_count = 0
 
-    if parent:
-        # Get the count of unread notifications for this parent
-        unread_count += Notification.objects.filter(parent=parent, is_read=False).count()
-        unread_count += AssignmentNotification.objects.filter(teacher__school=parent.school, is_read=False).count()
-        unread_count += EventNotification.objects.filter(school=parent.school, is_read=False).count()
+        if parent:
+            # Get the count of unread notifications for this parent
+            unread_count += Notification.objects.filter(parent=parent, is_read=False).count()
+            unread_count += AssignmentNotification.objects.filter(teacher__school=parent.school, is_read=False).count()
+            unread_count += EventNotification.objects.filter(school=parent.school, is_read=False).count()
+
+            # Get the classes and divisions of the students linked to the parent
+            student_classes_divisions = parent.students.values_list('class_assigned', 'division_assigned', flat=True)
+
+            # Count unread timetable notifications only for matching classes and divisions
+            unread_count += TimetableNotification.objects.filter(
+                school=parent.school,
+                is_read=False,
+                class_assigned__in=[class_div[0] for class_div in student_classes_divisions],
+                division_assigned__in=[class_div[1] for class_div in student_classes_divisions]
+            ).count()
+
+    except Parent.DoesNotExist:
+        return JsonResponse({'error': 'Parent not found'}, status=404)
 
     return JsonResponse({'unread_count': unread_count})
 
@@ -136,6 +152,13 @@ def parent_notifications(request):
     student_schools = students.values_list('school', flat=True).distinct()
     event_notifications = EventNotification.objects.filter(school__in=student_schools).order_by('-timestamp')
 
+    # Fetch timetable notifications for the students linked to the parent
+    timetable_notifications = TimetableNotification.objects.filter(
+        class_assigned__in=[student.class_assigned for student in students],
+        division_assigned__in=[student.division_assigned for student in students],
+        school=parent.school
+    ).order_by('-timestamp')
+
     # Absence notification data
     notification_data = [
         {
@@ -176,8 +199,22 @@ def parent_notifications(request):
         for event_notification in event_notifications
     ]
 
+    # Timetable notification data
+    timetable_notification_data = [
+        {
+            'id': timetable_notification.timetable_notification_id,
+            'message': timetable_notification.message,
+            'timestamp': timetable_notification.timestamp,
+            'is_read': timetable_notification.is_read,
+            'type': timetable_notification.type,
+            'class_assigned': timetable_notification.class_assigned,
+            'division_assigned': timetable_notification.division_assigned,
+        }
+        for timetable_notification in timetable_notifications
+    ]
+
     # Combine all notifications
-    combined_notifications = notification_data + assignment_notification_data + event_notification_data
+    combined_notifications = notification_data + assignment_notification_data + event_notification_data + timetable_notification_data
 
     # Sort by timestamp in descending order
     combined_notifications.sort(key=lambda x: x['timestamp'], reverse=True)
@@ -213,9 +250,17 @@ def mark_notification_as_read(request, notification_id):
                 notification.save()
                 notification_type = 'event'
             except EventNotification.DoesNotExist:
-                return JsonResponse({'error': 'Notification not found'}, status=404)
+                try:
+                    # Check for timetable notifications
+                    notification = TimetableNotification.objects.get(timetable_notification_id=notification_id)
+                    notification.is_read = True
+                    notification.save()
+                    notification_type = 'timetable'
+                except TimetableNotification.DoesNotExist:
+                    return JsonResponse({'error': 'Notification not found'}, status=404)
 
     return JsonResponse({'success': True, 'type': notification_type})
+
 
 @login_required
 def absent_notifications(request):
@@ -644,3 +689,80 @@ def get_event_details(request, event_id):
 
     except Event.DoesNotExist:
         return JsonResponse({'error': 'Event not found'}, status=404)
+    
+def timetables_page(request): 
+    return render(request,'parent/timetables_page.html')
+
+def get_exam_timetables(request):
+    if request.method == 'GET':
+        try:
+            # Access the Parent model via the user
+            parent = Parent.objects.get(user=request.user)
+        except Parent.DoesNotExist:
+            return JsonResponse({'error': 'Parent not found'}, status=404)
+        
+        # Get students associated with this parent via the ManyToMany field
+        students = parent.students.all()  
+        
+        # Collect the distinct exams and academic years where the student's class and division match the timetable
+        timetables_list = []
+        for student in students:
+            class_assigned = student.class_assigned
+            division_assigned = student.division_assigned
+
+            # Filter the timetables for the student's class and division
+            timetables = ExamTimetable.objects.filter(
+                school=student.school,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned
+            ).values('exam__exam_name', 'academic_year').distinct()
+
+            # Add unique timetables to the list
+            for timetable in timetables:
+                if timetable not in timetables_list:
+                    timetables_list.append(timetable)
+        
+        # Return the list as JSON
+        return JsonResponse({'timetables': timetables_list})
+    
+
+
+def get_exam_details(request):
+    if request.method == 'GET':
+        exam_name = request.GET.get('exam_name')
+        academic_year = request.GET.get('academic_year')
+
+        # Get the parent and associated students
+        try:
+            parent = Parent.objects.get(user=request.user)
+            students = parent.students.all()
+        except Parent.DoesNotExist:
+            return JsonResponse({'error': 'Parent not found'}, status=404)
+
+        # Collect the details based on the selected exam and academic year
+        details_list = []
+        for student in students:
+            class_assigned = student.class_assigned
+            division_assigned = student.division_assigned
+
+            # Filter the details for the selected exam and academic year
+            details = ExamTimetable.objects.filter(
+                school=student.school,
+                class_assigned=class_assigned,
+                division_assigned=division_assigned,
+                exam__exam_name=exam_name,
+                academic_year=academic_year
+            ).values('subject', 'exam_date', 'exam_time')
+
+            # Add unique details to the list
+            for detail in details:
+                # Format the exam_date to 'dd/mm/yyyy'
+                formatted_date = detail['exam_date'].strftime('%d/%m/%Y') if detail['exam_date'] else None
+                details_list.append({
+                    'subject': detail['subject'],
+                    'exam_date': formatted_date,  # Use the formatted date
+                    'exam_time': detail['exam_time']
+                })
+
+        # Return the details as JSON
+        return JsonResponse({'details': details_list})

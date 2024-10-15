@@ -66,7 +66,7 @@ button:active {
     transform: translateY(1px);
 }
 
-#logout_button{
+#logout_button {
     background-color: #eb2525;
     color: #fff;
     border: none;
@@ -77,12 +77,15 @@ button:active {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#logout_button:hover{ 
+#logout_button:hover {
     background-color: #901010;
 }
-#view_attendance_btn { 
+
+#view_attendance_btn {
     margin-top: 20px;
 }
+
+
 
 a {
     display: inline-block;
@@ -132,12 +135,17 @@ a:hover {
     padding: 10px;
     border-bottom: 1px solid #e2e8f0;
     text-align: left;
+    background-color: #eaeeff;
+    margin: 5px;
 }
 
+.notification-item.unread {
+    background-color: #7d93f7; /* Light red background for unread notifications */
+}
 .notification-item p {
     margin: 0;
     font-size: 1rem;
-    color: #4a5568;
+    color: #000000;
 }
 
 .view_notifications_link {
@@ -151,7 +159,7 @@ a:hover {
 }
 
 .view_notifications_link:hover {
-    background-color: #15e1f7;
+    background-color: #052976;
 }
 
 #close_notification_btn,
@@ -270,6 +278,21 @@ a:hover {
     #attendance_modal {
         width: 95%;
         margin: 20px auto;
+    }
+    #notification_section {
+        border-radius: 8px;
+        box-shadow: 0 8px 16px 1500px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-out;
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 250px;
+        height: 400px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        overflow-y: scroll;
     }
 }
 

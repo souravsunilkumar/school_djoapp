@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
-from datetime import date
+from datetime import date, timezone
 
 
 # Create your models here.
@@ -326,4 +326,38 @@ class EventNotification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
-        return self.title
+        return self.title 
+
+class ExamTimetable(models.Model):
+    academic_year = models.CharField(max_length=15, null=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    class_assigned = models.CharField(max_length=15, null=True)
+    division_assigned = models.CharField(max_length=15, null=True)
+    subject = models.CharField(max_length=15, null=True)
+    exam_date = models.DateField(null=True, blank=True)
+    exam_time = models.CharField(max_length=15, null=True)
+
+    def __str__(self):
+        return f"{self.exam.exam_name} - {self.subject} - {self.exam_date} ({self.exam_time})"
+    
+    def get_exam_date(self):
+        if self.exam_date:
+            return self.exam_date.strftime('%d-%m-%Y')
+        return None
+    
+
+class TimetableNotification(models.Model):
+    timetable_notification_id = models.AutoField(primary_key=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE,null=True)
+    academic_year = models.CharField(max_length=15, null=True)
+    exam = models.ForeignKey(Exam,on_delete=models.CASCADE)
+    class_assigned = models.CharField(max_length=20)
+    division_assigned = models.CharField(max_length=10)
+    message = models.TextField()
+    type = models.CharField(max_length=20, default='timetable')
+    timestamp = models.DateTimeField(auto_now_add=True,null=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.message}- {self.class_assigned}- {self.division_assigned}"

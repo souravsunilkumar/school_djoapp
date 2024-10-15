@@ -12,7 +12,6 @@ $(document).ready(function () {
             success: function (data) {
                 $('#parent_name').text(data.parent_name);
 
-
                 $('#student_select').empty();
                 $.each(data.students, function (index, student) {
                     $('#student_select').append(`<option value="${student.id}" ${student.selected ? 'selected' : ''}>${student.first_name} ${student.last_name}</option>`);
@@ -23,6 +22,26 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.error('Error fetching parent data:', error);
+            }
+        });
+    }
+
+    // Fetch Unread Notifications Count
+    function fetchUnreadNotificationsCount() {
+        $.ajax({
+            url: '/parent/unread_notifications_count/',
+            method: 'GET',
+            success: function (data) {
+                const unreadCount = data.unread_count;
+
+                if (unreadCount > 0) {
+                    $('#notification_count').text(unreadCount).show();  // Show count if there are unread notifications
+                } else {
+                    $('#notification_count').hide();  // Hide count if there are no unread notifications
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching unread notifications count:', error);
             }
         });
     }
@@ -99,24 +118,34 @@ $(document).ready(function () {
                             redirectUrl = '/parent/absent_page/';
                         } else if (notification.type === 'event') {
                             redirectUrl = '/parent/parent_event_page/'; // Update to point to event page
-                        } else {
+                        }
+                        else if(notification.type=='timetable'){
+                            redirectUrl = '/parent/timetables_page/';
+                        }
+                        else {
                             redirectUrl = '/parent/assignment_page/';
                         }
 
                         $('#notification_message').append(`
-                        <div class="notification-item">
-                            <p>${notification.message}</p>
-                            <a href="#" class="view_notifications_link" data-id="${notification.id}" data-type="${notification.type}">View Notification</a>
-                        </div>
-                    `);
+                            <div class="notification-item ${!notification.is_read ? 'unread' : ''}">
+                                <p>${notification.message}</p>
+                                <a href="#" class="view_notifications_link" data-id="${notification.id}" data-type="${notification.type}">
+                                    View Notification
+                                </a>
+                            </div>
+                        `);
                     });
+
+                    // Store all notifications data in the button
+                    $('#show_more_notifications_btn').show().data('notifications', data.notifications);
 
                     // Show the "Show Earlier Notifications" button if there are more than 5 notifications
                     if (data.notifications.length > 5) {
-                        $('#show_more_notifications_btn').show().data('notifications', data.notifications);
+                        $('#show_more_notifications_btn').show();
                     }
                 } else {
                     $('#notification_message').text('No new notifications.');
+                    $('#show_more_notifications_btn').hide(); // Hide button if no notifications
                 }
             },
             error: function (error) {
@@ -144,7 +173,9 @@ $(document).ready(function () {
                     redirectUrl = '/parent/absent_page/';
                 } else if (data.type === 'event') {
                     redirectUrl = '/parent/parent_event_page/';
-                } else {
+                }else if (data.type === 'timetable') {
+                    redirectUrl = '/parent/timetables_page/'; 
+                }else {
                     redirectUrl = '/parent/assignment_page/';
                 }
                 window.location.href = redirectUrl; // Redirect to the corresponding page
@@ -154,25 +185,29 @@ $(document).ready(function () {
             }
         });
     });
+
     // Show earlier notifications when the button is clicked
     $('#show_more_notifications_btn').on('click', function () {
-        const allNotifications = $(this).data('notifications');
-        $('#notification_message').empty();
+        const allNotifications = $(this).data('notifications'); // Get stored notifications data
+
+        if (!allNotifications) {
+            console.error('No notifications available.');
+            return; // Prevent further execution if no notifications found
+        }
 
         allNotifications.forEach(function (notification) {
             const redirectUrl = notification.is_absent ? '/parent/absent_page/' : '/parent/assignment_page/';
             $('#notification_message').append(`
-        <div class="notification-item">
-            <p>${notification.message}</p>
-            <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
-        </div>
-    `);
+            <div class="notification-item">
+                <p>${notification.message}</p>
+                <a href="${redirectUrl}" class="view_notifications_link">View Notification</a>
+            </div>
+        `);
         });
 
         // Hide the button after showing all notifications
         $(this).hide();
     });
-
     // Close notification section
     $('#close_notification_btn').on('click', function () {
         $('#notification_section').hide();
@@ -185,7 +220,9 @@ $(document).ready(function () {
 
     // Initial fetch of parent data
     fetchParentData();
+    fetchUnreadNotificationsCount();
 
+    // Logout functionality
     $('#logout_button').on('click', function () {
         $.ajax({
             url: '/setup_auth/api/logout/',
@@ -193,6 +230,9 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     alert('Logged out successfully.');
+                    
+                    // Replace current state and redirect to login page
+                    window.history.replaceState(null, null, '/'); // Replace history state
                     window.location.href = '/'; // Redirect to the login page
                 } else {
                     alert('Logout failed: ' + response.message);
@@ -201,6 +241,24 @@ $(document).ready(function () {
             error: function (error) {
                 alert('There was an error during logout.');
                 console.error(error);
+            }
+        });
+    });
+    
+    // Prevent back navigation after logout
+    window.addEventListener('popstate', function (event) {
+        // Check if the user is logged out
+        $.ajax({
+            url: '/setup_auth/api/is_logged_in/',  // Create an API endpoint that checks if the user is authenticated
+            type: 'GET',
+            success: function (response) {
+                if (!response.is_authenticated) {
+                    // If the user is logged out, redirect to the login page
+                    window.location.href = "/";
+                }
+            },
+            error: function (error) {
+                console.error('Error checking user authentication status:', error);
             }
         });
     });

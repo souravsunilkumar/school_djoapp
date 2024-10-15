@@ -118,21 +118,42 @@ $(document).ready(function () {
 
     loadTeacherDashboard();
 
-    $('#logout_button').on('click', function() {
+    $('#logout_button').on('click', function () {
         $.ajax({
             url: '/setup_auth/api/logout/',
             type: 'POST',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     alert('Logged out successfully.');
+                    
+                    // Replace current state and redirect to login page
+                    window.history.replaceState(null, null, '/'); // Replace history state
                     window.location.href = '/'; // Redirect to the login page
                 } else {
                     alert('Logout failed: ' + response.message);
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 alert('There was an error during logout.');
                 console.error(error);
+            }
+        });
+    });
+    
+    // Prevent back navigation after logout
+    window.addEventListener('popstate', function (event) {
+        // Check if the user is logged out
+        $.ajax({
+            url: '/setup_auth/api/is_logged_in/',  // Create an API endpoint that checks if the user is authenticated
+            type: 'GET',
+            success: function (response) {
+                if (!response.is_authenticated) {
+                    // If the user is logged out, redirect to the login page
+                    window.location.href = "/";
+                }
+            },
+            error: function (error) {
+                console.error('Error checking user authentication status:', error);
             }
         });
     });

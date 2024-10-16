@@ -1009,3 +1009,83 @@ def add_exam_timetable(request):
             return JsonResponse({'success': False, 'error': str(e)})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+def edit_timetable_page(request):
+    return render(request, 'teacher/edit_timetable.html')
+
+def fetch_timetables(request):
+    if request.method == 'GET':
+        try:
+            # Get the logged-in teacher
+            class_teacher = Class_Teacher.objects.get(user=request.user)
+            # Fetch the exam timetables for the teacher's class and division
+            timetables = ExamTimetable.objects.filter(
+                school=class_teacher.school,
+                class_assigned=class_teacher.class_assigned,
+                division_assigned=class_teacher.division_assigned
+            ).values('exam__exam_name', 'academic_year').distinct()
+
+            return JsonResponse({'timetables': list(timetables)})
+        except Class_Teacher.DoesNotExist:
+            return JsonResponse({'error': 'Teacher not found'}, status=404)
+
+def fetch_timetable_data(request):
+    if request.method == 'GET':
+        exam_name = request.GET.get('exam_name')
+        academic_year = request.GET.get('academic_year')
+
+        try:
+            # Get the logged-in teacher
+            class_teacher = Class_Teacher.objects.get(user=request.user)
+
+            # Fetch the exam timetable instances for the selected exam and academic year, ordered by exam_date
+            timetables = ExamTimetable.objects.filter(
+                school=class_teacher.school,
+                exam__exam_name=exam_name,
+                academic_year=academic_year,
+                class_assigned=class_teacher.class_assigned,
+                division_assigned=class_teacher.division_assigned
+            ).order_by('exam_date').values('id', 'subject', 'exam_date', 'exam_time')
+
+            return JsonResponse({'timetables': list(timetables)})
+        except Class_Teacher.DoesNotExist:
+            return JsonResponse({'error': 'Teacher not found'}, status=404)
+        
+
+@csrf_exempt
+def update_timetable(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        exam_name = data.get('exam_name')
+        academic_year = data.get('academic_year')
+        timetable_data = data.get('timetable_data')
+
+        # Get the logged-in teacher
+        try:
+            class_teacher = Class_Teacher.objects.get(user=request.user)
+
+            # Loop through timetable data and save updates or create new entries
+            for entry in timetable_data:
+                if 'id' in entry and entry['id']:  # Update existing
+                    timetable = ExamTimetable.objects.get(id=entry['id'])
+                    timetable.subject = entry['subject']
+                    timetable.exam_date = entry['exam_date']
+                    timetable.exam_time = entry['exam_time']
+                    timetable.save()
+                else:  # Create new
+                    ExamTimetable.objects.create(
+                        academic_year=academic_year,
+                        school=class_teacher.school,
+                        exam=Exam.objects.get(exam_name=exam_name),
+                        class_assigned=class_teacher.class_assigned,
+                        division_assigned=class_teacher.division_assigned,
+                        subject=entry['subject'],
+                        exam_date=entry['exam_date'],
+                        exam_time=entry['exam_time']
+                    )
+
+            return JsonResponse({'message': 'Timetable updated successfully!'})
+        except Class_Teacher.DoesNotExist:
+            return JsonResponse({'error': 'Teacher not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

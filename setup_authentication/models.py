@@ -361,3 +361,35 @@ class TimetableNotification(models.Model):
 
     def __str__(self):
         return f"{self.message}- {self.class_assigned}- {self.division_assigned}"
+    
+
+from django.db import models
+
+class TeacherTimetable(models.Model):
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    ]
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)  
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)  
+
+    def __str__(self):
+        return f"Timetable for {self.teacher.first_name} {self.teacher.last_name} on {self.day}"
+
+
+class Period(models.Model):
+    timetable = models.ForeignKey(TeacherTimetable, related_name='periods', on_delete=models.CASCADE)  # Link to TeacherTimetable
+    period_number = models.CharField(max_length=10)  
+    class_and_division = models.CharField(max_length=10)   
+    subject = models.CharField(max_length=50) 
+
+    class Meta:
+        unique_together = ('timetable', 'period_number')  
+
+    def __str__(self):
+        return f"Period {self.period_number} - {self.class_assigned} - {self.subject}"

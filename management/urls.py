@@ -66,4 +66,10 @@ urlpatterns = [
     path('add_exam_timetable_page/', add_exam_timetable_page, name='add_exam_timetable_page'),
     path('add_exam_timetable/', add_exam_timetable, name='add_exam_timetable'),
 
+    path('edit_timetable_page/', edit_timetable_page, name='edit_timetable_page'),
+    path('fetch_timetables/', fetch_timetables, name='fetch_timetables'),
+    path('fetch_timetable_data/', fetch_timetable_data, name='fetch_timetable_data'),
+    path('update_timetable/', update_timetable, name='update_timetable'),
+   
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

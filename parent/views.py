@@ -752,7 +752,7 @@ def get_exam_details(request):
                 division_assigned=division_assigned,
                 exam__exam_name=exam_name,
                 academic_year=academic_year
-            ).values('subject', 'exam_date', 'exam_time')
+            ).order_by('exam_date').values('subject', 'exam_date', 'exam_time')
 
             # Add unique details to the list
             for detail in details:
